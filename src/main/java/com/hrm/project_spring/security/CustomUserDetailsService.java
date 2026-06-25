@@ -1,4 +1,4 @@
-package com.hrm.project_spring.service;
+package com.hrm.project_spring.security;
 
 import com.hrm.project_spring.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
