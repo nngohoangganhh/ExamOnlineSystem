@@ -3,9 +3,9 @@ spring:
     name: exam-system-api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/eduOnl
-    username: postgres
-    password: 123456
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/eduOnl}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:123456}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -18,8 +18,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 jwt:
-  secret: MyVerySecureSecretKeyThatIsAtLeast256BitsLongForJWTSigningPurposesOnly
-  expiration: 86400000
+  secret: ${JWT_SECRET:MyVerySecureSecretKeyThatIsAtLeast256BitsLongForJWTSigningPurposesOnly}
+  expiration: ${JWT_EXPIRATION:86400000}
