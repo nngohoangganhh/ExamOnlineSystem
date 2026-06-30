@@ -55,12 +55,7 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, " USER NOT FOUND"));
         var jwtToken = jwtService.generateToken(user);
@@ -78,13 +73,11 @@ public class AuthService {
         response.setId(user.getId());
         response.setUsername(user.getUsername());
         response.setFullName(user.getFullName());
-        response.setRoles(
-               user.getRoles()
+        response.setRoles(user.getRoles()
                    .stream()
                    .map(role -> role.getCode())
                    .toList());
-        response.setPermissions(
-               user.getRoles()
+        response.setPermissions(user.getRoles()
                    .stream()
                    .flatMap(role -> role.getPermissions().stream())
                    .map(permission -> permission.getCode())
