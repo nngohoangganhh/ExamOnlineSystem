@@ -3,6 +3,7 @@ package com.hrm.project_spring.config;
 import com.hrm.project_spring.security.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -26,7 +27,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-
+   // @Value()
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -46,7 +47,6 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated())
-
                   .exceptionHandling(ex -> ex
                   .authenticationEntryPoint((req, res, e) ->
                   res.sendError(HttpServletResponse.SC_FORBIDDEN)))

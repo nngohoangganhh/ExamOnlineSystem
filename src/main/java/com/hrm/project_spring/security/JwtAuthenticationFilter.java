@@ -46,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 2. Trích xuất token và loại bỏ khoảng trắng thừa
             jwt = authHeader.substring(7).trim();
 
+
             // 3. Kiểm tra xem token có thực sự tồn tại sau chữ "Bearer " hay không
             // Nếu token là chuỗi rỗng hoặc chữ "null" (lỗi từ frontend), bỏ qua filter này
             if (jwt.isEmpty() || jwt.equalsIgnoreCase("null")) {
