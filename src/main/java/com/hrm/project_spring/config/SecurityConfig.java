@@ -49,7 +49,7 @@ public class SecurityConfig {
 
                   .exceptionHandling(ex -> ex
                   .authenticationEntryPoint((req, res, e) ->
-                  res.sendError(HttpServletResponse.SC_FORBIDDEN)))
+                  res.sendError(HttpServletResponse.SC_UNAUTHORIZED )))
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

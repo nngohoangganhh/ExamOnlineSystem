@@ -55,14 +55,12 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByUsername(request.getUsername())
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
+        User user = userRepository.findByUsername(request.getUsername())
+
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, " USER NOT FOUND"));
+
         var jwtToken = jwtService.generateToken(user);
         return AuthResponse.builder()
                 .token(jwtToken)
@@ -78,13 +76,11 @@ public class AuthService {
         response.setId(user.getId());
         response.setUsername(user.getUsername());
         response.setFullName(user.getFullName());
-        response.setRoles(
-               user.getRoles()
+        response.setRoles(user.getRoles()
                    .stream()
                    .map(role -> role.getCode())
                    .toList());
-        response.setPermissions(
-               user.getRoles()
+        response.setPermissions(user.getRoles()
                    .stream()
                    .flatMap(role -> role.getPermissions().stream())
                    .map(permission -> permission.getCode())
@@ -121,9 +117,11 @@ public class AuthService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tài khoản không tồn tại"));
+
         if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email đã được sử dụng");
         }
+
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
         userRepository.save(user);
