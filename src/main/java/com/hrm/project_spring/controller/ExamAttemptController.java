@@ -53,11 +53,6 @@ public class ExamAttemptController {
     }
 
     // ======================== NEW: LỊCH SỬ THI (STUDENT) ========================
-
-    /**
-     * Học sinh xem lịch sử thi của chính mình
-     * GET /api/attempts/my?pageNo=0&pageSize=10
-     */
     @PreAuthorize("hasAuthority('EXAM:START')")
     @GetMapping("/my")
     public ResponseEntity<ApiResponse<PageResponse<AttemptSummaryResponse>>> getMyAttempts(
@@ -71,11 +66,6 @@ public class ExamAttemptController {
                 .data(attemptService.getMyAttempts(authentication.getName(), pageNo, pageSize))
                 .build());
     }
-
-    /**
-     * Học sinh xem chi tiết kết quả 1 lần thi (bao gồm từng câu đúng/sai)
-     * GET /api/attempts/{attemptId}
-     */
     @PreAuthorize("hasAuthority('EXAM:START')")
     @GetMapping("/{attemptId}")
     public ResponseEntity<ApiResponse<AttemptDetailResponse>> getAttemptDetail(
@@ -91,10 +81,6 @@ public class ExamAttemptController {
 
     // ======================== NEW: ADMIN XEM KẾT QUẢ ========================
 
-    /**
-     * Admin xem tất cả attempts của 1 test
-     * GET /api/attempts/test/{testId}?pageNo=0&pageSize=10
-     */
     @PreAuthorize("hasAuthority('EXAM:READ')")
     @GetMapping("/test/{testId}")
     public ResponseEntity<ApiResponse<PageResponse<AttemptSummaryResponse>>> getAttemptsByTest(
@@ -109,10 +95,6 @@ public class ExamAttemptController {
                 .build());
     }
 
-    /**
-     * Admin xem tất cả attempts của 1 exam
-     * GET /api/attempts/exam/{examId}?pageNo=0&pageSize=10
-     */
     @PreAuthorize("hasAuthority('EXAM:READ')")
     @GetMapping("/exam/{examId}")
     public ResponseEntity<ApiResponse<PageResponse<AttemptSummaryResponse>>> getAttemptsByExam(
@@ -126,11 +108,6 @@ public class ExamAttemptController {
                 .data(attemptService.getAttemptsByExam(examId, pageNo, pageSize))
                 .build());
     }
-
-    /**
-     * Admin xem chi tiết bất kỳ attempt
-     * GET /api/attempts/{attemptId}/admin
-     */
     @PreAuthorize("hasAuthority('EXAM:READ')")
     @GetMapping("/{attemptId}/admin")
     public ResponseEntity<ApiResponse<AttemptDetailResponse>> getAttemptDetailAdmin(

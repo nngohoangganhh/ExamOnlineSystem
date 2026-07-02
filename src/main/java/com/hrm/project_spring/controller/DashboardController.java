@@ -21,10 +21,7 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
-    /**
-     * Admin xem thống kê tổng quan hệ thống
-     * GET /api/dashboard/admin
-     */
+
     @PreAuthorize("hasAuthority('USER:READ')")
     @GetMapping("/admin")
     public ResponseEntity<ApiResponse<AdminDashboardResponse>> getAdminDashboard() {
@@ -35,11 +32,6 @@ public class DashboardController {
                 .data(dashboardService.getAdminDashboard())
                 .build());
     }
-
-    /**
-     * Học sinh xem thống kê cá nhân
-     * GET /api/dashboard/student
-     */
     @PreAuthorize("hasAuthority('EXAM:START')")
     @GetMapping("/student")
     public ResponseEntity<ApiResponse<StudentDashboardResponse>> getStudentDashboard() {
@@ -51,10 +43,7 @@ public class DashboardController {
                 .build());
     }
 
-    /**
-     * Học sinh xem danh sách kỳ thi được gán
-     * GET /api/dashboard/my-exams
-     */
+
     @PreAuthorize("hasAuthority('EXAM:START')")
     @GetMapping("/my-exams")
     public ResponseEntity<ApiResponse<List<MyExamResponse>>> getMyExams() {

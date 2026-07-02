@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated())
                   .exceptionHandling(ex -> ex
                   .authenticationEntryPoint((req, res, e) ->
-                  res.sendError(HttpServletResponse.SC_FORBIDDEN)))
+                  res.sendError(HttpServletResponse.SC_UNAUTHORIZED )))
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -58,7 +58,7 @@ public class SecurityConfig {
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Dùng allowedOriginPatterns thay vì allowedOrigins khi cần credentials
+        CorsConfiguration corsConfiguration = configuration.setAllowedOriginPatterns(Arrays.asList("*"));// Dùng allowedOriginPatterns thay vì allowedOrigins khi cần credentials
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "authorization", "Content-Type", "content-type", "x-auth-token", "*"));
         configuration.setExposedHeaders(Arrays.asList("x-auth-token", "Authorization"));
