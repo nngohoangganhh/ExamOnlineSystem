@@ -64,7 +64,6 @@ public class AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
         User user = userRepository.findByUsername(request.getUsername())
-
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, " USER NOT FOUND"));
 
         var jwtToken = jwtService.generateToken(user);
@@ -159,7 +158,6 @@ public class AuthService {
         if (user.getResetPasswordExpiry().isBefore(LocalDateTime.now())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token đã hết hạn");
         }
-
         // Cập nhật mật khẩu mới
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         // Xóa token

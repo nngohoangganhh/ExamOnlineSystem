@@ -47,6 +47,7 @@ public class RoleService {
     }
 
     public RoleResponse createRole(RoleRequest request) {
+
         Role role = Role.builder()
                 .code(request.getCode().toUpperCase())
                 .name(request.getName())

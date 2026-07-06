@@ -35,6 +35,7 @@ public class User implements UserDetails {
     private String email;
 
     private String fullName;
+
     private String status;
 
     @CreationTimestamp

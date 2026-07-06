@@ -22,4 +22,7 @@ server:
 
 jwt:
   secret: ${JWT_SECRET:MyVerySecureSecretKeyThatIsAtLeast256BitsLongForJWTSigningPurposesOnly}
-  expiration: ${JWT_EXPIRATION:86400000}
+  access-token-expiration: 900000        # 15 phút (ms)
+#  refresh-token-expiration: 604800000    # 7 ngày (ms)
+
+
