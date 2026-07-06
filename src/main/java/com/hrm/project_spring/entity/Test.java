@@ -28,7 +28,9 @@ public class Test {
     @ManyToOne
     @JoinColumn(name = "exam_id", nullable = false)
     private Exam exam;
+
     private String title;
+
     @Column(name = "duration_minutes")
     private Integer durationMinutes;
     @Column(name = "total_score")

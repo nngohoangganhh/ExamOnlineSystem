@@ -3,10 +3,14 @@ package com.hrm.project_spring.service;
 import com.hrm.project_spring.dto.auth.AuthResponse;
 import com.hrm.project_spring.dto.auth.ChangePasswordRequest;
 import com.hrm.project_spring.dto.auth.LoginRequest;
+import com.hrm.project_spring.dto.auth.RefreshTokenRequest;
 import com.hrm.project_spring.dto.user.UpdateProfileRequest;
 import com.hrm.project_spring.dto.user.UserRequest;
 import com.hrm.project_spring.dto.user.UserResponse;
+import com.hrm.project_spring.entity.RefreshToken;
 import com.hrm.project_spring.entity.User;
+import com.hrm.project_spring.enums.UserStatus;
+import com.hrm.project_spring.repository.RefreshTokenRepository;
 import com.hrm.project_spring.repository.UserRepository;
 import com.hrm.project_spring.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -14,17 +18,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -44,25 +50,68 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .fullName(request.getFullName())
-                .status("ACTIVE")
+                .status(UserStatus.ACTIVE)
                 .build();
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateAccessToken(user);
         return AuthResponse.builder()
-                .token(jwtToken)
+                .accessToken(jwtToken)
                 .message("User registered successfully")
                 .build();
     }
 
+
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, " USER NOT FOUND"));
-        var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .message("User logged in successfully")
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tài khoản không tồn tại"
+                ));
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mật khẩu không đúng");
+        }
+
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tài khoản không hoạt động");
+        }
+
+        String newAccessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        RefreshToken savedRefreshToken = RefreshToken.builder()
+                .user(user)
+                .token(refreshToken)
+                .revoked(false)
+                .expiresAt(LocalDateTime.now().plusDays(7))
+                .createdAt(LocalDateTime.now())
                 .build();
+
+        refreshTokenRepository.save(savedRefreshToken);
+
+        return AuthResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(refreshToken)
+                .message("Đăng nhập thành công")
+                .build();
+    }
+
+    public AuthResponse refreshToken(RefreshTokenRequest request) {
+        String refreshToken = request.getRefreshtoken();
+        // 1. Kiểm tra JWT hợp lệ không
+        if (!jwtService.isRefreshToken(refreshToken)){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED," RefeshToken không hợp lệ ");
+        }
+        // 2. Kiểm tra đúng loại refresh token không
+
+
+        // 3. Lấy username từ token
+        // 4. Tìm user
+        // 5. Kiểm tra trạng thái user
+        // 6. Tìm refresh token trong DB
+        // 7. Kiểm tra token đã bị thu hồi chưa
+        // 8. Kiểm tra token hết hạn chưa
+        // 9. Tạo access token mới
+        // 10. Trả về cho FE
+        return null;
     }
 
     public UserResponse getProfile() {

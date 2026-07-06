@@ -36,7 +36,7 @@ public class ExamController {
         return ResponseEntity.ok(
                 ApiResponse.<PageResponse<ExamListResponse>>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("lấy danh sách thành công")
                         .data(examService.getAllExam(pageNo, pageSize))
                         .build()
@@ -48,7 +48,7 @@ public class ExamController {
         return ResponseEntity.ok(
                 ApiResponse.<ExamDetailResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("tìm kỳ thi theo id thành công")
                         .data(examService.getExamById(id))
                         .build()
@@ -61,7 +61,7 @@ public class ExamController {
            return ResponseEntity.ok(
                 ApiResponse.<ExamDetailResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message(" Tạo kỳ thi thành công")
                         .data(examService.create(request))
                         .build()
@@ -76,7 +76,7 @@ public class ExamController {
         return ResponseEntity.ok(
                 ApiResponse.<ExamDetailResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("tìm kỳ thi theo id thành công")
                         .data(examService.update(id,request))
                         .build()
@@ -89,7 +89,7 @@ public class ExamController {
         examService.deleteExam(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa thành công")
                 .data(null)
                 .build());
@@ -103,7 +103,7 @@ public class ExamController {
         return ResponseEntity.ok(
                  ApiResponse.<List<StudentResponse>>builder()
                         .success(true)
-                        .status(200)
+                         .code(200)
                         .message("lấy danh sách học sinh theo id kỳ thi thành công")
                         // Fix: Wrap Set<StudentResponse> into List to avoid ClassCastException
                         .data(new ArrayList<>(examService.getStudentsByExamId(examId)))
@@ -118,7 +118,7 @@ public class ExamController {
             @RequestBody @Valid AssignStudentsRequest request) {
         return ResponseEntity.ok(ApiResponse.<ExamDetailResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Gán học sinh thành công")
                 .data(examService.assignStudentsToExam(examId, request.getStudentIds()))
                 .build());
@@ -131,7 +131,7 @@ public class ExamController {
             @RequestBody @Valid AssignStudentsRequest request) {
         return ResponseEntity.ok(ApiResponse.<ExamDetailResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa học sinh thành công")
                 .data(examService.removeStudentsFromExam(examId, request.getStudentIds()))
                 .build());

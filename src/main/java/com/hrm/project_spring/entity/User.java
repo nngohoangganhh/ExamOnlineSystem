@@ -1,5 +1,6 @@
 package com.hrm.project_spring.entity;
 
+import com.hrm.project_spring.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,7 +36,10 @@ public class User implements UserDetails {
     private String email;
 
     private String fullName;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserStatus status = UserStatus.ACTIVE;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -115,6 +119,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return "ACTIVE".equalsIgnoreCase(status) || status == null;
+        return status== UserStatus.ACTIVE || status == null;
     }
 }

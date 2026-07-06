@@ -29,7 +29,7 @@ public class PermissionController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<PermissionResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách permission thành công")
                 .data(permissionService.getAllPermissions(pageNo, pageSize))
                 .build());
@@ -40,7 +40,7 @@ public class PermissionController {
     public ResponseEntity<ApiResponse<PermissionResponse>> getPermissionById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<PermissionResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Chi tiết permission")
                 .data(permissionService.getPermissionById(id))
                 .build());
@@ -51,7 +51,7 @@ public class PermissionController {
     public ResponseEntity<ApiResponse<PermissionResponse>> createPermission(@RequestBody @Valid PermissionRequest request) {
         return ResponseEntity.ok(ApiResponse.<PermissionResponse>builder()
                 .success(true)
-                .status(201)
+                .code (201)
                 .message("Tạo permission thành công")
                 .data(permissionService.createPermission(request))
                 .build());
@@ -64,7 +64,7 @@ public class PermissionController {
             @RequestBody @Valid PermissionRequest request) {
         return ResponseEntity.ok(ApiResponse.<PermissionResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Cập nhật permission thành công")
                 .data(permissionService.updatePermission(id, request))
                 .build());
@@ -76,7 +76,7 @@ public class PermissionController {
         permissionService.deletePermission(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa permission thành công")
                 .data(null)
                 .build());
@@ -92,7 +92,7 @@ public class PermissionController {
       permissionService.assignPermissionsToRole(roleId,permissionIds);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Gán permission cho role thành công")
                 .data(null)
                 .build());
@@ -106,7 +106,7 @@ public class PermissionController {
         permissionService.removePermissionsFromRole(roleId, permissionIds);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa permission khỏi role thành công")
                 .data(null)
                 .build());

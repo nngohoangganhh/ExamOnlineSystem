@@ -30,7 +30,7 @@ public class RoleController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<RoleResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách role thành công")
                 .data(roleService.getAllRoles(pageNo, pageSize))
                 .build());
@@ -41,7 +41,7 @@ public class RoleController {
     public ResponseEntity<ApiResponse<RoleResponse>> getRoleById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<RoleResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Chi tiết role")
                 .data(roleService.getRoleById(id))
                 .build());
@@ -52,7 +52,7 @@ public class RoleController {
     public ResponseEntity<ApiResponse<RoleResponse>> createRole(@RequestBody @Valid RoleRequest request) {
         return ResponseEntity.ok(ApiResponse.<RoleResponse>builder()
                 .success(true)
-                .status(201)
+                .code(201)
                 .message("Tạo role thành công")
                 .data(roleService.createRole(request))
                 .build());
@@ -65,7 +65,7 @@ public class RoleController {
             @RequestBody @Valid RoleRequest request) {
         return ResponseEntity.ok(ApiResponse.<RoleResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Cập nhật role thành công")
                 .data(roleService.updateRole(id, request))
                 .build());
@@ -77,7 +77,7 @@ public class RoleController {
         roleService.deleteRole(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa role thành công")
                 .data(null)
                 .build());

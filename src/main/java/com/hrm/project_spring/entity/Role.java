@@ -22,6 +22,7 @@ public class Role {
     private String code;        // ví dụ: "ADMIN", "TEACHER", "STUDENT"
 
     private String name;
+
     private String description;
 
     @ManyToMany(mappedBy = "roles")
