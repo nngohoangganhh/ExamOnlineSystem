@@ -34,4 +34,7 @@ public class Role {
         inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissions = new HashSet<>();
+
+    @Column(unique = true, nullable = false, name = "is_System")
+    private boolean isSystem;
 }
