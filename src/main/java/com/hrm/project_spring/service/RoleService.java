@@ -104,6 +104,7 @@ public class RoleService {
                 .code(role.getCode())
                 .name(role.getName())
                 .description(role.getDescription())
+                .isSystem(role.isSystem())
                 .permissions(permissions)
                 .build();
     }

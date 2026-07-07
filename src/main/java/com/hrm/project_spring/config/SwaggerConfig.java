@@ -11,11 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+
 @Configuration
 public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
+        // Tên scheme dùng chung cho SecurityRequirement
         final String securitySchemeName = "bearerAuth";
 
         return new OpenAPI()
@@ -26,9 +28,8 @@ public class SwaggerConfig {
                                 
                                 ### Hướng dẫn sử dụng:
                                 1. Gọi **POST /api/auth/login** để lấy token
-                                2. Nhấn nút **Authorize 🔒**
-                                3. Nhập JWT token
-                                4. Gọi các API khác bình thường
+                                2. Nhấn nút **Authorize 🔒** ở trên, nhập: `Bearer <token>`
+                                3. Gọi các API khác bình thường
                                 
                                 ### Các role mặc định:
                                 - **ADMIN** – Toàn quyền quản lý hệ thống
@@ -40,8 +41,8 @@ public class SwaggerConfig {
                                 .name("Dev Team")
                                 .email("admin@examSystem.com")))
                 .servers(List.of(
-                        new Server().url("/").description("Current Server")
-                ))
+                        new Server().url("http://localhost:8080").description("Local Development Server")))
+                // Khai báo security scheme JWT Bearer
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()
@@ -49,6 +50,6 @@ public class SwaggerConfig {
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
                                 .bearerFormat("JWT")
-                                .description("Nhập JWT token")));
+                                .description("Nhập JWT token theo định dạng: Bearer {token}")));
     }
 }
