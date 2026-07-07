@@ -21,8 +21,6 @@ server:
   port: ${PORT:8080}
 
 jwt:
-  secret: ${JWT_SECRET:MyVerySecureSecretKeyThatIsAtLeast256BitsLongForJWTSigningPurposesOnly}
-  access-token-expiration: 900000        # 15 phút (ms)
-#  refresh-token-expiration: 604800000    # 7 ngày (ms)
-
-
+    secret: ${JWT_SECRET:MyVerySecureSecretKeyThatIsAtLeast256BitsLongForJWTSigningPurposesOnly}
+    access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:3600000}
+    refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:604800000}

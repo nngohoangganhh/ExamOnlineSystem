@@ -32,7 +32,7 @@ public class ExamAttemptController {
             Authentication authentication) {
         return ResponseEntity.ok(ApiResponse.<ExamAttemptStart>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Bắt đầu bài thi thành công")
                 .data(attemptService.startAttempt(testId, authentication.getName()))
                 .build());
@@ -46,7 +46,7 @@ public class ExamAttemptController {
             Authentication authentication) {
         return ResponseEntity.ok(ApiResponse.<ExamAttemptSubmit>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Nộp bài thành công")
                 .data(attemptService.submitAttempt(attemptId, authentication.getName(), request))
                 .build());
@@ -61,7 +61,7 @@ public class ExamAttemptController {
             Authentication authentication) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<AttemptSummaryResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy lịch sử thi thành công")
                 .data(attemptService.getMyAttempts(authentication.getName(), pageNo, pageSize))
                 .build());
@@ -73,7 +73,7 @@ public class ExamAttemptController {
             Authentication authentication) {
         return ResponseEntity.ok(ApiResponse.<AttemptDetailResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy chi tiết bài thi thành công")
                 .data(attemptService.getAttemptDetail(attemptId, authentication.getName()))
                 .build());
@@ -89,7 +89,7 @@ public class ExamAttemptController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<AttemptSummaryResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách bài thi theo test thành công")
                 .data(attemptService.getAttemptsByTest(testId, pageNo, pageSize))
                 .build());
@@ -103,7 +103,7 @@ public class ExamAttemptController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<AttemptSummaryResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách bài thi theo kỳ thi thành công")
                 .data(attemptService.getAttemptsByExam(examId, pageNo, pageSize))
                 .build());
@@ -114,7 +114,7 @@ public class ExamAttemptController {
             @PathVariable Long attemptId) {
         return ResponseEntity.ok(ApiResponse.<AttemptDetailResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy chi tiết bài thi thành công")
                 .data(attemptService.getAttemptDetailAdmin(attemptId))
                 .build());

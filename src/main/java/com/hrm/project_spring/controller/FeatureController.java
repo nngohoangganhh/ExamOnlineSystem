@@ -25,7 +25,7 @@ public class FeatureController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<FeatureResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách feature thành công")
                 .data(featureService.getAllFeatures(pageNo, pageSize))
                 .build());
@@ -36,7 +36,7 @@ public class FeatureController {
     public ResponseEntity<ApiResponse<FeatureResponse>> getFeatureById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<FeatureResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Chi tiết feature")
                 .data(featureService.getFeatureById(id))
                 .build());
@@ -47,7 +47,7 @@ public class FeatureController {
     public ResponseEntity<ApiResponse<FeatureResponse>> createFeature(@RequestBody @Valid FeatureRequest request) {
         return ResponseEntity.ok(ApiResponse.<FeatureResponse>builder()
                 .success(true)
-                .status(201)
+                .code(201)
                 .message("Tạo feature thành công")
                 .data(featureService.createFeature(request))
                 .build());
@@ -60,7 +60,7 @@ public class FeatureController {
             @RequestBody @Valid FeatureRequest request) {
         return ResponseEntity.ok(ApiResponse.<FeatureResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Cập nhật feature thành công")
                 .data(featureService.updateFeature(id, request))
                 .build());
@@ -72,7 +72,7 @@ public class FeatureController {
         featureService.deleteFeature(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code (200)
                 .message("Xóa feature thành công")
                 .data(null)
                 .build());

@@ -24,7 +24,7 @@ public class AnswerController {
         return ResponseEntity.ok(
                 ApiResponse.<List<AnswerResponse>>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("Lấy danh sách thành công")
                         .data(answerService.getAnswersByQuestionId(questionId, includeIsCorrect))
                         .build()
@@ -38,7 +38,7 @@ public class AnswerController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AnswerResponse>builder()
                         .success(true)
-                        .status(201)
+                        .code(201)
                         .message("Tạo thành công")
                         .data(answerService.addAnswerToQuestion(questionId, request))
                         .build());
@@ -51,7 +51,7 @@ public class AnswerController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<List<AnswerResponse>>builder()
                         .success(true)
-                        .status(201)
+                        .code(201)
                         .message("Tạo thành công")
                         .data(answerService.addBulkAnswers(questionId, requests))
                         .build());
@@ -64,7 +64,7 @@ public class AnswerController {
             @Valid @RequestBody AnswerRequest request) {
         return ResponseEntity.ok(ApiResponse.<AnswerResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Cập nhật thành công")
                 .data(answerService.updateAnswer(questionId, answerId, request))
                 .build());
@@ -77,7 +77,7 @@ public class AnswerController {
         answerService.deleteAnswer(questionId, answerId);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa thành công")
                 .data(null)
                 .build());

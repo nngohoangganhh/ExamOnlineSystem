@@ -14,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "roles")
 public class Role {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,13 +22,11 @@ public class Role {
     private String code;        // ví dụ: "ADMIN", "TEACHER", "STUDENT"
 
     private String name;
+
     private String description;
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
-
-//    @Column(unique = true, nullable = false, name = "is_System")
-//    private boolean isSystem;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -39,5 +36,6 @@ public class Role {
     )
     private Set<Permission> permissions = new HashSet<>();
 
-
+    @Column(name = "is_system", nullable = false)
+    private boolean isSystem = false;
 }

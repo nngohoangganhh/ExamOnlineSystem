@@ -27,7 +27,7 @@ public class UserController {
         return ResponseEntity.ok(
                 ApiResponse.<PageResponse<UserResponseDto>>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("Lấy danh sách thành công")
                         .data(userService.getAllUsers(pageNo,pageSize))
                         .build()
@@ -40,7 +40,7 @@ public class UserController {
         return ResponseEntity.ok(
                 ApiResponse.<UserResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("lấy user theo id thành cong")
                         .data(userService.getUserById(id))
                         .build()
@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok(
                 ApiResponse.<UserResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("tạo user thành công")
                         .data(userService.createUser(request))
                         .build()
@@ -65,7 +65,7 @@ public class UserController {
         return ResponseEntity.ok(
                 ApiResponse.<UserResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("sửa thành công")
                         .data(userService.updateUser(id,request))
                          .build());

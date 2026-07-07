@@ -47,8 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("Số dấu chấm trong token = " + jwt.chars().filter(ch -> ch == '.').count());
             // 3. Kiểm tra xem token có thực sự tồn tại sau chữ "Bearer " hay không
             // Nếu token là chuỗi rỗng hoặc chữ "null" (lỗi từ frontend), bỏ qua filter này
-            if (jwt.isEmpty() || jwt.equalsIgnoreCase("null")) {
-                log.warn("JWT Token is empty or 'null' string");
+            if (jwt.isBlank() || jwt.chars().filter(ch -> ch == '.').count() != 2) {
+                log.warn("Invalid JWT format");
                 filterChain.doFilter(request, response);
                 return;
             }

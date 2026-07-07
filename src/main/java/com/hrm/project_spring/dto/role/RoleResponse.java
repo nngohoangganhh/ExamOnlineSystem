@@ -14,6 +14,6 @@ public class RoleResponse {
     private String code;
     private String name;
     private String description;
-    private Long totalUsers;
+    private Boolean isSystem;
     private List<PermissionResponse> permissions;
 }

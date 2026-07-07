@@ -26,7 +26,7 @@ public class ClassRoomController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<ClassRoomResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách lớp học thành công")
                 .data(classRoomService.getAllClassRooms(pageNo, pageSize))
                 .build());
@@ -38,7 +38,7 @@ public class ClassRoomController {
             @Valid @RequestBody ClassRoomRequest request) {
         return ResponseEntity.ok(ApiResponse.<ClassRoomResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Tạo lớp học thành công")
                 .data(classRoomService.createClassRoom(request))
                 .build());
@@ -51,7 +51,7 @@ public class ClassRoomController {
             @Valid @RequestBody ClassRoomRequest request) {
         return ResponseEntity.ok(ApiResponse.<ClassRoomResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Cập nhật lớp học thành công")
                 .data(classRoomService.updateClassRoom(id, request))
                 .build());
@@ -63,7 +63,7 @@ public class ClassRoomController {
         classRoomService.deleteClassRoom(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa lớp học thành công")
                 .build());
     }
@@ -75,7 +75,7 @@ public class ClassRoomController {
             @Valid @RequestBody AssignStudentsToClassRequest request) {
         return ResponseEntity.ok(ApiResponse.<ClassRoomResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Gán sinh viên vào lớp thành công")
                 .data(classRoomService.assignStudents(id, request))
                 .build());
@@ -88,7 +88,7 @@ public class ClassRoomController {
             @Valid @RequestBody AssignStudentsToClassRequest request) {
         return ResponseEntity.ok(ApiResponse.<ClassRoomResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa sinh viên khỏi lớp thành công")
                 .data(classRoomService.removeStudents(id, request))
                 .build());

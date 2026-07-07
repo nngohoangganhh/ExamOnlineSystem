@@ -5,6 +5,7 @@ import com.hrm.project_spring.dto.user.UserRequest;
 import com.hrm.project_spring.dto.user.UserResponse;
 import com.hrm.project_spring.dto.user.UserResponseDto;
 import com.hrm.project_spring.entity.User;
+import com.hrm.project_spring.enums.UserStatus;
 import com.hrm.project_spring.repository.PermissionRepository;
 import com.hrm.project_spring.repository.UserRepository;
 import com.hrm.project_spring.repository.RoleRepository;
@@ -66,7 +67,7 @@ public class UserService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .fullName(request.getFullName())
-                .status("ACTIVE")
+                .status(UserStatus.ACTIVE)
                 .build();
         if (request.getRoleIds() != null && !request.getRoleIds().isEmpty()) {
             Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoleIds()));
@@ -129,6 +130,9 @@ public class UserService {
                     .permissions(permissionCode)
                     .build();
         }
+
+
+
         private UserResponseDto mapTo(User user) {
             String roleName = null;
             if (user.getRoles() != null && !user.getRoles().isEmpty()) {
