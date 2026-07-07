@@ -32,11 +32,9 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-
     @Autowired
     @Lazy
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(UserRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -64,15 +62,21 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tài khoản không tồn tại"
-                ));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tài khoản không tồn tại"));
+
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mật khẩu không đúng");
         }
-
-        if (user.getStatus() != UserStatus.ACTIVE) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tài khoản không hoạt động");
+        if (user.getStatus() == UserStatus.INACTIVE) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tài khoản chưa hoạt động");
         }
+        if (user.getStatus() == UserStatus.DELETED){
+            throw  new ResponseStatusException(HttpStatus.FORBIDDEN," Tài khoản đã bị xóa ");
+        }
+        if (user.getStatus() == UserStatus.LOCKED){
+            throw  new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"Tài khoản đã bị khóa");
+        }
+
 
         String newAccessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -97,7 +101,7 @@ public class AuthService {
     @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
 
-        String refreshToken = request.getRefreshtoken();
+        String refreshToken = request.getRefreshToken();
 
         // 1. Check token có được gửi lên không
         if (refreshToken == null || refreshToken.isBlank()) {
@@ -167,10 +171,8 @@ public class AuthService {
                     "Refresh token đã hết hạn"
             );
         }
-
         // 10. Tạo access token mới
         String newAccessToken = jwtService.generateAccessToken(user);
-
         // 11. Trả về cho FE
         return AuthResponse.builder()
                 .accessToken(newAccessToken)
@@ -259,7 +261,6 @@ public class AuthService {
         if (user.getResetPasswordExpiry().isBefore(LocalDateTime.now())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token đã hết hạn");
         }
-
         // Cập nhật mật khẩu mới
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         // Xóa token
