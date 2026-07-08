@@ -9,8 +9,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
-@NoArgsConstructor
 public class RefreshTokenRequest {
     @NotBlank(message = "RefreshToken không được để trống")
     private String refreshToken;

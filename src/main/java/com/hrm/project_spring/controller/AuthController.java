@@ -2,6 +2,8 @@ package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.auth.*;
 import com.hrm.project_spring.dto.common.ApiResponse;
+import com.hrm.project_spring.dto.user.UpdateProfileRequest;
+import com.hrm.project_spring.dto.user.UserResponse;
 import com.hrm.project_spring.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -121,5 +123,26 @@ public class AuthController {
                 .message("Đổi mật khẩu thành công. Vui lòng đăng nhập lại trên các thiết bị khác.")
                 .data(null)
                 .build());
+    }
+    // GetProfile
+    @GetMapping("/profile")
+    public ResponseEntity<ApiResponse<UserResponse>> getProfile() {
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                .success(true)
+                .code(200)
+                .message("lấy thông tin cá nhân thành công")
+                .data(authService.getProfile())
+                .build());
+    }
+    //UpdateProfile
+    @PutMapping("/update-profile")
+    public ResponseEntity<ApiResponse<UserResponse>> updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                .success(true)
+                .code(200)
+                .message("Cập nhận thông tin thành công ")
+                .data(authService.updateProfile(request))
+                .build()
+        );
     }
 }
