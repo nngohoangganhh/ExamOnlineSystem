@@ -1,6 +1,8 @@
 package com.hrm.project_spring.service;
 
 import com.hrm.project_spring.dto.auth.*;
+import com.hrm.project_spring.dto.user.UpdateProfileRequest;
+import com.hrm.project_spring.dto.user.UserResponse;
 import com.hrm.project_spring.entity.RefreshToken;
 import com.hrm.project_spring.entity.User;
 import com.hrm.project_spring.enums.UserStatus;
@@ -30,7 +32,6 @@ public class AuthService {
     private final JwtService jwtService;
 
     // ======================== ĐĂNG NHẬP (UC01) ========================
-
     @Transactional
     public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
 
@@ -168,7 +169,6 @@ public class AuthService {
     }
 
     // ======================== REFRESH TOKEN ========================
-
     @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
 
@@ -283,6 +283,7 @@ public class AuthService {
     }
 
     // ======================== QUÊN MẬT KHẨU (UC03) ========================
+
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request) {
 
@@ -304,7 +305,6 @@ public class AuthService {
     }
 
     // ======================== RESET MẬT KHẨU (UC03) ========================
-
     @Transactional
     public void resetPassword(ResetPasswordRequest request) {
 
@@ -349,7 +349,6 @@ public class AuthService {
     }
 
     // ======================== ĐỔI MẬT KHẨU (UC04) ========================
-
     @Transactional
     public void changePassword(ChangePasswordRequest request, HttpServletRequest httpRequest) {
 
@@ -396,5 +395,36 @@ public class AuthService {
         // → Ở đây dùng cách đơn giản: xóa toàn bộ (user phải login lại sau khi đổi mật khẩu)
         // Nếu muốn giữ phiên hiện tại, cần truyền thêm currentRefreshTokenId từ request
         refreshTokenRepository.deleteAllByUser(user);
+    }
+
+    // PROFILE
+    public UserResponse getProfile() {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        var user = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        UserResponse response = new UserResponse();
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setFullName(user.getFullName());
+        response.setEmail(user.getEmail());
+        response.setStatus(UserStatus.ACTIVE);
+        response.setRequirePasswordChange(user.getRequirePasswordChange());
+        response.setLastLoginAt(user.getLastLoginAt());
+        response.setCreatedAt(user.getCreatedAt());
+        response.setRoles(user.getRoles().stream().map(role -> role.getCode()).toList());
+        response.setPermissions(user.getRoles().stream().flatMap(role -> role.getPermissions().stream()).map(permission -> permission.getCode()).distinct().toList());
+        return response;
+    }
+
+    public UserResponse updateProfile(UpdateProfileRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tài khoản không tồn tại"));
+        if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email đã được sử dụng");
+        }
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
+        userRepository.save(user);
+
+        return getProfile();
     }
 }

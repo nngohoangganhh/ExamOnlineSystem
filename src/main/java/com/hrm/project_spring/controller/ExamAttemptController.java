@@ -2,7 +2,10 @@ package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
+import com.hrm.project_spring.dto.exam.ExamAttemptStart;
+import com.hrm.project_spring.dto.exam.ExamAttemptSubmit;
 import com.hrm.project_spring.dto.result.AttemptDetailResponse;
+import com.hrm.project_spring.dto.result.AttemptSubmitRequest;
 import com.hrm.project_spring.dto.result.AttemptSummaryResponse;
 import com.hrm.project_spring.service.ExamAttemptService;
 import jakarta.validation.Valid;
@@ -11,10 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import com.hrm.project_spring.dto.result.AttemptSubmitRequest;
-import com.hrm.project_spring.dto.exam.ExamAttemptStart;
-import com.hrm.project_spring.dto.exam.ExamAttemptSubmit;
 
 @RestController
 @RequestMapping("/api/attempts")

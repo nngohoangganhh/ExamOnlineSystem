@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-import static org.hibernate.boot.model.process.spi.MetadataBuildingProcess.build;
-
 @RestController
 @RequestMapping("/api/permissions")
 @RequiredArgsConstructor

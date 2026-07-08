@@ -5,8 +5,8 @@ import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.exam.ExamDetailResponse;
 import com.hrm.project_spring.dto.exam.ExamListResponse;
 import com.hrm.project_spring.dto.exam.ExamRequest;
-import com.hrm.project_spring.dto.student.StudentResponse;
 import com.hrm.project_spring.dto.student.AssignStudentsRequest;
+import com.hrm.project_spring.dto.student.StudentResponse;
 import com.hrm.project_spring.service.ExamService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @RequestMapping("/api/exams")
 @RestController

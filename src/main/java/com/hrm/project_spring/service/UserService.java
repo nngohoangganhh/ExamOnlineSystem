@@ -4,12 +4,11 @@ import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.user.UserRequest;
 import com.hrm.project_spring.dto.user.UserResponse;
 import com.hrm.project_spring.dto.user.UserResponseDto;
+import com.hrm.project_spring.entity.Role;
 import com.hrm.project_spring.entity.User;
 import com.hrm.project_spring.enums.UserStatus;
-import com.hrm.project_spring.repository.PermissionRepository;
-import com.hrm.project_spring.repository.UserRepository;
 import com.hrm.project_spring.repository.RoleRepository;
-import com.hrm.project_spring.entity.Role;
+import com.hrm.project_spring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

@@ -2,12 +2,8 @@ package com.hrm.project_spring.service;
 
 import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.exam.ExamAttemptStart;
-import com.hrm.project_spring.dto.result.AttemptDetailResponse;
-import com.hrm.project_spring.dto.result.AttemptSubmitRequest;
-import com.hrm.project_spring.dto.result.AttemptSummaryResponse;
-import com.hrm.project_spring.dto.result.StudentAnswerDetailResponse;
 import com.hrm.project_spring.dto.exam.ExamAttemptSubmit;
-import com.hrm.project_spring.dto.result.StudentAnswerSubmitRequest;
+import com.hrm.project_spring.dto.result.*;
 import com.hrm.project_spring.entity.*;
 import com.hrm.project_spring.repository.*;
 import lombok.RequiredArgsConstructor;
