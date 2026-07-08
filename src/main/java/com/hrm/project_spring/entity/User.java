@@ -37,10 +37,15 @@ public class User {
     private UserStatus status = UserStatus.ACTIVE;
 
 
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
+    @Column(name = "reset_password_expiry")
+    private LocalDateTime resetPasswordExpiry;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_roles",
