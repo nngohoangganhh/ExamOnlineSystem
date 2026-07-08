@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class AuthResponse {
     private String accessToken;
     private String refreshToken;
+    private String tokenType;
     private String message;
+    private Boolean requirePasswordChange;
 
 }

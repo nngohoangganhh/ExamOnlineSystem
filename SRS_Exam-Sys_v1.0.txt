@@ -1,0 +1,2523 @@
+
+Tài li?u Ð?c t? Yêu c?u Ph?n m?m (SRS)
+
+
+
+
+Tài li?u Ð?c t? Yêu c?u Ph?n m?m (SRS)
+H? th?ng Thi tr?c tuy?n - Exam-Sys
+
+Mã tài li?u: SRS-EXAM-V1.0
+Phiên b?n: 1.0
+Ngày phát hành: 19/06/2026
+So?n th?o: Phùng Ð?c Chính & BA Agent
+Phòng: TT Phát tri?n ph?n m?m 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   L?ch s? phiên b?n
+
+   B?ng du?i dây ghi l?i l?ch s? các phiên b?n c?a tài li?u SRS này. M?i phiên b?n ghi rõ ngày phát hành, tác gi? so?n th?o, và tóm t?t thay d?i chính so v?i phiên b?n tru?c.
+
+Phiên b?nNgàyTác gi?Mô t? thay d?i0.101/06/2026BA (Business Analyst)B?n nháp d?u tiên: outline + Chuong 1-30.510/06/2026BA (Business Analyst)Thêm Chuong 4-9: d?c t? 48 use case chi ti?t0.815/06/2026BA (Business Analyst)Thêm Chuong 10-13: Business Rules, Data Dictionary, Domain Model, Mockup0.917/06/2026BA (Business Analyst)Thêm Chuong 14-17: NFR, UI/UX, Tech Stack, Data Storage1.019/06/2026BA (Business Analyst)Hoàn thi?n Ph? l?c + review n?i b?; phát hành cho stakeholder
+
+M?C L?C
+
+
+
+L?ch s? phiên b?n	1
+Chuong 1. Gi?i thi?u	2
+1.1 M?c dích tài li?u	2
+1.2 Ph?m vi h? th?ng	2
+1.3 Ð?nh nghia, t? vi?t t?t và thu?t ng?	3
+1.4 Tài li?u tham kh?o	4
+1.5 T?ng quan tài li?u	5
+Chuong 2. Mô t? t?ng quan	5
+2.1 Quan di?m h? th?ng	5
+2.2 Ch?c nang h? th?ng	6
+2.3 Ð?c di?m ngu?i dùng	6
+2.4 Ràng bu?c	7
+2.5 Gi? d?nh và ph? thu?c	8
+2.6 Phân b? yêu c?u	9
+Chuong 3. Yêu c?u ch?c nang - T?ng quan Use Case	9
+3.1 So d? Use Case t?ng quan	9
+3.1.1 Mô t? so d? Use Case (text)	10
+3.2 B?ng actor & vai trò	17
+3.3 Ma tr?n Use Case - Actor	17
+3.4 Phân nhóm Use Case theo module	17
+Chuong 4. Use Case chi ti?t - Module Ðang nh?p & Phân quy?n	18
+4.1 UC01 - Ðang nh?p	18
+UC01: Ðang nh?p	18
+4.2 UC02 - Ðang xu?t	23
+UC02: Ðang xu?t	23
+4.3 UC03 - Quên m?t kh?u / Reset m?t kh?u	26
+UC03: Quên m?t kh?u / Reset m?t kh?u	26
+4.4 UC04 - Ð?i m?t kh?u	30
+UC04: Ð?i m?t kh?u	30
+4.5 UC05 - Qu?n lý Role (RBAC)	33
+UC05: Qu?n lý Role	34
+4.6 UC06 - Phân quy?n User-Role	37
+UC06: Phân quy?n User-Role	37
+4.7 UC07 - Xem Audit Log truy c?p	40
+UC07: Xem Audit Log truy c?p	40
+Chuong 5. Use Case chi ti?t - Module Qu?n lý User	42
+5.1 UC08 - T?o user	43
+UC08: T?o user	43
+5.2 UC09 - S?a user	47
+UC09: S?a user	47
+5.3 UC10 - Khóa/M? khóa user	50
+UC10: Khóa/M? khóa user	50
+5.4 UC11 - Xóa user (soft delete)	53
+UC11: Xóa user (soft delete)	53
+5.5 UC12 - Import user t? Excel/CSV	56
+UC12: Import user t? Excel/CSV	56
+5.6 UC13 - Export danh sách user	60
+UC13: Export danh sách user	60
+5.7 UC14 - Tìm ki?m & l?c user	62
+UC14: Tìm ki?m & l?c user	62
+5.8 UC15 - Qu?n lý l?p h?c	65
+UC15: Qu?n lý l?p h?c	65
+Chuong 6. Use Case chi ti?t - Module Ngân hàng câu h?i	68
+6.1 UC16 - T?o câu h?i	68
+UC16: T?o câu h?i	68
+6.2 UC17 - S?a câu h?i	72
+UC17: S?a câu h?i	72
+6.3 UC18 - Xóa câu h?i	75
+UC18: Xóa câu h?i	75
+6.4 UC19 - Import câu h?i t? Word/Excel	78
+UC19: Import câu h?i t? Word/Excel	78
+6.5 UC20 - Export câu h?i	81
+UC20: Export câu h?i	81
+6.6 UC21 - Phân lo?i câu h?i	83
+UC21: Phân lo?i câu h?i (môn / chuong / m?c d? khó)	84
+6.7 UC22 - Tag câu h?i	86
+UC22: Tag câu h?i	86
+6.8 UC23 - Duy?t câu h?i	89
+UC23: Duy?t câu h?i	89
+6.9 UC24 - Tìm ki?m & l?c câu h?i	92
+UC24: Tìm ki?m & l?c câu h?i	92
+Chuong 7. Use Case chi ti?t - Module Qu?n lý K? thi & Bài thi	94
+7.1 UC25 - T?o k? thi	95
+UC25: T?o k? thi	95
+7.2 UC26 - S?a / xóa k? thi	97
+UC26: S?a / Xóa k? thi	97
+7.3 UC27 - T?o bài thi trong k? thi	100
+UC27: T?o bài thi trong k? thi	100
+7.4 UC28 - C?u hình bài thi	102
+UC28: C?u hình bài thi	102
+7.5 UC29 - Gán câu h?i vào bài thi	105
+UC29: Gán câu h?i vào bài thi	105
+7.6 UC30 - Gán thí sinh / l?p vào bài thi	109
+UC30: Gán thí sinh / l?p vào bài thi	109
+7.7 UC31 - M? / dóng bài thi (l?ch)	111
+UC31: M? / dóng bài thi (l?ch)	112
+7.8 UC32 - Xu?t d? thi PDF	114
+UC32: Xu?t d? thi PDF	115
+Chuong 8. Use Case chi ti?t - Module Tham gia thi	117
+8.1 UC33 - Xem danh sách bài thi du?c gán	117
+UC33: Xem danh sách bài thi du?c gán	117
+8.2 UC34 - Vào thi (d?ng ý quy d?nh)	120
+UC34: Vào thi (d?ng ý quy d?nh)	120
+8.3 UC35 - Tr? l?i câu h?i	124
+UC35: Tr? l?i câu h?i	124
+8.4 UC36 - Luu t?m câu tr? l?i	128
+UC36: Luu t?m câu tr? l?i	128
+8.5 UC37 - Chuy?n câu / navigate	130
+UC37: Chuy?n câu / navigate	130
+8.6 UC38 - Ðánh d?u câu c?n xem l?i	132
+UC38: Ðánh d?u câu c?n xem l?i	132
+8.7 UC39 - N?p bài (submit)	134
+UC39: N?p bài (submit)	134
+8.8 UC40 - T? d?ng n?p khi h?t gi? (auto-submit)	138
+UC40: T? d?ng n?p khi h?t gi? (auto-submit)	138
+8.9 UC41 - Xem l?i bài thi & dáp án dúng	141
+UC41: Xem l?i bài thi & dáp án dúng	141
+Chuong 9. Use Case chi ti?t - Module Báo cáo K?t qu?	144
+9.1 UC42 - Xem k?t qu? cá nhân	144
+UC42: Xem k?t qu? cá nhân	144
+9.2 UC43 - Xem danh sách k?t qu? bài thi	146
+UC43: Xem danh sách k?t qu? bài thi	147
+9.3 UC44 - Báo cáo th?ng kê theo l?p / môn / k?	149
+UC44: Báo cáo th?ng kê theo l?p / môn / k?	149
+9.4 UC45 - Export k?t qu? Excel / PDF	152
+UC45: Export k?t qu? Excel / PDF	153
+9.5 UC46 - Dashboard t?ng quan	155
+UC46: Dashboard t?ng quan	155
+9.6 UC47 - Phân tích d? khó câu h?i (item analysis)	158
+UC47: Phân tích d? khó câu h?i (item analysis)	158
+9.7 UC48 - In ch?ng ch? / b?ng di?m	161
+UC48: In ch?ng ch? / b?ng di?m	161
+Chuong 10. Ma tr?n Quy t?c Nghi?p v? (Business Rules Matrix)	164
+10.1 Ma tr?n Business Rules	164
+Chuong 11. Data Dictionary	164
+11.1 Th?c th? User	165
+11.2 Th?c th? Role & Permission	165
+11.3 Th?c th? Class (L?p h?c) & Subject	166
+11.4 Th?c th? Question & liên quan	166
+11.5 Th?c th? Exam & Test	167
+11.6 Th?c th? Attempt & Result	167
+11.7 Th?c th? Audit Log	168
+Chuong 12. Domain Model	168
+12.1 Nhóm th?c th? Identity & Access	168
+12.2 Nhóm th?c th? Organization	169
+12.3 Nhóm th?c th? Question Bank	171
+12.4 Nhóm th?c th? Exam	172
+12.5 Nhóm th?c th? Attempt & Result	174
+12.6 B?ng t?ng h?p quan h?	175
+Chuong 13. Mockup mô t? màn hình chính	176
+13.1 Màn Login	176
+13.2 Dashboard Admin	177
+13.3 Dashboard Teacher	178
+13.4 Dashboard Student	179
+13.5 Màn Qu?n lý câu h?i	180
+13.6 Màn T?o bài thi (Wizard 4 bu?c)	181
+13.7 Màn Làm bài thi	182
+13.8 Màn Báo cáo k?t qu?	183
+Chuong 14. Yêu c?u phi ch?c nang (NFR)	184
+14.1 Hi?u nang (Performance)	185
+14.2 B?o m?t (Security)	185
+14.3 Tuong thích (Compatibility)	185
+14.4 Kh? nang m? r?ng (Scalability)	186
+14.5 Kh? d?ng & V?n hành (Availability & Operations)	186
+Chuong 15. Yêu c?u Giao di?n & Tr?i nghi?m	186
+15.1 Nguyên t?c UX	187
+15.2 Hu?ng d?n UI	188
+15.3 Ða ngôn ng? (i18n)	188
+15.4 Responsive breakpoints	189
+Chuong 16. Ràng bu?c Công ngh? & Tích h?p	190
+16.1 Tech stack khuy?n ngh?	190
+16.2 Tích h?p h? th?ng ngoài	190
+16.2.1 SMTP Email (Must)	190
+16.2.2 SMS Gateway (Could)	191
+16.2.3 SSO / OAuth2 (Should)	192
+16.2.4 LDAP / Active Directory (Could)	193
+16.2.5 LTI 1.3 integration (Could, roadmap 1.1)	193
+16.2.6 Safe Exam Browser (Could, roadmap 2.0)	194
+16.2.7 Ch? ký s? (Could, roadmap 1.1)	194
+16.3 Browser lockdown strategy	195
+16.4 Backup & Recovery	196
+Chuong 17. Yêu c?u D? li?u & Luu tr?	197
+17.1 Mô hình d? li?u logic	197
+17.2 Quy t?c luu tr? file	197
+17.3 B?o m?t d? li?u	198
+17.4 Retention policy	199
+17.5 Migration & versioning schema	199
+Chuong 18. Ph? l?c	200
+18.1 Ph? l?c A - B?ng t?ng h?p Use Case	200
+18.2 Ph? l?c B - B?ng mã l?i h? th?ng	201
+18.3 Ph? l?c C - Template file import	201
+18.3.1 Template import user	201
+18.3.2 Template import câu h?i (Excel)	201
+18.4 Ph? l?c D - Changelog d? ki?n	202
+
+
+
+
+
+   Chuong 1. Gi?i thi?u
+
+1.1 M?c dích tài li?u
+   Tài li?u Ð?c t? Yêu c?u Ph?n m?m (Software Requirements Specification - SRS) này du?c so?n th?o nh?m xác d?nh m?t cách d?y d?, rõ ràng và có th? ki?m ch?ng du?c các yêu c?u ch?c nang và phi ch?c nang c?a H? th?ng Thi tr?c tuy?n mang tên Exam-Sys. Tài li?u dóng vai trò làm h?p d?ng ki?n th?c gi?a các bên liên quan (Business Owner, Product Owner, Giáo viên, Qu?n tr? viên h? th?ng, Ð?i ngu phát tri?n, Ð?i ngu ki?m th?) và là co s? d? thi?t k? chi ti?t, l?p trình, ki?m th? cung nhu nghi?m thu s?n ph?m.
+   Ð?i tu?ng d?c chính c?a tài li?u bao g?m: (i) Nhóm phát tri?n ph?n m?m - s? d?ng làm d?u vào d? thi?t k? và l?p trình; (ii) Nhóm Ki?m th? (QA) - s? d?ng làm co s? d? xây d?ng test case và ki?m th? nghi?m thu; (iii) Khách hàng/Business Owner - xác nh?n dúng yêu c?u nghi?p v? tru?c khi phát tri?n; (iv) Nhóm V?n hành (Ops) - chu?n b? h? t?ng tri?n khai phù h?p v?i các yêu c?u phi ch?c nang; (v) Ð?i ngu dào t?o và h? tr? ngu?i dùng - biên so?n tài li?u hu?ng d?n s? d?ng.
+
+1.2 Ph?m vi h? th?ng
+   H? th?ng Exam-Sys là m?t h? th?ng thi tr?c tuy?n dành cho các t? ch?c giáo d?c, trung tâm dào t?o và doanh nghi?p có nhu c?u t? ch?c ki?m tra, dánh giá nang l?c h?c viên/nhân viên qua hình th?c tr?c tuy?n. H? th?ng cho phép giáo viên xây d?ng ngân hàng câu h?i theo chu?n, t? ch?c các k? thi v?i nhi?u bài thi d?c l?p, gán thí sinh theo l?p/nhóm, t? ch?c thi v?i các co ch? ch?ng gian l?n co b?n, và xu?t báo cáo k?t qu? da chi?u.
+   H? th?ng bao g?m 6 nhóm ch?c nang chính du?c d?c t? chi ti?t trong tài li?u này: (1) Ðang nh?p và phân quy?n theo vai trò (RBAC); (2) Qu?n lý ngu?i dùng và don v? t? ch?c (l?p, khoa); (3) Ngân hàng câu h?i h?n h?p (tr?c nghi?m và t? lu?n); (4) Qu?n lý k? thi và bài thi v?i c?u hình linh ho?t; (5) Tham gia thi cho thí sinh v?i các bi?n pháp ch?ng gian l?n m?c trung bình; (6) Báo cáo k?t qu? và th?ng kê da chi?u. Bên c?nh dó, tài li?u cung d?c t? các yêu c?u phi ch?c nang v? hi?u nang, b?o m?t, tuong thích và kh? nang m? r?ng.
+   Ph?m vi KHÔNG bao g?m trong phiên b?n 1.0 c?a h? th?ng: (i) Tích h?p thanh toán tr?c tuy?n cho các k? thi thuong m?i; (ii) Nh?n di?n khuôn m?t và giám sát qua webcam th?i gian th?c (ch? d?c t? m?c tùy ch?n trong roadmap); (iii) H? th?ng qu?n lý h?c t?p (LMS) d?y d? v?i bài gi?ng, bài t?p v?
+
+nhà, di?n dàn; (iv) Tích h?p ch? ký s? c?p tru?ng cho ch?ng ch?; (v) ?ng d?ng di d?ng native (iOS/Android) - trong phiên b?n 1.0 ch? h? tr? giao di?n web responsive; (vi) Tích h?p chia s? d? li?u v?i các h? th?ng bên th? ba qua API công khai (public API) - s? du?c phát tri?n ? phiên b?n 1.1.
+   Các tính nang nâng cao du?c ghi nh?n trong roadmap phiên b?n 1.1 và 2.0 bao g?m: giám sát qua webcam tùy ch?n, tích h?p LTI 1.3 v?i LMS ngoài, ?ng d?ng di d?ng native, AI t? sinh câu h?i, phân tích d? khó câu h?i b?ng AI. Các tính nang này du?c d?t trong Chuong 16 v?i nhãn priority = Could và không thu?c ph?m vi nghi?m thu c?a phiên b?n 1.0.
+
+1.3 Ð?nh nghia, t? vi?t t?t và thu?t ng?
+   Ph?n này t?ng h?p các thu?t ng? chuyên ngành, t? vi?t t?t và khái ni?m nghi?p v? du?c s? d?ng xuyên su?t tài li?u. Vi?c th?ng nh?t thu?t ng? giúp tránh hi?u sai gi?a các bên liên quan, d?c bi?t gi?a nhóm nghi?p v? (giáo d?c) và nhóm k? thu?t.
+B?ng 1.1 - Danh m?c t? vi?t t?t
+
+SLA	Service Level Agreement - Th?a thu?n m?c d? d?ch v?
+
+
+
+T? vi?t t?t
+RTO/RPODi?n gi?i
+Recovery Time/Point Objective - M?c tiêu th?i gian/di?m khôi ph?cWCAGWeb Content Accessibility Guidelines - Tiêu chu?n ti?p c?n webOWASPOpen Worldwide Application Security ProjectCDNContent Delivery Network - M?ng phân ph?i n?i dungB?ng 1.2 - Ð?nh nghia thu?t ng? nghi?p v?
+
+Thu?t ng?Ð?nh nghiaK? thi (Exam)M?t s? ki?n ki?m tra có th?i gian xác d?nh (vd: gi?a k? h?c ph?n X, cu?i k? nam 2026). M?t k? thi có th? ch?a nhi?u bài thi.Bài thi (Test)M?t c?u trúc d? thi c? th? trong m?t k? thi: g?m danh sách câu h?i, c?u hình th?i gian, cách tính di?m, s? l?n thi. M?t bài thi thu?c v? dúng m?t k? thi.Lu?t thi (Attempt)M?t l?n thí sinh tham gia làm bài thi. M?t thí sinh có th? có nhi?u lu?t thi v?i cùng m?t bài thi tùy c?u hình s? l?n thi.Ngân hàng câu h?iT?p h?p câu h?i du?c phân lo?i theo môn h?c, chuong, m?c d? khó, có th? tái s? d?ng trong nhi?u bài thi.M?c d? khó (Bloom)Phân lo?i m?c d? nh?n th?c theo thang Bloom: Nh? - Hi?u - V?n d?ng - Phân tích - T?ng h?p
+- Ðánh giá.Ði?m t?i daT?ng di?m t?i da c?a m?t bài thi. M?c d?nh là 10 ho?c 100. Ði?m c?a thí sinh du?c quy d?i v? thang này.Chính sách tính di?mQuy t?c ch?n k?t qu? cu?i cùng khi có nhi?u lu?t thi: best (di?m cao nh?t), last (lu?t thi cu?i), avg (trung bình c?ng).Anti-cheatT?p h?p các bi?n pháp k? thu?t nh?m gi?m thi?u gian l?n khi thi tr?c tuy?n.Duy?t câu h?iWorkflow yêu c?u ngu?i có th?m quy?n phê duy?t câu h?i tru?c khi câu h?i dó có th? du?c s? d?ng trong bài thi.L?p h?c (Class)Ðon v? t? ch?c ch?a nhóm sinh viên, dùng d? gán bài thi hàng lo?t.
+
+1.4 T?ng quan tài li?u
+   Tài li?u du?c t? ch?c thành 18 chuong và m?t ph? l?c, bám sát c?u trúc khuy?n ngh? c?a IEEE 830. Chuong 1 gi?i thi?u m?c dích, ph?m vi, thu?t ng? và tài li?u tham kh?o. Chuong 2 mô t? t?ng quan h? th?ng trong b?i c?nh v?n hành, các d?c di?m c?a ngu?i dùng, ràng bu?c công ngh? và các gi? d?nh. Chuong 3 cung c?p so d? use case t?ng quan, danh m?c actor và ma tr?n use case - actor. Các chuong 4 d?n chuong 9 d?c t? chi ti?t 48 use case, chia theo sáu nhóm ch?c nang, m?i use case có lu?ng chính, lu?ng thay th?, lu?ng ngo?i l? và b?ng validation rule c?p tru?ng. Chuong 10 t?ng h?p ma tr?n quy t?c nghi?p v?. Chuong 11 trình bày data dictionary. Chuong 12 mô t? domain model. Chuong 13 mô t? wireframe d?ng text cho các màn hình chính. Chuong 14 d?n chuong 17 d?c t? các yêu c?u phi ch?c nang, giao di?n, công ngh? và d? li?u. Chuong 18 là ph? l?c v?i b?ng t?ng h?p use case, mã l?i và template import.
+   M?i yêu c?u ch?c nang và phi ch?c nang du?c dánh mã duy nh?t (UC01-UC48, BR-001 d?n BR-030, NFR-01 d?n NFR-32, ERR-001 d?n ERR-050) d? d? truy xu?t trong các tài li?u thi?t k?, test case và ticket Jira. Các yêu c?u có c?p uu tiên Must là di?u ki?n b?t bu?c d? nghi?m thu phiên b?n 1.0; Should là khuy?n ngh? m?nh; Could là tùy ch?n có th? hoãn sang phiên b?n sau.
+
+   Chuong 2. Mô t? t?ng quan
+
+2.1 Quan di?m h? th?ng
+   H? th?ng Exam-Sys du?c d?nh v? là m?t ?ng d?ng web da t?ng (multi-tier web application) ph?c v? t? ch?c thi tr?c tuy?n cho các t? ch?c giáo d?c và dào t?o. H? th?ng không ho?t d?ng d?c l?p mà tuong tác v?i nhi?u h? th?ng bên ngoài d? hoàn thi?n nghi?p v?, bao g?m: h? th?ng email (SMTP) d? g?i OTP và thông báo; d?ch v? luu tr? file tinh (S3-compatible) d? luu d? thi, hình ?nh, âm thanh trong câu h?i; h? th?ng danh b? t? ch?c (LDAP/Active Directory) tùy ch?n d? d?ng b? ngu?i dùng; h? th?ng LMS ngoài qua chu?n LTI 1.3 (tùy ch?n, roadmap 1.1).
+   Trong ng? c?nh doanh nghi?p, Exam-Sys thu?ng du?c tri?n khai nhu m?t module d?c l?p trong h? sinh thái s? hóa t? ch?c, có th? tích h?p v?i h? th?ng nhân s? (d?ng b? danh sách nhân viên), h? th?ng luong (gán thi tuy?n v?i v? trí công vi?c), và h? th?ng h?c t?p n?i b?. Ð?i v?i tru?ng h?c/d?i h?c, Exam-Sys thu?ng du?c tri?n khai song song v?i LMS, dóng vai trò chuyên bi?t cho các k? thi chính th?c c?n giám sát nghiêm ng?t hon so v?i bài t?p trên LMS.
+
+2.2 Ch?c nang h? th?ng
+   T?ng quan ch?c nang c?a Exam-Sys du?c phân chia thành 6 nhóm chính, m?i nhóm có 7-9 use case chi ti?t:
+B?ng 2.1 - T?ng quan 6 nhóm ch?c nang chính
+
+NhómMô t?S? UCM?c uu tiênÐang nh?p & Phân quy?nXác th?c ngu?i dùng, qu?n lý phiên, phân quy?n RBAC, audit log truy c?p7MustQu?n lý UserCRUD ngu?i dùng, import/export, qu?n lý l?p h?c, tim ki?m l?c8MustNgân hàng câu h?iCRUD câu h?i 4 lo?i, import Word/Excel, phân lo?i, tag, duy?t câu h?i9MustQu?n lý k? thi & bài thiT?o k? thi, c?u hình bài thi, gán câu h?i/thí sinh, m? dóng l?ch8MustTham gia thiVào thi, tr? l?i, luu t?m, n?p bài, auto-submit, anti-cheat9Must
+
+
+
+
+Báo cáo k?t qu?Xem k?t qu?, th?ng kê, export Excel/PDF, dashboard, item analysis7Must/Should2.3 Ð?c di?m ngu?i dùng
+   H? th?ng có ba lo?i ngu?i dùng chính v?i các d?c di?m và t?n su?t s? d?ng khác nhau. Vi?c hi?u rõ d?c di?m ngu?i dùng giúp thi?t k? UI/UX và d? xu?t các yêu c?u hu?n luy?n, h? tr? phù h?p.
+B?ng 2.2 - Ð?c di?m ngu?i dùng
+
+Vai tròTrình d? tin h?cT?n su?t s? d?ngNhi?m v? chínhYêu c?u h? tr?AdminK? thu?t - caoHàng ngàyQu?n lý user, c?u hình h? th?ng, phân quy?n, xem audit log, v?n hànhTài li?u v?n hành chi ti?t + training ban d?u 8hTeacher (Giáo viên)Van phòng - trung bìnhVài l?n/tu?n, d?nh vào mùa thiT?o câu h?i, so?n bài thi, xem báo cáo, duy?t câu h?iTài li?u hu?ng d?n s? d?ng + video ng?n + hotline tr? giúpStudent (Sinh viên/H?c viên)Co b?n - th?p d?n trung bìnhVài l?n/k?Ðang nh?p, xem bài thi du?c gán, tham gia thi, xem k?t qu?Hu?ng d?n nhanh
++ câu h?i thu?ng g?p + c?nh báo tru?c khi thi   Ð?c bi?t, nhóm Student có th? bao g?m ngu?i dùng l?n tu?i (dào t?o doanh nghi?p) ho?c ngu?i dùng ? vùng k?t n?i m?ng không ?n d?nh. H? th?ng c?n thi?t k? sao cho tr?i nghi?m thi không b? gián do?n nghiêm tr?ng khi m?t m?ng ng?n (du?i 3 phút), có co ch? luu t?m và d?ng b? khi k?t n?i ph?c h?i.
+
+2.4 Ràng bu?c
+Các ràng bu?c (constraints) ?nh hu?ng d?n thi?t k? và tri?n khai h? th?ng:
+? Công ngh? b?t bu?c: Backend ph?i là Node.js (Express/NestJS) ho?c Java (Spring Boot) - hai l?a ch?n du?c dánh giá tuong duong, quy?t d?nh cu?i do d?i ki?n trúc dua ra. Co s? d? li?u ph?i là PostgreSQL 14+ vì c?n tính toàn v?ch giao d?ch cao khi ch?m di?m và h? tr? JSONB cho d? li?u câu h?i linh ho?t.
+? Frontend dùng Angular 19 (ho?c Next.js) v?i TypeScript
+
+? Tuân th? pháp lu?t: H? th?ng x? lý d? li?u cá nhân (PII) c?a công dân Vi?t Nam nên ph?i tuân th? Ngh? d?nh 13/2023/NÐ-CP v? b?o v? d? li?u cá nhân, bao g?m mã hóa d? li?u nh?y c?m t?i noi luu tr?, có co ch? d?ng ý c?a ch? th? d? li?u, và chính sách luu tr?/xóa d? li?u rõ ràng.
+? Tri?n khai: H? th?ng ph?i có kh? nang tri?n khai on-premise (cho t? ch?c yêu c?u d? li?u n?i b?) ho?c trên cloud (AWS, Azure, GCP, ho?c cloud trong nu?c nhu VNG Cloud, FPT Cloud). Không du?c ph? thu?c hardcode vào m?t cloud provider c? th?.
+? Chi phí gi?y phép: Uu tiên s? d?ng thu vi?n mã ngu?n m? có gi?y phép MIT/Apache 2.0; các thu vi?n thuong m?i ch? du?c dùng khi có gi?y phép enterprise dã thanh toán và du?c phê duy?t.
+? Th?i gian phát tri?n MVP: 4 tháng k? t? ngày ký h?p d?ng, v?i 3 sprint chính (M1: auth + user + question; M2: exam + participation; M3: report + hardening + UAT).
+
+2.5 Gi? d?nh và ph? thu?c
+   Tài li?u SRS này du?c xây d?ng d?a trên các gi? d?nh và ph? thu?c sau. N?u b?t k? gi? d?nh nào b? phá v?, BA c?n c?p nh?t SRS và dánh giá l?i l?ch trình.
+? Gi? d?nh 1: T? ch?c TTSFE có h? t?ng m?ng n?i b? ?n d?nh, bang thông t?i thi?u 100 Mbps cho 500 ngu?i dùng d?ng th?i. Ð?i v?i mô hình cloud, t? ch?c có du?ng truy?n dedicated ho?c SD-WAN t?i region cloud g?n nh?t.
+? Gi? d?nh 2: M?i thí sinh có m?t thi?t b? cá nhân (laptop ho?c máy tính bàn) dáp ?ng c?u hình t?i thi?u: RAM 4GB, CPU dual-core 2.0GHz, màn hình 1280x720, có webcam và micro (cho tính nang tùy ch?n giám sát).
+? Gi? d?nh 3: Trình duy?t c?a ngu?i dùng du?c c?p nh?t trong vòng 12 tháng g?n nh?t. H? th?ng không h? tr? Internet Explorer và các phiên b?n Chrome/Edge/Firefox cu hon 2 phiên b?n chính th?c g?n nh?t.
+? Gi? d?nh 4: H? th?ng email n?i b? (SMTP relay) cho phép g?i t?i thi?u 500 email/gi?, không b? dánh d?u spam khi g?i OTP.
+? Ph? thu?c 1: Vi?c tích h?p v?i LMS ngoài qua LTI 1.3 ph? thu?c vào vi?c LMS bên ngoài h? tr? LTI 1.3 và cung c?p thông tin dang ký (client key, shared secret).
+? Ph? thu?c 2: H? th?ng ch? ký s? (n?u có) cho ch?ng ch? ph? thu?c vào vi?c t? ch?c có h?p d?ng v?i nhà cung c?p ch? ký s? h?p l? theo quy d?nh pháp lu?t Vi?t Nam.
+? Ph? thu?c 3: Tính nang Safe Exam Browser (lockdown browser) tùy ch?n ph? thu?c vào vi?c thí sinh cài d?t du?c ph?n m?m này trên máy cá nhân.
+
+2.6 Phân b? yêu c?u
+   Vi?c phân b? yêu c?u theo phiên b?n giúp qu?n lý k? v?ng và uu tiên ngu?n l?c phát tri?n. B?ng du?i t?ng h?p k? ho?ch phát hành theo 3 giai do?n chính:
+
+
+B?ng 2.3 - Phân b? yêu c?u theo phiên b?n
+
+Phiên b?nN?i dung chínhS? UCTh?i gian d? ki?n1.0 (MVP)6 nhóm ch?c nang c?t lõi: Auth, User, Question, Exam, Participation, Reports co b?n48 UC (Must)4 tháng1.1Tích h?p LTI 1.3, public API, mobile-responsive nâng cao, dashboard nâng cao, item analysis+8 UC (Should)+2 tháng2.0Webcam monitoring tùy ch?n, AI generate question, Safe Exam Browser, mobile app native+12 UC (Could)+4 tháng
+   Chuong 3. Yêu c?u ch?c nang - T?ng quan Use Case
+
+3.1 So d? Use Case t?ng quan
+   So d? use case t?ng quan mô t? các tuong tác gi?a các actor và các use case chính c?a h? th?ng. Do h?n ch? c?a tài li?u Word, so d? du?c mô t? du?i d?ng text theo cú pháp tuong duong PlantUML. So d? hình th?c có th? du?c d?ng b?ng công c? PlantUML ho?c draw.io d?a trên mô t? này.
+   H? th?ng Exam-Sys có 3 actor chính (Admin, Teacher, Student), 1 actor h? th?ng (System - cho các tác v? t? d?ng nhu auto-submit, send OTP), và 1 actor th? c?p (Guest - ch? dùng cho lu?ng quên m?t kh?u tru?c khi dang nh?p). Các use case du?c nhóm theo 6 package nghi?p v? chính.
+3.1.1 Mô t? so d? Use Case (text)
+Package "Ðang nh?p & Phân quy?n":
+? Actor Guest ? UC03 Quên m?t kh?u
+? Actor Admin/Teacher/Student ? UC01 Ðang nh?p
+? Actor Admin/Teacher/Student ? UC02 Ðang xu?t
+? Actor Admin/Teacher/Student ? UC04 Ð?i m?t kh?u
+? Actor Admin ? UC05 Qu?n lý Role
+? Actor Admin ? UC06 Phân quy?n User-Role
+? Actor Admin ? UC07 Xem Audit Log truy c?p
+
+Package "Qu?n lý User":
+? Actor Admin ? UC08 T?o user
+? Actor Admin ? UC09 S?a user
+? Actor Admin ? UC10 Khóa/M? khóa user
+? Actor Admin ? UC11 Xóa user (soft delete)
+? Actor Admin ? UC12 Import user t? Excel/CSV
+? Actor Admin ? UC13 Export danh sách user
+? Actor Admin ? UC14 Tìm ki?m & l?c user
+   ? Actor Admin ? UC15 Qu?n lý l?p h?c Package "Ngân hàng câu h?i":
+? Actor Teacher ? UC16 T?o câu h?i
+? Actor Teacher ? UC17 S?a câu h?i
+? Actor Teacher ? UC18 Xóa câu h?i
+? Actor Teacher ? UC19 Import câu h?i t? Word/Excel
+? Actor Teacher ? UC20 Export câu h?i
+? Actor Teacher ? UC21 Phân lo?i câu h?i (môn/chuong/d? khó)
+? Actor Teacher ? UC22 Tag câu h?i
+? Actor Teacher/Admin ? UC23 Duy?t câu h?i
+   ? Actor Teacher ? UC24 Tìm ki?m & l?c câu h?i Package "Qu?n lý k? thi & bài thi":
+? Actor Admin/Teacher ? UC25 T?o k? thi
+? Actor Admin/Teacher ? UC26 S?a/xóa k? thi
+? Actor Teacher ? UC27 T?o bài thi trong k? thi
+? Actor Teacher ? UC28 C?u hình bài thi
+? Actor Teacher ? UC29 Gán câu h?i vào bài thi
+? Actor Teacher ? UC30 Gán thí sinh/l?p vào bài thi
+? Actor Teacher ? UC31 M?/dóng bài thi
+   ? Actor Teacher ? UC32 Xu?t d? thi PDF Package "Tham gia thi":
+? Actor Student ? UC33 Xem danh sách bài thi du?c gán
+? Actor Student ? UC34 Vào thi (d?ng ý quy d?nh)
+? Actor Student ? UC35 Tr? l?i câu h?i
+? Actor Student ? UC36 Luu t?m câu tr? l?i
+? Actor Student ? UC37 Chuy?n câu/navigate
+
+? Actor Student ? UC38 Ðánh d?u câu c?n xem l?i
+? Actor Student ? UC39 N?p bài (submit)
+? Actor System ? UC40 T? d?ng n?p khi h?t gi?
+   ? Actor Student ? UC41 Xem l?i bài thi & dáp án dúng Package "Báo cáo k?t qu?":
+? Actor Student ? UC42 Xem k?t qu? cá nhân
+? Actor Teacher ? UC43 Xem danh sách k?t qu? bài thi
+? Actor Teacher/Admin ? UC44 Báo cáo th?ng kê theo l?p/môn/k?
+? Actor Teacher/Admin ? UC45 Export k?t qu? Excel/PDF
+? Actor Admin ? UC46 Dashboard t?ng quan
+? Actor Teacher ? UC47 Phân tích d? khó câu h?i (item analysis)
+? Actor Teacher/Admin ? UC48 In ch?ng ch?/b?ng di?m
+
+3.2 B?ng actor & vai trò
+H? th?ng có 5 actor du?c d?nh nghia nhu sau:
+B?ng 3.1 - Danh m?c Actor
+
+ActorLo?iMô t?Ph?m vi tác d?ngAdminPrimaryQu?n tr? viên h? th?ng
+- có toàn quy?n qu?n lý ngu?i dùng, c?u hình, xem d? li?u m?i k? thiToàn h? th?ngTeacherPrimaryGiáo viên/ngu?i so?n d? - qu?n lý câu h?i, bài thi c?a môn/l?p mình ph? tráchCâu h?i & bài thi do mình s? h?u + k?t qu? c?a l?p du?c gánStudentPrimarySinh viên/h?c viên - tham gia thi và xem k?t qu? cá nhânD? li?u cá nhân + bài thi du?c gánSystemSecondaryActor h? th?ng cho các tác v? t? d?ng (auto-submit, g?i OTP, d?ng b?)Tác d?ng n?n, không tuong tác UIGuestSecondaryNgu?i dùng chua dang nh?p - ch? th?c hi?n UC03 Quên m?t kh?uCh? màn dang nh?p + quên m?t kh?u
+
+3.3 Ma tr?n Use Case - Actor
+   Ma tr?n du?i dây t?ng h?p quy?n truy c?p c?a m?i actor d?i v?i 48 use case. Ký hi?u: P = Primary (ch? th? kh?i t?o), S = Secondary (tham gia h? tr?), X = Không có quy?n, A = Admin Only, T = Teacher Only, St = Student Only.
+B?ng 3.2 - Ma tr?n Use Case x Actor
+
+Use CaseAdminTeacherStudentSystemGuestUC01 Ðang nh?pPPP--UC02 Ðang xu?tPPP--UC03 Quên m?t kh?u----PUC04 Ð?i m?t kh?uPPP--UC05 Qu?n lý RoleAXX--UC06 Phân quy?n User-RoleAXX--UC07 Xem
+Audit LogAXX--UC08 T?o userAXX--UC09 S?a userAXX--UC10
+Khóa/M? khóa userAXX--UC11 Xóa userAXX--UC12 Import userAXX--UC13 Export userAXX--UC14 Tìm
+ki?m userAXX--UC15 Qu?n lý l?p h?cAXX--UC16 T?o câu h?iXTX--
+
+
+
+
+UC17 S?a câu h?iXTX--UC18 Xóa câu h?iXTX--UC19 Import câu h?iXTX--UC20 Export câu h?iXTX--UC21 Phân lo?i câu h?iXTX--UC22 Tag câu h?iXTX--UC23 Duy?t câu h?iATX--UC24 Tìm
+ki?m câu h?iXTX--UC25 T?o k? thiATX--UC26 S?a/xóa k? thiATX--UC27 T?o bài thiXTX--UC28 C?u hình bài thiXTX--UC29 Gán câu h?iXTX--UC30 Gán thí sinhXTX--UC31
+M?/dóng bài thiXTX--UC32 Xu?t d? thi PDFXTX--UC33 Xem bài thi du?c gánXXSt--UC34 Vào thiXXSt--UC35 Tr? l?i câu h?iXXSt--
+
+
+Use Case
+UC36 Luu t?mAdmin
+XTeacher
+XStudent
+StSystem
+-Guest
+-UC37 Chuy?n câuXXSt--UC38 Ðánh d?u xem l?iXXSt--UC39 N?p bàiXXSt--UC40 Auto-submitXXStS-UC41 Xem l?i bài thiXXSt--UC42 Xem k?t qu? cá nhânXXSt--UC43 Xem k?t qu? bài thiXTX--UC44 Báo cáo th?ng kêATX--UC45 Export k?t qu?ATX--UC46
+Dashboard t?ng quanAXX--UC47 Item analysisXTX--UC48 In ch?ng ch?ATX--3.4 Phân nhóm Use Case theo module
+   Vi?c phân nhóm theo module giúp cho d?i phát tri?n d? dàng chia task theo nhóm tính nang d?c l?p. M?i module có th? du?c phát tri?n song song v?i các module khác, v?i m?t s? ph? thu?c nh?t d?nh (module Qu?n lý k? thi ph? thu?c module Ngân hàng câu h?i và module User; module Tham gia thi ph? thu?c module Qu?n lý k? thi; module Báo cáo ph? thu?c module Tham gia thi).
+B?ng 3.3 - Phân nhóm Use Case theo module
+
+ModuleD?i UCPh? thu?cM?c uu tiênÐang nh?p & Phân quy?nUC01-UC07Không (n?n t?ng)MustQu?n lý UserUC08-UC15Module Ðang nh?p (cho RBAC)Must
+
+
+
+
+Ngân hàng câu h?iUC16-UC24Module Ðang nh?pMustQu?n lý k? thi & bài thiUC25-UC32Module User + Ngân hàng câu h?iMustTham gia thiUC33-UC41Module Qu?n lý k? thiMustBáo cáo k?t qu?UC42-UC48Module Tham gia thiMust/Should
+   Chuong 4. Use Case chi ti?t - Module Ðang nh?p & Phân quy?n
+
+   Chuong này d?c t? 7 use case (UC01-UC07) c?a module Ðang nh?p & Phân quy?n. Ðây là module n?n t?ng, m?i actor mu?n s? d?ng ch?c nang khác d?u ph?i tr?i qua bu?c dang nh?p và du?c phân quy?n phù h?p. Module s? d?ng mô hình RBAC (Role-Based Access Control) v?i 3 role chính: Admin, Teacher, Student. M?i use case du?c trình bày theo c?u trúc: tóm t?t, actor, di?u ki?n tru?c/sau, lu?ng chính, lu?ng thay th?, lu?ng ngo?i l?, quy t?c nghi?p v? và b?ng validation rules.
+
+4.1 UC01 - Ðang nh?p
+
+   UC01: Ðang nh?p
+Tóm t?t: Ngu?i dùng nh?p thông tin dang nh?p (email/username + m?t kh?u) d? xác th?c và nh?n token phiên làm vi?c, t? dó truy c?p các ch?c nang theo vai trò.
+Actor chính: Admin / Teacher / Student
+Actor ph?: H? th?ng SMTP (g?i OTP l?n dang nh?p d?u tiên n?u c?n)
+   Ði?u ki?n tru?c (Precondition):
+? Ngu?i dùng dã có tài kho?n trong h? th?ng và tài kho?n ? tr?ng thái Active.
+? Thi?t b? c?a ngu?i dùng có k?t n?i internet và trình duy?t du?c h? tr?.
+   Ði?u ki?n sau (Postcondition):
+? Thành công: Ngu?i dùng du?c chuy?n d?n Dashboard theo vai trò; JWT access token (15 phút) và refresh token (7 ngày) du?c c?p.
+? Th?t b?i: Ngu?i dùng ? l?i màn dang nh?p v?i thông báo l?i; s? l?n th? sai du?c tang lên.
+   Lu?ng chính (Main Flow):
+Ngu?i dùng: truy c?p trang dang nh?p qua URL h? th?ng.
+H? th?ng: hi?n th? form dang nh?p v?i các tru?ng: email/username, m?t kh?u, nút "Ðang nh?p", link "Quên m?t kh?u".
+Ngu?i dùng: nh?p email/username và m?t kh?u, tick vào "Ghi nh? tôi" (tùy ch?n), nh?n nút "Ðang nh?p".
+
+H? th?ng: ki?m tra tính h?p l? c?a d? li?u nh?p (xem b?ng validation). N?u không h?p l?, hi?n th? l?i tr?c ti?p trên form.
+H? th?ng: truy v?n co s? d? li?u tim user theo email/username. N?u không tim th?y, hi?n th? l?i "Tài kho?n không t?n t?i".
+H? th?ng: ki?m tra tr?ng thái tài kho?n. N?u tài kho?n b? khóa (Locked/Inactive), hi?n th? l?i tuong ?ng.
+H? th?ng: so sánh m?t kh?u nh?p v?i m?t kh?u dã bam (bcrypt) trong DB. N?u sai, tang b? d?m s? l?n sai liên ti?p và hi?n th? l?i.
+H? th?ng: ki?m tra chính sách m?t kh?u: n?u m?t kh?u dã quá 90 ngày, dánh d?u yêu c?u d?i m?t kh?u ? l?n dang nh?p ti?p theo.
+H? th?ng: t?o JWT access token và refresh token, luu refresh token vào Redis (TTL 7 ngày), ghi audit log login thành công.
+H? th?ng: chuy?n ngu?i dùng d?n Dashboard theo vai trò: Admin ? /admin/dashboard; Teacher
+* /teacher/dashboard; Student ? /student/dashboard.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Tick "Ghi nh? tôi": th?i gian s?ng c?a refresh token tang t? 7 lên 30 ngày; access token v?n 15 phút.
+? A2: Ðang nh?p l?n d?u sau khi Admin reset m?t kh?u: h? th?ng chuy?n sang màn Ð?i m?t kh?u b?t bu?c tru?c khi vào Dashboard.
+? A3: Ðang nh?p t? thi?t b? m?i (IP chua t?ng xu?t hi?n trong 30 ngày g?n nh?t): h? th?ng g?i OTP qua email, yêu c?u nh?p OTP d? hoàn t?t dang nh?p.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Sai m?t kh?u 5 l?n liên ti?p trong vòng 15 phút: tài kho?n b? t? d?ng khóa 30 phút. Hi?n th?: "Tài kho?n t?m khóa do nh?p sai nhi?u l?n. Vui lòng th? l?i sau 30 phút ho?c liên h? qu?n tr? viên." B? d?m t? reset sau 30 phút.
+? E2: Tài kho?n ? tr?ng thái Locked (admin khóa ch? d?ng): hi?n th? "Tài kho?n dã b? khóa. Vui lòng liên h? qu?n tr? viên." Ðang nh?p không thành công ngay c? khi m?t kh?u dúng.
+? E3: Tài kho?n ? tr?ng thái Pending (chua du?c admin duy?t sau khi import): hi?n th? "Tài kho?n chua du?c kích ho?t. Vui lòng liên h? qu?n tr? viên.".
+? E4: L?i k?t n?i CSDL ho?c d?ch v? xác th?c bên th? ba: hi?n th? "H? th?ng dang b?n, vui lòng th? l?i sau ít phút." và ghi log backend ERROR.
+? E5: Quá 5 l?n nh?p OTP sai trong A3: phiên dang nh?p b? h?y, ngu?i dùng ph?i dang nh?p l?i t? d?u.
+   Quy t?c nghi?p v? liên quan:
+? BR-001: M?i dang nh?p (thành công ho?c th?t b?i) d?u du?c ghi vào audit_log v?i IP, User-Agent, th?i gian chính xác d?n mili-giây.
+
+? BR-002: M?t kh?u b?t bu?c bam b?ng bcrypt v?i cost factor 12. Không bao gi? luu m?t kh?u d?ng plaintext.
+? BR-003: Refresh token ch? có hi?u l?c khi kh?p v?i token trong Redis c?a user dó. Ðang xu?t làm m?t hi?u l?c refresh token.
+? BR-004: Cùng m?t user không th? dang nh?p d?ng th?i quá 3 thi?t b?. L?n dang nh?p th? 4 s? dang xu?t thi?t b? cu nh?t.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)email/usernameStringCóEmail RFC 5322 h?p l? HO?C username 3-50 ký t? alphanumeric + d?u ch?m, g?ch du?i, g?ch ngangVui lòng nh?p email ho?c tên dang nh?p h?p l?.passwordStringCóT?i thi?u 8 ký t?, t?i da 64 ký t?, không ch?a kho?ng tr?ng d?u/cu?iM?t kh?u ph?i t? 8 d?n 64 ký t? và không có kho?ng tr?ng th?a.rememberMeBooleanKhôngM?c d?nh false. true ? refresh token TTL 30 ngày; false ? 7 ngày-
+4.2 UC02 - Ðang xu?t
+
+   UC02: Ðang xu?t
+Tóm t?t: Ngu?i dùng k?t thúc phiên làm vi?c, h? th?ng thu h?i token và chuy?n v? trang dang nh?p.
+Actor chính: Admin / Teacher / Student
+   Ði?u ki?n tru?c (Precondition):
+? Ngu?i dùng dang trong phiên dang nh?p h?p l?.
+   Ði?u ki?n sau (Postcondition):
+? Thành công: Refresh token b? xóa kh?i Redis; access token hi?n t?i du?c dua vào blacklist cho d?n khi h?t h?n (15 phút).
+? Ngu?i dùng du?c chuy?n v? trang dang nh?p v?i thông báo "B?n dã dang xu?t thành công".
+   Lu?ng chính (Main Flow):
+
+Ngu?i dùng: nh?n vào bi?u tu?ng avatar/tên ngu?i dùng góc ph?i trang, ch?n "Ðang xu?t".
+H? th?ng: hi?n th? h?p tho?i xác nh?n "B?n có ch?c mu?n dang xu?t?" v?i 2 nút "H?y" và "Ðang xu?t".
+Ngu?i dùng: nh?n "Ðang xu?t".
+H? th?ng: g?i API /auth/logout v?i access token hi?n t?i.
+H? th?ng: xóa refresh token kh?i Redis, thêm access token vào blacklist Redis (TTL = th?i gian còn l?i c?a token).
+H? th?ng: ghi audit log logout; xóa cookie ch?a token (n?u dùng cookie); xóa d? li?u t?m trong sessionStorage c?a trình duy?t.
+H? th?ng: chuy?n ngu?i dùng v? trang dang nh?p v?i thông báo thành công.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Ngu?i dùng nh?n "H?y" trong h?p xác nh?n: dóng h?p tho?i, ngu?i dùng v?n ? trang hi?n t?i.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Access token dã h?t h?n tru?c khi g?i logout: h? th?ng v?n xóa refresh token n?u còn h?p l?, chuy?n v? trang dang nh?p.
+? E2: Refresh token không tim th?y trong Redis (dã b? xóa ho?c dã dang xu?t ? thi?t b? khác): h? th?ng v?n ghi audit log và dang xu?t ngu?i dùng, không hi?n th? l?i.
+   Quy t?c nghi?p v? liên quan:
+? BR-005: Ðang xu?t không xóa d? li?u làm bài dang luu t?m (draft) trong DB - d? li?u này ch? b? xóa khi user ch? d?ng h?y ho?c khi bài thi h?t h?n.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)accessTokenJWTCóToken h?p l?, chua trong blacklist, chua h?t h?nPhiên dang nh?p không h?p l?. Vui lòng dang nh?p l?i.
+4.3 UC03 - Quên m?t kh?u / Reset m?t kh?u
+
+   UC03: Quên m?t kh?u / Reset m?t kh?u
+Tóm t?t: Ngu?i dùng quên m?t kh?u có th? yêu c?u h? th?ng g?i link reset qua email, link này có hi?u l?c gi?i h?n d? d?t m?t kh?u m?i.
+Actor chính: Guest (ngu?i dùng chua dang nh?p)
+Actor ph?: H? th?ng SMTP d? g?i email reset
+
+   Ði?u ki?n tru?c (Precondition):
+? Ngu?i dùng có email dã dang ký trong h? th?ng và tài kho?n không b? khóa.
+? H? th?ng email (SMTP) dang ho?t d?ng bình thu?ng.
+   Ði?u ki?n sau (Postcondition):
+? Thành công: m?t kh?u m?i du?c c?p nh?t; t?t c? phiên dang nh?p hi?n t?i c?a user b? thu h?i (force logout toàn thi?t b?).
+? Email thông báo m?t kh?u dã thay d?i du?c g?i d?n email ngu?i dùng.
+   Lu?ng chính (Main Flow):
+Guest: t? trang dang nh?p, nh?n link "Quên m?t kh?u". H? th?ng: hi?n th? form nh?p email dang ký.
+Guest: nh?p email và nh?n "G?i yêu c?u".
+H? th?ng: ki?m tra email có trong DB không. Dù có hay không, luôn hi?n th? thông báo chung "N?u email t?n t?i, b?n s? nh?n du?c hu?ng d?n d?t l?i m?t kh?u trong vài phút" (d? tránh dò l?t thông tin user).
+H? th?ng: (n?u email t?n t?i) sinh token reset random 32 byte, luu vào Redis v?i key = reset-pwd:
+{token}, value = userId, TTL 30 phút.
+H? th?ng: g?i email ch?a link: https://exam-sys.example.com/reset-password?token={token}. Email d?ng HTML có branding, hu?ng d?n và nút "Ð?t l?i m?t kh?u".
+Guest: m? email, nh?n vào link reset (ho?c copy paste vào trình duy?t).
+H? th?ng: ki?m tra token trong Redis. N?u h?p l?, hi?n th? form d?t m?t kh?u m?i (m?t kh?u m?i
++ xác nh?n).
+Guest: nh?p m?t kh?u m?i 2 l?n, nh?n "Ð?t l?i m?t kh?u".
+H? th?ng: validate m?t kh?u m?i theo chính sách m?nh (xem validation). N?u không d?t, hi?n th? l?i.
+H? th?ng: bam m?t kh?u m?i v?i bcrypt, c?p nh?t vào DB. Xóa token kh?i Redis. Thu h?i t?t c? refresh token hi?n t?i c?a user trong Redis.
+H? th?ng: g?i email thông báo m?t kh?u dã thay d?i. Chuy?n ngu?i dùng v? trang dang nh?p.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Ngu?i dùng không nh?n du?c email sau 5 phút: có th? yêu c?u g?i l?i (rate limit 1 email/phút, 5 email/gi?).
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Token reset không t?n t?i ho?c dã h?t h?n: hi?n th? "Link d?t l?i m?t kh?u không h?p l? ho?c dã h?t h?n. Vui lòng yêu c?u l?i." và chuy?n v? form nh?p email.
+? E2: Token dã du?c s? d?ng (dã d?t l?i m?t kh?u): t? ch?i, hi?n th? link yêu c?u token m?i.
+
+? E3: Email không t?n t?i trong h? th?ng: v?n hi?n th? thông báo thành công ? bu?c 4 d? tránh enumeration attack, nhung không g?i email.
+? E4: M?t kh?u m?i trùng m?t kh?u g?n dây (3 m?t kh?u g?n nh?t): t? ch?i v?i thông báo "Không du?c s? d?ng l?i m?t kh?u dã dùng trong 3 l?n g?n nh?t".
+   Quy t?c nghi?p v? liên quan:
+? BR-006: Token reset ch? có hi?u l?c 30 phút k? t? lúc sinh ra. Token ch? dùng du?c 1 l?n.
+? BR-007: Sau khi reset, toàn b? phiên dang nh?p hi?n t?i b? thu h?i (b?o m?t khi tài kho?n nghi b? xâm ph?m).
+? BR-008: L?ch s? 3 m?t kh?u g?n nh?t du?c luu (ch? hash) d? ngan tái s? d?ng. L?ch s? này b? xóa khi user b? xóa kh?i h? th?ng (soft delete).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)emailEmailCóRFC 5322, t?i da 254 ký t?, domain có MX record h?p l?Email không h?p l?.tokenString (hex 64 ký t?)CóT?n t?i trong Redis, chua s? d?ng, chua h?t h?nLink không h?p l? ho?c dã h?t h?n.newPasswordStringCó8-64 ký t?, có ít nh?t 1 ch? hoa, 1 ch? thu?ng, 1 s?, 1 ký t? d?c bi?t trong !@#$
+%^&*()-_=+M?t kh?u ph?i t? 8-64 ký t?, g?m ch? hoa, ch? thu?ng, s? và ký t? d?c bi?t.confirmPasswordStringCóPh?i kh?p v?i newPasswordXác nh?n m?t kh?u không kh?p.
+4.4 UC04 - Ð?i m?t kh?u
+
+   UC04: Ð?i m?t kh?u
+Tóm t?t: Ngu?i dùng dã dang nh?p có th? ch? d?ng d?i m?t kh?u d? tang cu?ng b?o m?t ho?c theo chu k? quy d?nh.
+Actor chính: Admin / Teacher / Student
+   Ði?u ki?n tru?c (Precondition):
+? Ngu?i dùng dang trong phiên dang nh?p h?p l?.
+
+   Ði?u ki?n sau (Postcondition):
+? Thành công: m?t kh?u m?i du?c luu; các phiên dang nh?p khác (không ph?i phiên hi?n t?i) b? thu h?i.
+? Audit log ghi nh?n s? ki?n d?i m?t kh?u.
+   Lu?ng chính (Main Flow):
+Ngu?i dùng: t? menu tài kho?n, ch?n "Ð?i m?t kh?u".
+H? th?ng: hi?n th? form: m?t kh?u hi?n t?i, m?t kh?u m?i, xác nh?n m?t kh?u m?i. Ngu?i dùng: nh?p d?y d? 3 tru?ng, nh?n "C?p nh?t".
+H? th?ng: ki?m tra m?t kh?u hi?n t?i kh?p v?i DB. N?u sai, hi?n th? l?i.
+H? th?ng: ki?m tra m?t kh?u m?i không trùng m?t kh?u hi?n t?i và không n?m trong 3 m?t kh?u g?n nh?t.
+H? th?ng: bam và luu m?t kh?u m?i, c?p nh?t tru?ng password_changed_at = now(). Thu h?i các phiên khác (tr? phiên hi?n t?i).
+H? th?ng: hi?n th? thông báo thành công; ngu?i dùng ti?p t?c ? trang hi?n t?i.
+   Lu?ng thay th? (Alternate Flow):
+? A1: H? th?ng phát hi?n m?t kh?u hi?n t?i s? h?t h?n trong 7 ngày: hi?n th? banner nh?c nh? d?i m?t kh?u trên m?i trang.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Sai m?t kh?u hi?n t?i: hi?n th? "M?t kh?u hi?n t?i không dúng". Không tang b? d?m sai (vì dã dang nh?p r?i).
+? E2: M?t kh?u m?i không d?t chính sách: hi?n th? l?i c? th? theo validation.
+   Quy t?c nghi?p v? liên quan:
+? BR-009: M?t kh?u có chu k? 90 ngày. Sau 90 ngày k? t? l?n d?i g?n nh?t, h? th?ng b?t bu?c d?i ? l?n dang nh?p ti?p theo.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)currentPasswordStringCóPh?i kh?p m?t kh?u hi?n t?i trong DB (sau khi bam)M?t kh?u hi?n t?i không dúng.
+
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)newPasswordStringCó8-64 ký t?, có ch?M?t kh?u m?ihoa, ch? thu?ng,không d?t yêus?, ký t? d?c bi?t;c?u. Vui lòng xemkhông trùngl?i chính sách m?tcurrentPassword;kh?u.không n?m trong3 m?t kh?u g?nnh?tconfirmPasswordStringCóPh?i kh?pXác nh?n m?tnewPasswordkh?u không kh?p.4.5 UC05 - Qu?n lý Role (RBAC)
+
+   UC05: Qu?n lý Role
+Tóm t?t: Admin t?o/s?a/xem các role trong h? th?ng và gán permission cho role. H? th?ng dùng RBAC v?i permission theo d?nh d?ng resource:action.
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? Admin dã dang nh?p và có quy?n manage_roles.
+   Ði?u ki?n sau (Postcondition):
+? Thay d?i role du?c ghi audit log. Các user gi? role b? thay d?i s? th?y quy?n m?i ? l?n t?i trang ti?p theo.
+? Không cho phép xóa role h? th?ng (Admin, Teacher, Student).
+   Lu?ng chính (Main Flow):
+Admin: vào menu "Phân quy?n" ? "Qu?n lý Role".
+H? th?ng: hi?n th? danh sách role hi?n có: ID, tên, mô t?, s? user, s? permission, tr?ng thái. Phân trang 20 dòng/trang.
+Admin: nh?n "Thêm role m?i" d? t?o, ho?c nh?n tên role d? s?a.
+H? th?ng: hi?n th? form role: tên, mô t?, danh sách permission (checkbox theo nhóm resource). Admin: nh?p thông tin, tick các permission mong mu?n, nh?n "Luu".
+H? th?ng: validate (xem b?ng). Luu role. Ghi audit log. Hi?n th? danh sách v?i role m?i.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Admin mu?n xóa role (không ph?i role h? th?ng): h? th?ng ki?m tra không còn user nào gi? role ? cho phép xóa. Còn user ? yêu c?u chuy?n user sang role khác tru?c.
+   Lu?ng ngo?i l? (Exception Flow):
+
+? E1: Tên role dã t?n t?i: t? ch?i v?i thông báo "Tên role dã t?n t?i".
+? E2: C? g?ng xóa role h? th?ng (Admin/Teacher/Student): t? ch?i v?i thông báo "Không du?c xóa role h? th?ng".
+   Quy t?c nghi?p v? liên quan:
+? BR-010: Permission có d?nh d?ng resource:action. VD: user:create, user:read, exam:update, report:export.
+? BR-011: Role h? th?ng (Admin, Teacher, Student) không du?c xóa và không du?c d?i tên, nhung có th? thêm/b?t permission.
+? BR-012: Khi role b? thay d?i permission, các phiên dang nh?p hi?n t?i c?a user gi? role dó gi? nguyên quy?n cu d?n khi refresh token ho?c dang nh?p l?i (cache permission có TTL 5 phút).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)nameStringCó2-50 ký t?, ch?/space/d?u g?ch du?i; duy nh?t trong b?ng rolesTên role 2-50 ký t? và không trùng.descriptionStringKhôngT?i da 255 ký t?Mô t? t?i da 255 ký t?.permissionsArray<String>CóM?i ph?n t? d?ng resource:action h?p l?; ít nh?t 1 permissionPh?i ch?n ít nh?t 1 permission.statusEnumCóactive | inactiveTr?ng thái không h?p l?.
+4.6 UC06 - Phân quy?n User-Role
+
+   UC06: Phân quy?n User-Role
+Tóm t?t: Admin gán (ho?c thu h?i) m?t ho?c nhi?u role cho user. M?t user có th? gi? nhi?u role cùng lúc; quy?n tích luy.
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? Admin dã dang nh?p và có quy?n user:assign_role.
+   Ði?u ki?n sau (Postcondition):
+? Thay d?i du?c ghi audit log.
+
+? User du?c gán thêm role s? có quy?n m?i áp d?ng trong vòng 5 phút (sau khi cache permission h?t h?n).
+   Lu?ng chính (Main Flow):
+Admin: vào "Qu?n lý User", tim và m? chi ti?t user c?n phân quy?n. H? th?ng: hi?n th? thông tin user + b?ng role hi?n t?i + nút "Gán role".
+Admin: nh?n "Gán role", ch?n role t? dropdown (ch?n nhi?u), nh?n "Luu". H? th?ng: ki?m tra role h?p l? và chua trùng v?i role hi?n t?i c?a user.
+H? th?ng: luu vào b?ng user_roles. Ghi audit log. Hi?n th? b?ng role m?i.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Admin thu h?i role: nh?n nút X bên c?nh role trong b?ng, xác nh?n. H? th?ng xóa kh?i user_roles, ghi audit log.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: C? g?ng thu h?i role cu?i cùng c?a user: h? th?ng t? ch?i v?i "M?i user ph?i có ít nh?t 1 role".
+? E2: User ? tr?ng thái Locked/Inactive: không cho phép gán role m?i, hi?n th? "Tài kho?n không ho?t d?ng, không th? gán role".
+   Quy t?c nghi?p v? liên quan:
+? BR-013: M?t user có th? có nhi?u role; quy?n hi?u qu? là h?p (union) c?a t?t c? permission thu?c các role.
+? BR-014: M?i user ph?i có ít nh?t 1 role; không t?n t?i user không có role.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)userIdUUIDCóT?n t?i trong b?ng users, không b? xóaNgu?i dùng không t?n t?i.roleIdsArray<UUID>CóM?i ph?n t? t?n t?i trong b?ng roles, status=activeM?t ho?c nhi?u role không h?p l?.
+4.7 UC07 - Xem Audit Log truy c?p
+
+   UC07: Xem Audit Log truy c?p
+Tóm t?t: Admin xem l?ch s? các s? ki?n truy c?p và thao tác trong h? th?ng, h? tr? di?u tra s? c? b?o m?t và conform v?i yêu c?u audit.
+
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? Admin dã dang nh?p và có quy?n audit:read.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? danh sách audit log theo filter; không thay d?i d? li?u.
+   Lu?ng chính (Main Flow):
+Admin: vào "B?o m?t" ? "Audit Log".
+H? th?ng: hi?n th? filter: kho?ng th?i gian (m?c d?nh 7 ngày g?n nh?t), lo?i s? ki?n (login/logout/role_change/data_access/...), user, IP. B?ng k?t qu?: th?i gian, user, s? ki?n, IP, User-Agent, chi ti?t.
+Admin: ch?n filter, nh?n "L?c". Ho?c nh?n "Export CSV" d? xu?t d? li?u.
+H? th?ng: truy v?n audit_log theo filter, tr? v? 100 dòng/trang (t?i da 10.000 dòng m?i query). S?p x?p theo th?i gian gi?m d?n.
+Admin: có th? nh?n vào 1 dòng d? xem chi ti?t JSON d?y d? c?a s? ki?n.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Export CSV: h? th?ng gi?i h?n 10.000 dòng; n?u l?n hon, yêu c?u thu h?p filter.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Kho?ng th?i gian filter quá l?n (> 90 ngày): hi?n th? c?nh báo "Kho?ng th?i gian quá r?ng, k?t qu? có th? không d?y d?. Vui lòng thu h?p du?i 90 ngày".
+   Quy t?c nghi?p v? liên quan:
+? BR-015: Audit log du?c luu t?i thi?u 12 tháng trong DB chính, sau dó archive sang object storage (S3) và gi? thêm 24 tháng.
+? BR-016: Audit log là immutable - không ai có quy?n s?a/xóa log (k? c? Admin) trong vòng 12 tháng d?u. Ch? System t? d?ng d?n d?p sau khi archive.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)fromDateDateCóISO 8601, không l?n hon toDate, không xa quá 2 namNgày b?t d?u không h?p l?.toDateDateCóISO 8601, không l?n hon now, không tru?c fromDateNgày k?t thúc không h?p l?.
+
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)eventTypeEnumKhônglogin | logout |Lo?i s? ki?n khôngrole_change |h?p l?.data_access |config_change |password_change| export_datauserIdUUIDKhôngT?n t?i trong b?ngNgu?i dùng khôngusers (n?u có)h?p l?.
+   Chuong 5. Use Case chi ti?t - Module Qu?n lý User
+
+   Chuong này d?c t? 8 use case (UC08-UC15) c?a module Qu?n lý User. Module này do Admin s? h?u, h? tr? các thao tác CRUD user, import/export hàng lo?t, tim ki?m, l?c và qu?n lý don v? t? ch?c (l?p h?c). Module có quan h? ph? thu?c v?i module Ðang nh?p & Phân quy?n vì m?i user ph?i có ít nh?t 1 role.
+
+5.1 UC08 - T?o user
+
+   UC08: T?o user
+Tóm t?t: Admin t?o m?i m?t ngu?i dùng th? công v?i thông tin cá nhân và role ban d?u. H? th?ng t? sinh m?t kh?u ng?u nhiên và g?i qua email.
+Actor chính: Admin
+Actor ph?: SMTP d? g?i email kích ho?t
+   Ði?u ki?n tru?c (Precondition):
+? Admin có quy?n user:create.
+   Ði?u ki?n sau (Postcondition):
+? User m?i du?c luu v?i status=Pending (ch? kích ho?t qua email).
+? Email ch?a link kích ho?t (TTL 7 ngày) du?c g?i d?n email user.
+? Audit log ghi s? ki?n user:create.
+   Lu?ng chính (Main Flow):
+Admin: vào "Qu?n lý User" ? "Thêm user".
+H? th?ng: hi?n th? form: h? tên, email, username, mã s?, vai trò, l?p h?c (n?u Student), s? di?n tho?i, ngày sinh, gi?i tính.
+Admin: nh?p thông tin, ch?n role (m?c d?nh: Student), nh?n "Luu".
+H? th?ng: validate toàn b? tru?ng (xem b?ng). N?u có l?i, hi?n th? l?i tr?c ti?p trên form.
+
+H? th?ng: ki?m tra email và username là duy nh?t trong DB (k? c? user dã soft delete).
+H? th?ng: sinh m?t kh?u ng?u nhiên 12 ký t?, bam b?ng bcrypt cost 12. Luu user v?i status=Pending.
+H? th?ng: sinh activation token (32 byte hex), luu Redis v?i TTL 7 ngày. G?i email ch?a link kích ho?t: /activate?token={token}.
+H? th?ng: ghi audit log. Hi?n th? thông báo "Ðã t?o user. Email kích ho?t dã du?c g?i". Chuy?n v? danh sách user.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Admin tick "G?i m?t kh?u qua SMS" (n?u SÐT h?p l? và SMS gateway c?u hình): h? th?ng g?i SMS ch?a m?t kh?u (ch? trong tru?ng h?p chính sách t? ch?c cho phép).
+? A2: Admin tick "B? qua email kích ho?t, set Active ngay": tr?ng thái user ngay l?p t?c là Active, m?t kh?u ng?u nhiên du?c hi?n th? 1 l?n duy nh?t cho Admin copy.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Email dã t?n t?i: hi?n th? "Email dã du?c s? d?ng b?i user khác".
+? E2: Username dã t?n t?i: hi?n th? "Tên dang nh?p dã du?c s? d?ng".
+? E3: SMTP g?i email th?t b?i: user v?n du?c luu (status=Pending), Admin có nút "G?i l?i email kích ho?t".
+   Quy t?c nghi?p v? liên quan:
+? BR-017: Email và username ph?i là duy nh?t trong toàn h? th?ng, k? c? các user dã b? soft delete (d? tránh tài kho?n ma và d? khôi ph?c).
+? BR-018: User m?i t?o m?c d?nh có status=Pending; ph?i kích ho?t qua email ho?c Admin set Active th? công m?i dang nh?p du?c.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)fullNameStringCó2-100 ký t?, có d?u ti?ng Vi?t, không có ký t? d?c bi?t ngoài space và d?u g?ch n?iH? tên 2-100 ký t?, không ch?a ký t? d?c bi?t.emailEmailCóRFC 5322, t?i da 254 ký t?, duy nh?t trong DB (g?m soft deleted)Email không h?p l? ho?c dã t?n t?i.
+
+
+Tru?ng
+
+usernameKi?u
+
+StringB?t bu?c
+
+CóRàng bu?c
+
+3-50 ký t? alphanumeric + . _
+-, duy nh?t trong DBThông báo l?i (ti?ng Vi?t)
+Username 3-50 ký t? (a-z, 0-9, ._-) và không trùng.employeeCode/ studentCodeStringCó3-20 ký t? alphanumeric, duy nh?t theo role; sinh viên b?t bu?c theo d?nh d?ng tru?ngMã s? không h?p l? ho?c dã t?n t?i.roleIdUUIDCóT?n t?i trong b?ng roles, status=activeRole không h?p l?.classIdUUIDKhôngB?t bu?c n?u role=Student; t?n t?i trong b?ng classesL?p h?c không h?p l?.phoneStringKhôngRegex VN: ^(0|\
++84)(\d{9,10})$ -
+s? SÐT Vi?t NamS? di?n tho?i Vi?t Nam không h?p l?.birthDateDateKhôngISO 8601; nam
+sinh t? 1920 d?n (current year - 5)Ngày sinh không h?p l?.genderEnumKhôngmale | female | otherGi?i tính không h?p l?.5.2 UC09 - S?a user
+
+   UC09: S?a user
+Tóm t?t: Admin c?p nh?t thông tin cá nhân ho?c tr?ng thái c?a m?t user dã t?n t?i. Không cho phép d?i email/username (ch? Admin có quy?n d?c bi?t m?i d?i du?c).
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? User c?n s?a t?n t?i trong h? th?ng, không b? soft delete.
+   Ði?u ki?n sau (Postcondition):
+? Thông tin user du?c c?p nh?t; audit log ghi user:update.
+? N?u thay d?i role, quy?n m?i áp d?ng trong 5 phút.
+   Lu?ng chính (Main Flow):
+
+Admin: t? danh sách user, nh?n vào user c?n s?a. H? th?ng: hi?n th? chi ti?t user v?i nút "Ch?nh s?a".
+Admin: nh?n "Ch?nh s?a", s?a các tru?ng c?n thi?t, nh?n "Luu".
+H? th?ng: validate các tru?ng (xem b?ng). N?u l?i, hi?n th? trên form.
+H? th?ng: c?p nh?t DB. Ghi audit log v?i diff tru?c/sau. Hi?n th? thông báo thành công.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Admin có quy?n d?c bi?t change_email có th? d?i email: h? th?ng g?i email xác nh?n d?n email m?i, user ph?i click link xác nh?n tru?c khi email m?i có hi?u l?c.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Email/username m?i (n?u du?c phép d?i) dã t?n t?i: hi?n th? l?i.
+? E2: User v?a b? soft delete b?i admin khác trong phiên giao d?ch: hi?n th? "User không còn t?n t?i ho?c dã b? xóa".
+   Quy t?c nghi?p v? liên quan:
+? BR-019: M?c d?nh, không cho d?i email và username d? d?m b?o tính toàn v?n d? li?u l?ch s? (di?m thi, audit log).
+? BR-020: Khi d?i role t? Teacher ? Student ho?c ngu?c l?i, các quy?n s? h?u tài nguyên (câu h?i, bài thi) c?n du?c x? lý: h? th?ng hi?n th? c?nh báo và yêu c?u Admin xác nh?n chuy?n quy?n s? h?u sang user khác tru?c khi d?i role.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)userIdUUIDCóT?n t?i trong b?ng users, không soft deleteNgu?i dùng không t?n t?i.fullNameStringCó2-100 ký t?H? tên 2-100 ký t?.phoneStringKhôngRegex VNSÐT Vi?t Nam không h?p l?.birthDateDateKhông1920 d?n currentYear-5Ngày sinh không h?p l?.classIdUUIDKhôngT?n t?i trong classes (n?u Student)L?p h?c không h?p l?.
+
+5.3 UC10 - Khóa/M? khóa user
+
+   UC10: Khóa/M? khóa user
+Tóm t?t: Admin khóa (lock) t?m th?i ho?c m? khóa (unlock) m?t user. User b? khóa không th? dang nh?p nhung d? li?u du?c gi? nguyên.
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? User t?n t?i, không ph?i là chính Admin dang thao tác.
+   Ði?u ki?n sau (Postcondition):
+? Status c?a user chuy?n gi?a Active ? Locked.
+? T?t c? phiên dang nh?p hi?n t?i c?a user (n?u b? khóa) b? thu h?i ngay l?p t?c.
+? Audit log ghi user:lock ho?c user:unlock kèm lý do.
+   Lu?ng chính (Main Flow):
+Admin: t? chi ti?t user, nh?n "Khóa tài kho?n".
+H? th?ng: hi?n th? form nh?p lý do khóa (b?t bu?c) và th?i h?n khóa (tùy ch?n: vinh vi?n ho?c d?n ngày).
+Admin: nh?p lý do, ch?n th?i h?n, nh?n "Khóa".
+H? th?ng: c?p nh?t status=Locked, luu lý do và th?i h?n. Thu h?i toàn b? refresh token c?a user trong Redis.
+H? th?ng: ghi audit log. G?i email thông báo cho user. Hi?n th? thông báo thành công.
+   Lu?ng thay th? (Alternate Flow):
+? A1: M? khóa: t? chi ti?t user (dang Locked), nh?n "M? khóa". H? th?ng set status=Active, xóa th?i h?n khóa. Yêu c?u user d?i m?t kh?u ? l?n dang nh?p ti?p theo.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Admin c? khóa chính mình: h? th?ng t? ch?i v?i "Không th? khóa tài kho?n c?a chính mình".
+? E2: Admin c? khóa admin khác có quy?n cao hon: t? ch?i v?i "Không d? quy?n d? khóa tài kho?n này".
+   Quy t?c nghi?p v? liên quan:
+? BR-021: Lý do khóa là b?t bu?c và du?c luu trong audit log d? truy v?t.
+? BR-022: Khi m? khóa, h? th?ng reset b? d?m dang nh?p sai d? tránh user b? khóa l?i ngay do co ch? cu.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)userIdUUIDCóT?n t?i, không ph?i current adminNgu?i dùng không h?p l?.reasonStringCó10-500 ký t?Lý do 10-500 ký t?.lockUntilDateKhôngPh?i sau now + 1 gi?; không quá now + 5 namTh?i h?n khóa không h?p l?.5.4 UC11 - Xóa user (soft delete)
+
+   UC11: Xóa user (soft delete)
+Tóm t?t: Admin xóa m?t user theo co ch? soft delete - d? li?u v?n còn trong DB, dánh d?u deleted_at. L?ch s? di?m thi c?a user du?c gi? nguyên.
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? User t?n t?i; không có lu?t thi nào dang di?n ra (status=in_progress).
+   Ði?u ki?n sau (Postcondition):
+? User du?c dánh d?u deleted_at = now(), status = Deleted.
+? Email và username cu du?c thêm h?u t? _deleted_{timestamp} d? gi?i phóng cho user m?i.
+? Audit log ghi user:delete v?i lý do.
+? Không th? dang nh?p n?a; d? li?u l?ch s? (di?m, audit log) v?n truy xu?t du?c.
+   Lu?ng chính (Main Flow):
+Admin: t? chi ti?t user, nh?n "Xóa tài kho?n".
+H? th?ng: hi?n th? c?nh báo: "Hành d?ng này không th? hoàn tác t? UI. User s? b? xóa m?m, d? li?u l?ch s? du?c gi?. Ti?p t?c?" Yêu c?u nh?p lý do.
+Admin: nh?p lý do, gõ xác nh?n (ví d?: gõ tên user d? xác nh?n), nh?n "Xóa". H? th?ng: ki?m tra không có lu?t thi dang di?n ra. N?u có, t? ch?i.
+H? th?ng: dánh d?u deleted_at, d?i status=Deleted, d?i email/username thêm h?u t?
+_deleted_{timestamp}. Thu h?i toàn b? phiên.
+H? th?ng: ghi audit log. G?i email thông báo. Chuy?n v? danh sách.
+   Lu?ng thay th? (Alternate Flow):
+
+? A1: Restore user: trong vòng 30 ngày sau khi xóa, Admin có quy?n d?c bi?t có th? restore. Sau 30 ngày, d? li?u b? purge vinh vi?n.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: User có lu?t thi dang di?n ra: t? ch?i v?i "Không th? xóa user khi có lu?t thi dang di?n ra. Vui lòng d?i k?t thúc ho?c h?y lu?t thi.".
+? E2: Xác nh?n gõ tên user không kh?p: t? ch?i, hi?n th? "Xác nh?n không kh?p".
+   Quy t?c nghi?p v? liên quan:
+? BR-023: Soft delete gi? d? li?u 30 ngày; sau dó System t? d?ng purge (xóa vinh vi?n) theo job hàng ngày.
+? BR-024: Email/username c?a user b? soft delete du?c thêm h?u t? d? cho phép t?o user m?i v?i email/username cu.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)userIdUUIDCóT?n t?i, không ph?i current admin, không có attempt in_progressNgu?i dùng không h?p l? d? xóa.reasonStringCó10-500 ký t?Lý do 10-500 ký t?.confirmNameStringCóPh?i kh?p chính xác username c?a user b? xóaXác nh?n tên không kh?p.
+5.5 UC12 - Import user t? Excel/CSV
+
+   UC12: Import user t? Excel/CSV
+Tóm t?t: Admin t?i lên file Excel/CSV ch?a nhi?u user d? t?o hàng lo?t, h? tr? t?o l?p h?c m?i và gán role theo c?t.
+Actor chính: Admin
+Actor ph?: H? th?ng background job d? x? lý file l?n
+   Ði?u ki?n tru?c (Precondition):
+? Admin có quy?n user:import.
+   Ði?u ki?n sau (Postcondition):
+? File du?c x? lý; m?i dòng h?p l? t?o 1 user. Dòng l?i du?c ghi vào file báo cáo.
+? Sau khi hoàn t?t, email g?i cho Admin v?i file k?t qu? (success/fail).
+
+   Lu?ng chính (Main Flow):
+Admin: vào "Qu?n lý User" ? "Import". T?i template Excel m?u.
+Admin: di?n template, quay l?i trang, ch?n file, ch?n "Có g?i email kích ho?t" (m?c d?nh Yes), nh?n "T?i lên".
+H? th?ng: validate file: d?nh d?ng (xlsx/xls/csv), kích thu?c t?i da 5MB, s? dòng t?i da 5.000. H? th?ng: dua file vào hàng d?i (BullMQ). Hi?n th? ti?n trình trên UI (polling m?i 5 giây).
+H? th?ng: background job x? lý t?ng dòng: validate, ki?m tra trùng, t?o user, g?i email kích ho?t n?u c?u hình.
+H? th?ng: khi hoàn t?t, c?p nh?t tr?ng thái job. G?i email cho Admin v?i file CSV k?t qu?: dòng bao g?m s? th? t?, status (success/skip/error), lý do l?i (n?u có).
+   Lu?ng thay th? (Alternate Flow):
+? A1: Admin tick "Ch? d? dry-run": h? th?ng ch? validate, không t?o user. Tr? v? file báo cáo preview d? Admin xem tru?c.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: File sai d?nh d?ng: t? ch?i v?i "Ch? h? tr? .xlsx, .xls, .csv".
+? E2: File quá l?n: t? ch?i v?i "File vu?t quá gi?i h?n 5MB ho?c 5.000 dòng. Vui lòng chia nh?".
+? E3: Thi?u c?t b?t bu?c: t? ch?i v?i "File thi?u c?t: {tên c?t}".
+? E4: Job th?t b?i gi?a ch?ng (l?i h? th?ng): job có th? resume t? dòng cu?i cùng dã x? lý. Admin có nút "Ti?p t?c".
+   Quy t?c nghi?p v? liên quan:
+? BR-025: Import không transaction - các dòng h?p l? v?n du?c t?o k? c? khi có dòng l?i. M?c dích: tránh import l?i t? d?u khi ch? vài dòng l?i.
+? BR-026: Email kích ho?t ch? du?c g?i sau khi toàn b? file x? lý xong (g?i batch) d? tránh spam.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)fileFileCóxlsx/xls/csv, max 5MB, max 5000
+dòng d? li?u (không k? header)File không h?p l?.sendActivationEm ailBooleanKhôngM?c d?nh true-dryRunBooleanKhôngM?c d?nh false-
+
+
+Tru?ng	Ki?u	B?t bu?c	Ràng bu?c	Thông báo l?i
+(ti?ng Vi?t)defaultRoleEnumCóstudent | teacher
+| admin (m?c d?nh student n?u c?t role trong file tr?ng)Role m?c d?nh không h?p l?.5.6 UC13 - Export danh sách user
+
+   UC13: Export danh sách user
+Tóm t?t: Admin xu?t danh sách user (theo filter hi?n t?i) ra file Excel ho?c CSV d? luu tr? ho?c x? lý ngoài h? th?ng.
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? Admin có quy?n user:export.
+   Ði?u ki?n sau (Postcondition):
+? File export du?c t?o và t?i v? máy Admin.
+   Lu?ng chính (Main Flow):
+Admin: t? danh sách user, áp d?ng filter (theo role, l?p, tr?ng thái), nh?n "Export".
+H? th?ng: hi?n th? tùy ch?n: d?nh d?ng (xlsx/csv), tru?ng c?n xu?t (m?c d?nh t?t c?), có bao g?m user dã soft delete không.
+Admin: ch?n tùy ch?n, nh?n "Export".
+H? th?ng: truy v?n DB theo filter, gi?i h?n t?i da 50.000 dòng. T?o file Excel/CSV, luu vào b? nh? t?m.
+H? th?ng: tr? link download cho Admin. Link có TTL 1 gi?. Ghi audit log user:export.
+   Lu?ng thay th? (Alternate Flow):
+? A1: S? dòng quá 50.000: hi?n th? c?nh báo "Vu?t gi?i h?n 50.000 dòng, vui lòng thu h?p filter".
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: H?t b? nh? t?m: hi?n th? "H? th?ng t?m quá t?i, vui lòng th? l?i sau".
+   Quy t?c nghi?p v? liên quan:
+? BR-027: Export user ra file ch?a PII (email, SÐT) nên audit log ghi chi ti?t: ai export, filter gì, s? dòng, th?i di?m.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)formatEnumCóxlsx | csvÐ?nh d?ng không h?p l?.includeDeletedBooleanKhôngM?c d?nh false-fieldsArray<String>KhôngSubset c?a các tru?ng h?p l?Tru?ng không h?p l?.5.7 UC14 - Tìm ki?m & l?c user
+
+   UC14: Tìm ki?m & l?c user
+Tóm t?t: Admin tim user theo t? khóa và l?c theo nhi?u tiêu chí: role, l?p, tr?ng thái, kho?ng th?i gian t?o.
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? Admin có quy?n user:read.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? danh sách k?t qu? theo filter; không thay d?i d? li?u.
+   Lu?ng chính (Main Flow):
+Admin: t? danh sách user, nh?p t? khóa vào ô tim ki?m (tim theo tên, email, username, mã s?). Admin: ch?n filter: role, l?p, tr?ng thái, kho?ng ngày t?o. Nh?n "L?c" ho?c Enter.
+H? th?ng: truy v?n DB v?i filter, phân trang 20 dòng/trang. S?p x?p theo created_at gi?m d?n (m?c d?nh).
+H? th?ng: hi?n th? k?t qu? v?i các c?t: avatar, h? tên, email, role, l?p, tr?ng thái, action menu.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Admin luu filter thành "B? l?c dã luu" d? dùng l?i sau. T?i da 10 b? l?c/user.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: T? khóa quá ng?n (< 2 ký t?) ho?c quá dài (> 100 ký t?): hi?n th? g?i ý s?a.
+   Quy t?c nghi?p v? liên quan:
+? BR-028: Tìm ki?m full-text trên PostgreSQL s? d?ng GIN index. K?t qu? tr? v? trong 200ms cho 1 tri?u user.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)keywordStringKhông2-100 ký t? n?u cóT? khóa 2-100 ký t?.roleIdUUIDKhôngT?n t?i trong rolesRole không h?p l?.classIdUUIDKhôngT?n t?i trong classesL?p không h?p l?.statusEnumKhôngactive | locked | pending | deletedTr?ng thái không h?p l?.pageIntegerKhông= 1, m?c d?nh 1S? trang không h?p l?.pageSizeIntegerKhông10/20/50/100,
+m?c d?nh 20Kích thu?c trang không h?p l?.5.8 UC15 - Qu?n lý l?p h?c
+
+   UC15: Qu?n lý l?p h?c
+Tóm t?t: Admin t?o, s?a, xóa l?p h?c và gán sinh viên vào l?p. L?p dùng d? gán bài thi hàng lo?t.
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? Admin có quy?n class:manage.
+   Ði?u ki?n sau (Postcondition):
+? L?p h?c du?c CRUD; sinh viên du?c gán/g? kh?i l?p; audit log ghi l?i.
+   Lu?ng chính (Main Flow):
+Admin: vào "Qu?n lý L?p h?c". Nh?n "Thêm l?p".
+H? th?ng: hi?n th? form: tên l?p, mã l?p, khóa h?c/nam h?c, giáo viên ch? nhi?m, mô t?. Admin: nh?p thông tin, nh?n "Luu".
+H? th?ng: validate. Luu. Hi?n th? danh sách l?p v?i s? sinh viên m?i l?p.
+Admin: nh?n vào l?p d? xem chi ti?t, gán sinh viên (tim theo tên/mã + tick thêm vào), ho?c t?o bài thi cho l?p.
+   Lu?ng thay th? (Alternate Flow):
+? A1: S?a l?p: cho phép d?i tên, mã, mô t?, giáo viên ch? nhi?m. Không cho d?i mã l?p n?u dã có bài thi gán vào l?p (d?m b?o tính toàn v?n).
+? A2: Xóa l?p: ch? cho phép khi l?p không còn sinh viên. N?u còn, yêu c?u chuy?n sinh viên sang l?p khác tru?c.
+   Lu?ng ngo?i l? (Exception Flow):
+
+? E1: Mã l?p dã t?n t?i: t? ch?i v?i "Mã l?p dã t?n t?i".
+? E2: Xóa l?p còn sinh viên: t? ch?i v?i "L?p còn sinh viên, không th? xóa".
+   Quy t?c nghi?p v? liên quan:
+? BR-029: M?t sinh viên có th? thu?c nhi?u l?p cùng lúc (vd: l?p chuyên ngành + l?p h?c ph?n).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)nameStringCó2-100 ký t?Tên l?p 2-100 ký t?.codeStringCó3-20 ký t? alphanumeric + d?u g?ch, duy nh?tMã l?p 3-20 ký t? và không trùng.academicYearStringCóÐ?nh d?ng YYYY-YYYY (vd: 2025-
+2026)Nam h?c không h?p l?.teacherIdUUIDKhôngUser có role Teacher, t?n t?iGiáo viên không h?p l?.descriptionStringKhôngT?i da 500 ký t?Mô t? t?i da 500 ký t?.
+   Chuong 6. Use Case chi ti?t - Module Ngân hàng câu h?i
+
+   Chuong này d?c t? 9 use case (UC16-UC24) c?a module Ngân hàng câu h?i. Ðây là module c?t lõi do Teacher s? h?u, dùng d? xây d?ng kho câu h?i tái s? d?ng. H? th?ng h? tr? 4 lo?i câu h?i: (1) Tr?c nghi?m m?t dáp án (MCQ-Single); (2) Tr?c nghi?m nhi?u dáp án (MCQ-Multiple); (3) Ðúng/Sai (True/False); (4) T? lu?n ng?n (Essay). M?i câu h?i có metadata phân lo?i theo môn, chuong, m?c d? khó (Bloom) và tag t? do. Workflow duy?t câu h?i tùy ch?n theo c?u hình t? ch?c.
+
+6.1 UC16 - T?o câu h?i
+
+   UC16: T?o câu h?i
+Tóm t?t: Teacher so?n m?t câu h?i m?i thu?c 1 trong 4 lo?i, nh?p n?i dung, dáp án, metadata phân lo?i. Câu h?i sau khi t?o có status Draft (chua duy?t) ho?c Pending Review (g?i duy?t).
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+
+? Teacher dã dang nh?p và có quy?n question:create.
+   Ði?u ki?n sau (Postcondition):
+? Câu h?i du?c luu v?i status Draft ho?c Pending Review.
+? Audit log ghi question:create.
+   Lu?ng chính (Main Flow):
+Teacher: vào "Ngân hàng câu h?i" ? "Thêm câu h?i".
+H? th?ng: hi?n th? form: ch?n lo?i câu h?i, nh?p n?i dung (h? tr? rich text + MathJax + hình ?nh), nh?p dáp án theo lo?i.
+Teacher: ch?n lo?i (vd: MCQ-Single), nh?p stem, nh?p 4-6 phuong án, tick dáp án dúng. Teacher: ch?n môn, chuong, m?c d? khó (Bloom), nh?p tag (n?u có), nh?p gi?i thích (tùy ch?n). Teacher: nh?n "Luu nháp" ho?c "G?i duy?t".
+H? th?ng: validate (xem b?ng). N?u l?i, hi?n th? trên form.
+H? th?ng: luu câu h?i v?i status tuong ?ng (Draft ho?c Pending). Ghi audit log. Hi?n th? thông báo thành công.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Lo?i MCQ-Multiple: cho phép tick nhi?u dáp án dúng. M?i dáp án dúng có th? có tr?ng s? di?m khác nhau.
+? A2: Lo?i Essay: thay vì nh?p dáp án, Teacher nh?p "dáp án tham kh?o" và "hu?ng d?n ch?m" (rubric). Ch?m t? d?ng không kh? thi, GV s? ch?m th? công sau thi.
+? A3: Lo?i True/False: 2 phuong án c? d?nh True/False, Teacher tick 1 dáp án dúng.
+? A4: C?u hình workflow duy?t câu h?i b?t: nút "G?i duy?t" kh? d?ng; t?t: ch? có "Luu" v?i status = Approved ngay.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Stem r?ng ho?c quá ng?n (< 10 ký t?): hi?n th? "N?i dung câu h?i quá ng?n".
+? E2: MCQ-Single không có dáp án dúng nào du?c tick: hi?n th? "Ph?i ch?n 1 dáp án dúng".
+? E3: MCQ-Single có 2+ dáp án dúng du?c tick: hi?n th? "Lo?i MCQ-Single ch? cho phép 1 dáp án dúng".
+? E4: S? phuong án < 2 ho?c > 8: hi?n th? "S? phuong án t? 2 d?n 8".
+? E5: Upload hình ?nh quá l?n (> 2MB) ho?c sai d?nh d?ng: hi?n th? l?i.
+   Quy t?c nghi?p v? liên quan:
+? BR-030: Câu h?i ? status Draft không du?c dua vào bài thi. C?n du?c duy?t (Approved) tru?c khi s? d?ng.
+? BR-031: M?c d? khó theo thang Bloom: 1-Nh?, 2-Hi?u, 3-V?n d?ng, 4-Phân tích, 5-T?ng h?p, 6-Ðánh giá.
+? BR-032: M?i câu h?i thu?c dúng 1 môn và 1 chuong. Tag có th? có nhi?u.
+
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)typeEnumCómcq_single | mcq_multiple | true_false | essayLo?i câu h?i không h?p l?.stemString (HTML)Có10-5000 ký t? (sau khi strip HTML)N?i dung câu h?i 10-5000 ký t?.optionsArrayCó2-8 ph?n t? cho MCQ; m?i option có id, content (1-1000 ký t?), isCorrect, scorePhuong án không h?p l?.correctOptionIdUUIDCó (MCQ-Single)T?n t?i trong options, isCorrect
+= true; duy nh?tÐáp án dúng không h?p l?.subjectIdUUIDCóT?n t?i trong b?ng subjectsMôn h?c không h?p l?.chapterIdUUIDCóT?n t?i trong b?ng chapters, thu?c subject trênChuong không h?p l?.bloomLevelIntegerCó1-6M?c d? khó 1-6.tagsArray<String>KhôngM?i tag 1-30 ký t?, t?i da 10 tagTag không h?p l?.explanationStringKhôngT?i da 3000 ký t?Gi?i thích t?i da 3000 ký t?.scoreDecimalCó0.01 - 100.00, làm
+tròn 2 s? th?p phânÐi?m 0.01 - 100.
+6.2 UC17 - S?a câu h?i
+
+   UC17: S?a câu h?i
+Tóm t?t: Teacher s?a n?i dung câu h?i do mình s? h?u. Câu h?i dang du?c dùng trong bài thi s?p di?n ra không du?c s?a.
+Actor chính: Teacher (ch? ngu?i s? h?u câu h?i)
+   Ði?u ki?n tru?c (Precondition):
+? Câu h?i t?n t?i, status khác Archived; ngu?i s?a là ch? s? h?u ho?c Admin.
+   Ði?u ki?n sau (Postcondition):
+
+? Câu h?i du?c c?p nh?t; status chuy?n v? Draft n?u tru?c dó là Approved (c?n duy?t l?i).
+? Audit log ghi question:update v?i diff.
+   Lu?ng chính (Main Flow):
+Teacher: t? danh sách câu h?i, nh?n vào câu h?i c?n s?a.
+H? th?ng: ki?m tra quy?n s? h?u. N?u không ph?i ch?, t? ch?i.
+H? th?ng: ki?m tra câu h?i có dang du?c dùng trong bài thi s?p di?n ra không. N?u có, t? ch?i s?a.
+H? th?ng: hi?n th? form s?a (gi?ng form t?o, dã fill d? li?u cu). Teacher: s?a các tru?ng, nh?n "Luu".
+H? th?ng: validate. N?u câu h?i tru?c dó là Approved, status v? Draft c?n duy?t l?i. Luu. Ghi audit log.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Câu h?i dang dùng trong bài thi ÐÃ di?n ra (status=completed): v?n cho phép s?a, nhung h? th?ng c?nh báo "S?a câu h?i s? không ?nh hu?ng k?t qu? thi dã ch?m".
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Không ph?i ch? s? h?u (và không ph?i Admin): t? ch?i v?i "B?n không có quy?n s?a câu h?i này".
+? E2: Câu h?i dang dùng trong bài thi s?p di?n ra: t? ch?i v?i "Câu h?i dang du?c dùng trong bài thi s?p di?n ra, không th? s?a. Vui lòng d?i sau k? thi ho?c nhân b?n câu h?i d? s?a".
+   Quy t?c nghi?p v? liên quan:
+? BR-033: S?a câu h?i Approved s? t? d?ng chuy?n v? Draft d? duy?t l?i, d?m b?o không dua câu h?i l?i vào bài thi.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)questionIdUUIDCóT?n t?i, không Archived, không trong bài thi s?p di?n raCâu h?i không h?p l? d? s?a.fullNameStringCó2-100 ký t?H? tên 2-100 ký t?.stemString (HTML)Có10-5000 ký t? (sau khi strip HTML)N?i dung câu h?i 10-5000 ký t?.subjectIdUUIDCóT?n t?i trong b?ng subjectsMôn h?c không h?p l?.
+
+
+Tru?ng
+
+chapterIdKi?u
+
+UUIDB?t bu?c
+
+CóRàng bu?c
+
+T?n t?i trong b?ng chapters, thu?c subjectThông báo l?i (ti?ng Vi?t)
+Chuong không h?p l?.bloomLevelIntegerCó1-6M?c d? khó 1-6.scoreDecimalCó0.01 - 100.00Ði?m 0.01 - 100.6.3 UC18 - Xóa câu h?i
+
+   UC18: Xóa câu h?i
+Tóm t?t: Teacher xóa câu h?i không s? d?ng. Câu h?i dã du?c dùng trong bài thi dã di?n ra không du?c xóa (ch? archive).
+Actor chính: Teacher (ch? s? h?u) ho?c Admin
+   Ði?u ki?n tru?c (Precondition):
+? Câu h?i chua t?ng du?c dùng trong lu?t thi nào (status='never_used').
+   Ði?u ki?n sau (Postcondition):
+? Câu h?i b? soft delete (deleted_at = now).
+? Audit log ghi question:delete.
+   Lu?ng chính (Main Flow):
+Teacher: t? danh sách câu h?i, nh?n menu ? "Xóa".
+H? th?ng: ki?m tra câu h?i chua t?ng du?c dùng trong attempt nào.
+H? th?ng: hi?n th? h?p xác nh?n "B?n có ch?c mu?n xóa câu h?i này? Hành d?ng không th? hoàn tác".
+Teacher: nh?n "Xóa".
+H? th?ng: soft delete câu h?i. Ghi audit log. C?p nh?t danh sách.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Câu h?i dã t?ng dùng: h? th?ng không cho xóa, g?i ý "Archive" thay th? - câu h?i b? ?n kh?i danh sách m?c d?nh nhung v?n truy xu?t du?c qua filter includeArchived=true.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Không ph?i ch? s? h?u và không ph?i Admin: t? ch?i.
+   Quy t?c nghi?p v? liên quan:
+? BR-034: Câu h?i dã dùng trong thi không du?c xóa d? d?m b?o tính toàn v?n l?ch s? - có th? truy v?n l?i d? thi cu d? khi?u n?i.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)questionIdUUIDCóT?n t?i, chua t?ng du?c dùng (status='never_us ed'), là ch? s? h?u ho?c AdminCâu h?i không h?p l? d? xóa.6.4 UC19 - Import câu h?i t? Word/Excel
+
+   UC19: Import câu h?i t? Word/Excel
+Tóm t?t: Teacher import hàng lo?t câu h?i t? file Word (theo template d?c t?) ho?c Excel. H? tr? c? 4 lo?i câu h?i trong cùng file.
+Actor chính: Teacher
+Actor ph?: Background job d? x? lý file l?n
+   Ði?u ki?n tru?c (Precondition):
+? Teacher có quy?n question:import.
+   Ði?u ki?n sau (Postcondition):
+? M?i dòng/do?n h?p l? t?o 1 câu h?i v?i status Draft.
+? File báo cáo k?t qu? g?i v? cho Teacher qua email.
+   Lu?ng chính (Main Flow):
+Teacher: vào "Ngân hàng câu h?i" ? "Import". T?i template Word/Excel.
+Teacher: di?n template theo hu?ng d?n: m?i câu h?i là 1 do?n (Word) ho?c 1 dòng (Excel), có stem, options, dáp án dúng, metadata.
+Teacher: quay l?i trang Import, ch?n file, ch?n môn m?c d?nh (n?u file không có c?t môn), nh?n "T?i lên".
+H? th?ng: validate file: d?nh d?ng (docx/xlsx), kích thu?c t?i da 10MB, s? câu t?i da 500. H? th?ng: dua vào hàng d?i. Hi?n th? ti?n trình.
+H? th?ng: background job parse file, validate t?ng câu, t?o câu h?i status=Draft.
+H? th?ng: g?i email cho Teacher v?i file k?t qu?: s? câu thành công, s? câu l?i, chi ti?t l?i theo dòng.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Dry-run: ch? parse và validate, không t?o câu h?i. Tr? v? preview cho Teacher xem tru?c.
+   Lu?ng ngo?i l? (Exception Flow):
+
+? E1: File không dúng template: t? ch?i v?i "File không theo template chu?n. Vui lòng t?i template m?u".
+? E2: L?i parse 1 câu: b? qua câu dó, ghi vào báo cáo, ti?p t?c x? lý các câu khác.
+   Quy t?c nghi?p v? liên quan:
+? BR-035: Câu h?i import luôn có status Draft - Teacher ph?i duy?t th? công tru?c khi dua vào bài thi.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)fileFileCódocx/xlsx, max 10MB, max 500
+câuFile không h?p l?.defaultSubjectIdUUIDCóT?n t?i trong subjectsMôn m?c d?nh không h?p l?.defaultBloomLeve lIntegerKhông1-6, m?c d?nh 2M?c d? khó không h?p l?.dryRunBooleanKhôngM?c d?nh false-
+6.5 UC20 - Export câu h?i
+
+   UC20: Export câu h?i
+Tóm t?t: Teacher export danh sách câu h?i (theo filter) ra Word/Excel d? chia s? n?i b? ho?c backup.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Teacher có quy?n question:export.
+   Ði?u ki?n sau (Postcondition):
+? File export du?c t?o và t?i v?; audit log ghi question:export.
+   Lu?ng chính (Main Flow):
+Teacher: t? danh sách câu h?i, áp d?ng filter (môn, chuong, d? khó, tag, status), nh?n "Export".
+H? th?ng: hi?n th? tùy ch?n: d?nh d?ng (Word/Excel/PDF), có bao g?m dáp án + gi?i thích không, có ký hi?u không.
+Teacher: ch?n tùy ch?n, nh?n "Export".
+H? th?ng: truy v?n DB theo filter, gi?i h?n 2000 câu. T?o file. Tr? link download.
+   Lu?ng thay th? (Alternate Flow):
+
+? A1: Export không bao g?m dáp án: file ch? có stem + options, dùng d? in d? thi th? cho h?c sinh.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: S? câu quá 2000: yêu c?u thu h?p filter.
+   Quy t?c nghi?p v? liên quan:
+? BR-036: Export câu h?i có ch?a dáp án du?c audit log ghi l?i d? truy v?t rò r? d?.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)formatEnumCódocx | xlsx | pdfÐ?nh d?ng không h?p l?.includeAnswersBooleanKhôngM?c d?nh false-includeExplanatio nsBooleanKhôngM?c d?nh false-
+6.6 UC21 - Phân lo?i câu h?i
+
+   UC21: Phân lo?i câu h?i (môn / chuong / m?c d? khó)
+Tóm t?t: Teacher qu?n lý c?u trúc phân lo?i: t?o môn h?c, t?o chuong trong môn, gán câu h?i vào phân lo?i. Phân lo?i dùng cho filter khi so?n bài thi.
+Actor chính: Teacher (có quy?n subject:manage) ho?c Admin
+   Ði?u ki?n tru?c (Precondition):
+? Có quy?n subject:manage ho?c chapter:manage.
+   Ði?u ki?n sau (Postcondition):
+? Môn/chuong du?c CRUD; câu h?i du?c gán phân lo?i.
+   Lu?ng chính (Main Flow):
+Teacher: vào "Phân lo?i" ? "Môn h?c". Nh?n "Thêm môn". H? th?ng: hi?n th? form: tên môn, mã môn, mô t?.
+Teacher: nh?p thông tin, nh?n "Luu".
+H? th?ng: luu môn. Cho phép t?o chuong trong môn: tên chuong, mã, s? th? t?, mô t?.
+Teacher: t? danh sách câu h?i, có th? bulk update phân lo?i: ch?n nhi?u câu, ch?n môn/chuong, nh?n "C?p nh?t".
+   Lu?ng thay th? (Alternate Flow):
+? A1: S?a môn/chuong: ch? cho phép d?i tên/mô t?. Ð?i mã môn n?u dã có câu h?i g?n thì t? ch?i.
+
+? A2: Xóa môn: ch? cho phép n?u môn không còn câu h?i. Có câu h?i thì yêu c?u chuy?n câu h?i sang môn khác tru?c.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Mã môn/chuong trùng: t? ch?i.
+? E2: Xóa môn còn câu h?i: t? ch?i.
+   Quy t?c nghi?p v? liên quan:
+? BR-037: C?u trúc phân lo?i: 1 môn có nhi?u chuong; 1 chuong thu?c 1 môn; 1 câu h?i thu?c 1 (môn, chuong).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)nameStringCó2-100 ký t?Tên 2-100 ký t?.codeStringCó2-20 ký t? alphanumeric, duy nh?tMã 2-20 ký t? và không trùng.descriptionStringKhôngT?i da 500 ký t?Mô t? t?i da 500 ký t?.orderIntegerKhông= 1, m?c d?nh 1Th? t? không h?p l?.
+6.7 UC22 - Tag câu h?i
+
+   UC22: Tag câu h?i
+Tóm t?t: Teacher g?n tag t? do cho câu h?i d? phân lo?i chéo (vd: "chuong-1", "kho-lam", "de-thi-2024"). Tag là namespace ph? tr? ngoài phân lo?i chính.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Teacher có quy?n question:update (cho câu h?i c?a mình).
+   Ði?u ki?n sau (Postcondition):
+? Tag du?c thêm/g? kh?i câu h?i; th?ng kê tag c?p nh?t.
+   Lu?ng chính (Main Flow):
+Teacher: m? chi ti?t câu h?i, m?c "Tags" nh?n "Thêm tag". H? th?ng: hi?n th? ô nh?p v?i autocomplete t? tag dã có. Teacher: nh?p tag (m?i tag Enter d? thêm), nh?n "Luu".
+H? th?ng: luu tag. C?p nh?t b?ng question_tags. Hi?n th? tag du?i d?ng chip có nút X d? g?.
+
+   Lu?ng thay th? (Alternate Flow):
+? A1: Bulk tag: t? danh sách, ch?n nhi?u câu h?i, ch?n tag d? gán hàng lo?t.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Tag quá 30 ký t? ho?c ch?a ký t? d?c bi?t (ch? cho ch?/s?/d?u g?ch): t? ch?i.
+? E2: Câu h?i dã có 10 tag: t? ch?i thêm, hi?n th? "M?i câu h?i t?i da 10 tag".
+   Quy t?c nghi?p v? liên quan:
+? BR-038: Tag là ch? thu?ng, không d?u, ch?/s?/d?u g?ch ngang. Tag trùng (khác case) t? d?ng normalize.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)tagStringCó1-30 ký t?, regex
+^[a-z0-9-]+$, không trùng tag dã có c?a câu h?iTag 1-30 ký t? (ch? thu?ng, s?, d?u g?ch).
+6.8 UC23 - Duy?t câu h?i
+
+   UC23: Duy?t câu h?i
+Tóm t?t: Ngu?i có th?m quy?n (Admin ho?c Teacher du?c ?y quy?n) phê duy?t câu h?i ? status Pending Review. Câu h?i Approved m?i du?c dùng trong bài thi.
+Actor chính: Admin ho?c Teacher có quy?n question:approve
+   Ði?u ki?n tru?c (Precondition):
+? C?u hình workflow duy?t b?t. Câu h?i ? status Pending Review.
+   Ði?u ki?n sau (Postcondition):
+? Status chuy?n sang Approved (n?u duy?t) ho?c Rejected (n?u t? ch?i) + lý do.
+? Teacher s? h?u nh?n thông báo qua email.
+   Lu?ng chính (Main Flow):
+Approver: vào "Phê duy?t" ? "Câu h?i ch? duy?t". Nh?n vào câu h?i c?n duy?t.
+H? th?ng: hi?n th? n?i dung câu h?i d?y d? + metadata + comment c?a Teacher g?i kèm. Approver: xem n?i dung. N?u OK, nh?n "Duy?t". N?u c?n s?a, gõ comment và nh?n "T? ch?i".
+H? th?ng: c?p nh?t status (Approved/Rejected) + comment. Ghi audit log. G?i email thông báo cho Teacher.
+   Lu?ng thay th? (Alternate Flow):
+
+? A1: Approver yêu c?u ch?nh s?a nh?: gõ comment "C?n s?a", câu h?i v? status Draft v?i comment, Teacher s?a và g?i l?i.
+? A2: Bulk approve: ch?n nhi?u câu h?i, nh?n "Duy?t hàng lo?t". H? th?ng duy?t t?t c?.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Approver là chính ngu?i g?i câu h?i: t? ch?i v?i "Không th? duy?t câu h?i do chính mình t?o".
+   Quy t?c nghi?p v? liên quan:
+? BR-039: Workflow duy?t có th? b?t/t?t theo c?u hình h? th?ng. Khi t?t, câu h?i t?o ra có status Approved ngay.
+? BR-040: Approver không du?c duy?t câu h?i do chính mình t?o (4-eye principle).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)questionIdUUIDCóT?n t?i, status=PendingCâu h?i không ? tr?ng thái ch? duy?t.decisionEnumCóapproved | rejected | request_changesQuy?t d?nh không h?p l?.commentStringCó n?u rejected/request_ changes5-1000 ký t?Comment 5-1000 ký t? khi t? ch?i.
+6.9 UC24 - Tìm ki?m & l?c câu h?i
+
+   UC24: Tìm ki?m & l?c câu h?i
+Tóm t?t: Teacher tim câu h?i theo t? khóa trong stem, l?c theo môn/chuong/d? khó/tag/status. K?t qu? phân trang.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Teacher có quy?n question:read.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? danh sách k?t qu?.
+   Lu?ng chính (Main Flow):
+Teacher: vào "Ngân hàng câu h?i". Nh?p t? khóa (tim full-text trong stem).
+Teacher: ch?n filter: môn, chuong, d? khó, tag, status, lo?i câu h?i, owner. Nh?n "L?c".
+
+H? th?ng: truy v?n DB v?i filter, phân trang 20 dòng/trang.
+H? th?ng: hi?n th? b?ng: stem (rút g?n 100 ký t?), môn, chuong, d? khó, lo?i, status, action.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Teacher có th? luu filter thành "B? l?c dã luu" d? tái s? d?ng.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Filter không tr? k?t qu? nào: hi?n th? "Không tim th?y câu h?i phù h?p" + g?i ý n?i l?ng filter.
+   Quy t?c nghi?p v? liên quan:
+? BR-041: Teacher ch? th?y câu h?i do mình t?o ho?c câu h?i du?c chia s? (organization-level).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)keywordStringKhông2-200 ký t? n?u cóT? khóa 2-200 ký t?.subjectIdUUIDKhôngT?n t?i trong subjectsMôn không h?p l?.chapterIdUUIDKhôngT?n t?i trong chaptersChuong không h?p l?.bloomLevelIntegerKhông1-6M?c d? khó 1-6.typeEnumKhôngmcq_single | mcq_multiple | true_false | essayLo?i không h?p l?.statusEnumKhôngdraft | pending | approved | rejected | archivedStatus không h?p l?.pageIntegerKhông= 1, m?c d?nh 1Trang không h?p l?.
+   Chuong 7. Use Case chi ti?t - Module Qu?n lý K? thi & Bài thi
+
+   Chuong này d?c t? 8 use case (UC25-UC32) c?a module Qu?n lý K? thi & Bài thi. C?u trúc d? li?u phân 2 t?ng: K? thi (Exam) là s? ki?n bao, Bài thi (Test) là c?u hình d? thi c? th? trong m?t k? thi. M?t k? thi có th? ch?a nhi?u bài thi ph?c v? các m?c dích khác nhau (vd: bài thi chính th?c + bài thi ph? kh?o). M?i bài thi có c?u hình linh ho?t v? th?i gian, s? câu, cách tính di?m, chính sách thi l?i.
+
+7.1 UC25 - T?o k? thi
+
+   UC25: T?o k? thi
+Tóm t?t: Admin ho?c Teacher t?o m?t k? thi m?i (vd: Gi?a k? h?c ph?n X - H?c k? 1 2025-2026). K? thi là vùng ch?a cho các bài thi.
+Actor chính: Admin ho?c Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Có quy?n exam:create.
+   Ði?u ki?n sau (Postcondition):
+? K? thi du?c t?o v?i status=Draft; audit log ghi exam:create.
+   Lu?ng chính (Main Flow):
+User: vào "Qu?n lý k? thi" ? "T?o k? thi".
+H? th?ng: hi?n th? form: tên k? thi, mã k? thi, h?c k?, nam h?c, môn h?c, mô t?, ngày b?t d?u, ngày k?t thúc.
+User: nh?p thông tin, nh?n "Luu".
+H? th?ng: validate. Luu k? thi v?i status=Draft. Ghi audit log.
+H? th?ng: chuy?n d?n trang chi ti?t k? thi, noi User có th? t?o các bài thi bên trong.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Save and Publish: luu và chuy?n status=Published ngay. K? thi Published xu?t hi?n trong danh sách cho Student (nhung bài thi bên trong v?n c?n m? riêng).
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Mã k? thi trùng: t? ch?i.
+? E2: Ngày k?t thúc tru?c ngày b?t d?u: t? ch?i.
+   Quy t?c nghi?p v? liên quan:
+? BR-042: K? thi ? status=Draft không hi?n th? cho Student. Ph?i Published d? Student th?y.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)nameStringCó5-150 ký t?Tên k? thi 5-150 ký t?.codeStringCó3-30 ký t? alphanumeric + d?u g?ch, duy nh?tMã k? thi 3-30 ký t? và không trùng.
+
+
+Tru?ng
+
+semesterKi?u
+
+EnumB?t bu?c
+
+CóRàng bu?c
+
+1 | 2 | 3 (hè)Thông báo l?i (ti?ng Vi?t)
+H?c k? không h?p l?.academicYearStringCóÐ?nh d?ng YYYY-YYYYNam h?c không h?p l?.subjectIdUUIDCóT?n t?i trong subjectsMôn h?c không h?p l?.startDateDateTimeCóISO 8601, sau now
+- 7 ngàyNgày b?t d?u không h?p l?.endDateDateTimeCóISO 8601, sau
+startDate, không quá startDate + 365 ngàyNgày k?t thúc không h?p l?.descriptionStringKhôngT?i da 1000 ký t?Mô t? t?i da 1000 ký t?.7.2 UC26 - S?a / xóa k? thi
+
+   UC26: S?a / Xóa k? thi
+Tóm t?t: C?p nh?t thông tin k? thi ho?c xóa k? thi (soft delete). Ch? cho phép khi chua có bài thi nào dã di?n ra.
+Actor chính: Admin ho?c Teacher (ch? s? h?u)
+   Ði?u ki?n tru?c (Precondition):
+? K? thi t?n t?i; ngu?i dùng là ch? s? h?u ho?c Admin.
+   Ði?u ki?n sau (Postcondition):
+? K? thi du?c c?p nh?t ho?c soft delete; audit log ghi l?i.
+   Lu?ng chính (Main Flow):
+User: t? danh sách k? thi, nh?n vào k? thi c?n s?a. Nh?n "Ch?nh s?a" ho?c "Xóa".
+H? th?ng: ki?m tra không có attempt nào dã completed thu?c các bài thi trong k?. N?u có, t? ch?i xóa.
+H? th?ng: (s?a) hi?n th? form, validate, luu. (xóa) hi?n th? h?p xác nh?n, soft delete.
+   Lu?ng thay th? (Alternate Flow):
+? A1: S?a k? thi Published: h? th?ng c?nh báo "K? thi dang Published, thay d?i có th? ?nh hu?ng Student. Ti?p t?c?" Yêu c?u xác nh?n.
+   Lu?ng ngo?i l? (Exception Flow):
+
+? E1: Xóa k? thi dã có attempt completed: t? ch?i v?i "K? thi dã có lu?t thi, không th? xóa. Có th? Archive d? ?n kh?i danh sách".
+? E2: Ð?i mã k? thi khi dã Published: t? ch?i.
+   Quy t?c nghi?p v? liên quan:
+? BR-043: Archive k? thi: ?n kh?i danh sách m?c d?nh, không cho t?o/s?a bài thi bên trong, nhung v?n xem k?t qu? và export.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)examIdUUIDCóT?n t?i, không có attempt completed (n?u xóa)K? thi không h?p l?.nameStringCó (s?a)5-150 ký t?Tên k? thi 5-150 ký t?.descriptionStringKhôngT?i da 1000 ký t?Mô t? t?i da 1000 ký t?.startDateDateTimeCó (s?a)ISO 8601, sau now
+- 7 ngàyNgày b?t d?u không h?p l?.endDateDateTimeCó (s?a)ISO 8601, sau
+startDateNgày k?t thúc không h?p l?.
+7.3 UC27 - T?o bài thi trong k? thi
+
+   UC27: T?o bài thi trong k? thi
+Tóm t?t: Teacher t?o m?t bài thi c? th? bên trong m?t k? thi. Bài thi ch?a c?u hình d?, danh sách câu h?i, danh sách thí sinh.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? K? thi t?n t?i, status không ph?i Archived. Teacher là ch? s? h?u k? thi ho?c Admin.
+   Ði?u ki?n sau (Postcondition):
+? Bài thi du?c t?o v?i status=Draft; audit log ghi test:create.
+   Lu?ng chính (Main Flow):
+Teacher: vào chi ti?t k? thi, nh?n "Thêm bài thi".
+H? th?ng: hi?n th? form: tên bài thi, mô t?, lo?i (chính th?c/ph? kh?o), th?i lu?ng (phút), s? câu, di?m t?i da, chính sách tính di?m.
+Teacher: nh?p thông tin co b?n, nh?n "Luu".
+
+H? th?ng: validate. Luu bài thi v?i status=Draft. Chuy?n d?n wizard c?u hình chi ti?t (4 bu?c: C?u hình ? Ch?n câu h?i ? Gán thí sinh ? L?ch m?).
+   Lu?ng thay th? (Alternate Flow):
+? A1: Sao chép t? bài thi có s?n: ch?n bài thi m?u, h? th?ng copy toàn b? c?u hình + câu h?i (không copy danh sách thí sinh và l?ch).
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: K? thi dã Archived: t? ch?i v?i "K? thi dã luu tr?, không th? t?o bài thi m?i".
+   Quy t?c nghi?p v? liên quan:
+? BR-044: Bài thi có 4 status: Draft (nháp) ? Ready (dã c?u hình d?) ? Open (dang m? cho thi) ? Closed (dã dóng).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)nameStringCó5-100 ký t?Tên bài thi 5-100 ký t?.examIdUUIDCóT?n t?i, không ArchivedK? thi không h?p l?.typeEnumCómain | supplementaryLo?i bài thi không h?p l?.durationMinutesIntegerCó1-300 (t?i da 5 ti?ng)Th?i lu?ng 1-300 phút.maxScoreDecimalCó1.00 - 1000.00Ði?m t?i da 1-1000.scoringPolicyEnumCóbest | last | avgChính sách tính di?m không h?p l?.maxAttemptsIntegerCó1-5S? l?n thi 1-5.
+7.4 UC28 - C?u hình bài thi
+
+   UC28: C?u hình bài thi
+Tóm t?t: Teacher thi?t l?p các tham s? chi ti?t c?a bài thi: th?i gian, s? l?n thi, shuffle câu h?i/dáp án, hi?n th? k?t qu?, cho phép xem l?i, anti-cheat.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Bài thi ? status=Draft ho?c Ready.
+   Ði?u ki?n sau (Postcondition):
+
+? C?u hình du?c luu; audit log ghi test:update_config.
+   Lu?ng chính (Main Flow):
+Teacher: m? bài thi, vào tab "C?u hình".
+H? th?ng: hi?n th? các nhóm c?u hình: (1) Th?i gian & s? l?n thi; (2) Hi?n th? & navigation; (3) Anti-cheat; (4) Ch?m di?m; (5) Tr?i nghi?m thi.
+Teacher: ch?nh s?a các tham s?, nh?n "Luu".
+H? th?ng: validate các tham s? (xem b?ng). Luu. N?u d? di?u ki?n (có câu h?i + có thí sinh + có l?ch), status chuy?n Ready.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Reset v? m?c d?nh: nút khôi ph?c t?t c? c?u hình v? default c?a h? th?ng.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Bài thi dang Open: ch? cho phép s?a m?t s? tru?ng h?n ch? (vd: th?i gian m? dóng). Các tham s? c?t lõi (th?i lu?ng, s? câu) b? khóa.
+   Quy t?c nghi?p v? liên quan:
+? BR-045: Khi shuffle b?t, th? t? câu h?i và th? t? dáp án trong m?i câu s? khác nhau cho m?i thí sinh.
+? BR-046: Chính sách tính di?m best/last/avg ch? áp d?ng khi maxAttempts > 1. N?u maxAttempts = 1, k?t qu? = lu?t thi duy nh?t.
+? BR-047: Anti-cheat m?c trung bình (m?c d?nh): c?nh báo thoát tab, c?m copy/paste, log s? ki?n, fullscreen khuy?n ngh?. Có th? b?t/t?t t?ng m?c.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)durationMinutesIntegerCó1-300Th?i lu?ng 1-300 phút.maxAttemptsIntegerCó1-5S? l?n thi 1-5.cooldownMinutesIntegerCó n?u maxAttempts > 10-10080 (t?i da 7 ngày)Th?i gian ch? 0-10080 phút.shuffleQuestionsBooleanCóM?c d?nh true-shuffleOptionsBooleanCóM?c d?nh true-showResultImmed iatelyBooleanCóM?c d?nh false (xem sau khi GV ch?m xong)-allowReviewAfter SubmitBooleanCóM?c d?nh true-
+
+
+Tru?ng
+
+showCorrectAnsw ersKi?u
+
+BooleanB?t bu?c
+
+CóRàng bu?c
+
+M?c d?nh falseThông báo l?i (ti?ng Vi?t)
+-antiCheat_fullscre enRequiredBooleanCóM?c d?nh true-antiCheat_blockTa bSwitchBooleanCóM?c d?nh true-antiCheat_maxTa bSwitchesIntegerCó n?u blockTabSwitch0-10, m?c d?nh 3 (sau 3 l?n t? d?ng n?p)S? l?n thoát tab 0-10.antiCheat_blockC opyPasteBooleanCóM?c d?nh true-antiCheat_blockRi ghtClickBooleanCóM?c d?nh false-passingScoreDecimalKhông0 - maxScore, m?c d?nh 50% maxScoreÐi?m d?u không h?p l?.7.5 UC29 - Gán câu h?i vào bài thi
+
+   UC29: Gán câu h?i vào bài thi
+Tóm t?t: Teacher ch?n câu h?i t? ngân hàng d? dua vào bài thi. H? tr? ch?n tay ho?c t? d?ng random theo filter.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Bài thi ? status Draft/Ready; có quy?n question:read.
+   Ði?u ki?n sau (Postcondition):
+? Danh sách câu h?i c?a bài thi du?c c?p nh?t; t?ng di?m t? tính l?i.
+   Lu?ng chính (Main Flow):
+Teacher: m? bài thi, vào tab "Câu h?i".
+H? th?ng: hi?n th? danh sách câu h?i hi?n t?i c?a bài thi + nút "Thêm câu h?i". Teacher: nh?n "Thêm câu h?i". Ch?n 1 trong 2 ch? d?: ch?n tay ho?c random.
+H? th?ng: (ch?n tay) hi?n th? dialog v?i danh sách câu h?i (filter theo môn, chuong, d? khó, tag, status=Approved), tick d? ch?n nhi?u, nh?n "Thêm".
+H? th?ng: (random) hi?n th? form: s? câu c?n, filter (môn, chuong, d? khó), h? th?ng random theo filter, hi?n th? preview, nh?n "Áp d?ng".
+
+H? th?ng: luu danh sách câu h?i + di?m m?i câu. Tính t?ng di?m. Hi?n th? danh sách m?i.
+   Lu?ng thay th? (Alternate Flow):
+? A1: S?p x?p câu h?i: Teacher có th? kéo th? d? thay d?i th? t? (khi shuffleQuestions=false).
+? A2: Bulk edit di?m: ch?n nhi?u câu, d?t di?m chung (vd: 1 di?m/câu). H? th?ng t? quy d?i t?ng v? maxScore.
+? A3: T?o section: chia bài thi thành các ph?n (Ph?n 1: 10 câu d?, Ph?n 2: 5 câu khó). M?i section có th? có th?i gian riêng (tùy ch?n).
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Ch?n câu h?i ? status khác Approved: t? ch?i v?i "Ch? du?c dùng câu h?i dã duy?t".
+? E2: Random không d? s? câu theo filter: hi?n th? "Ch? có X câu phù h?p, không d? Y câu. Vui lòng n?i l?ng filter".
+? E3: T?ng di?m vu?t maxScore: hi?n th? c?nh báo "T?ng di?m (X) vu?t di?m t?i da (Y). H? th?ng s? quy d?i t? l? khi ch?m".
+   Quy t?c nghi?p v? liên quan:
+? BR-048: M?t bài thi có th? có 1-200 câu h?i. Quá 200 câu, hi?u nang t?i và làm bài gi?m.
+? BR-049: Ði?m m?i câu có th? khác nhau. T?ng di?m = sum(di?m câu). N?u t?ng ? maxScore, h? th?ng quy d?i t? l? khi ch?m: finalScore = (rawScore / totalQuestionScore) × maxScore.
+? BR-050: Khi random, câu h?i dã b? archive sau khi gán v?n gi? nguyên trong bài thi (snapshot).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)testIdUUIDCóT?n t?i, status=Draft/Read yBài thi không h?p l?.questionIdsArray<UUID>Có (ch?n tay)M?i ID t?n t?i, status=Approved, không trùng câu dã cóCâu h?i không h?p l?.randomConfig.cou ntIntegerCó (random)1-200, không vu?t s? câu kh? d?ng theo filterS? câu không h?p l?.randomConfig.filt ersObjectKhôngFilter theo môn/chuong/d? khó/tagFilter không h?p l?.
+
+
+
+points	Array<Decimal>	Không	M?i giá tr? 0.01-
+1000, d? dài = s? câu
+
+Ði?m câu không h?p l?.
+
+
+7.6 UC30 - Gán thí sinh / l?p vào bài thi
+
+   UC30: Gán thí sinh / l?p vào bài thi
+Tóm t?t: Teacher gán thí sinh (cá nhân) ho?c c? l?p vào bài thi. Ch? ngu?i du?c gán m?i th?y và tham gia du?c.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Bài thi t?n t?i; Teacher là ch? s? h?u ho?c Admin.
+   Ði?u ki?n sau (Postcondition):
+? Danh sách enrollment du?c c?p nh?t; thí sinh nh?n du?c email thông báo (n?u b?t).
+   Lu?ng chính (Main Flow):
+Teacher: m? bài thi, vào tab "Thí sinh".
+H? th?ng: hi?n th? danh sách enrollment hi?n t?i + nút "Gán thí sinh".
+Teacher: nh?n "Gán thí sinh". Ch?n: (a) Gán cá nhân - tim theo tên/mã; (b) Gán l?p - ch?n l?p, t? d?ng l?y toàn b? Student trong l?p; (c) Gán theo filter - vd: toàn b? Student c?a môn X.
+H? th?ng: luu enrollment. G?i email thông báo (n?u b?t). Hi?n th? danh sách m?i.
+   Lu?ng thay th? (Alternate Flow):
+? A1: G? thí sinh: ch?n enrollment, nh?n X. H? th?ng xóa (không xóa k?t qu? dã có).
+? A2: Bulk gán: import danh sách mã sinh viên t? Excel.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Gán trùng thí sinh dã có: b? qua, không báo l?i.
+? E2: Thí sinh không có role Student: t? ch?i v?i "Ch? user có role Student m?i du?c gán làm thí sinh".
+   Quy t?c nghi?p v? liên quan:
+? BR-051: Enrollment ghi nh?n thí sinh du?c phép tham gia bài thi. M?i enrollment cho phép maxAttempts lu?t thi.
+? BR-052: N?u g? thí sinh khi dã có lu?t thi completed: lu?t thi cu v?n du?c gi? d? tính di?m; thí sinh không th? thi thêm lu?t m?i.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)testIdUUIDCóT?n t?iBài thi không h?p l?.userIdsArray<UUID>Có (gán cá nhân)M?i ID có role Student, t?n t?iThí sinh không h?p l?.classIdsArray<UUID>Có (gán l?p)M?i ID t?n t?i trong classesL?p không h?p l?.sendNotificationBooleanKhôngM?c d?nh true-7.7 UC31 - M? / dóng bài thi (l?ch)
+
+   UC31: M? / dóng bài thi (l?ch)
+Tóm t?t: Teacher c?u hình th?i gian m? (openTime) và dóng (closeTime) cho bài thi. Có th? m? ngay th? công ho?c theo l?ch t? d?ng.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Bài thi ? status Ready (dã có câu h?i + thí sinh).
+   Ði?u ki?n sau (Postcondition):
+? L?ch m? dóng du?c luu; status chuy?n Open khi t?i openTime, Closed khi t?i closeTime.
+   Lu?ng chính (Main Flow):
+Teacher: m? bài thi, vào tab "L?ch thi".
+H? th?ng: hi?n th? form: openTime, closeTime, timezone (m?c d?nh theo profile Teacher), tùy ch?n "M? ngay".
+Teacher: ch?n th?i gian, nh?n "Luu" ho?c "M? ngay".
+H? th?ng: luu l?ch. N?u "M? ngay": status=Open ngay. N?u theo l?ch: job hàng phút ki?m tra và t? d?ng chuy?n status.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Ðóng ngay th? công: status=Closed ngay l?p t?c, m?i attempt in_progress b? auto-submit.
+? A2: Gia h?n closeTime: cho phép s?a closeTime mu?n hon, áp d?ng cho các thí sinh chua thi. Thí sinh dã thi không ?nh hu?ng.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Bài thi chua Ready: t? ch?i m? v?i "Bài thi chua d? di?u ki?n (c?n có câu h?i và thí sinh)".
+? E2: closeTime tru?c openTime: t? ch?i.
+
+? E3: closeTime dã qua: hi?n th? c?nh báo, cho phép nhung không có tác d?ng th?c t?.
+   Quy t?c nghi?p v? liên quan:
+? BR-053: Timezone m?c d?nh = Asia/Ho_Chi_Minh (UTC+7) n?u không c?u hình. Timezone du?c hi?n th? rõ trong UI d? tránh nh?m l?n.
+? BR-054: Khi closeTime t?i, m?i attempt in_progress có thêm 60 giây grace period d? sinh viên k?p submit; sau 60s t? d?ng submit.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)testIdUUIDCóT?n t?i, status=Ready ho?c OpenBài thi không h?p l?.openTimeDateTimeCóISO 8601, không quá now + 365 ngàyTh?i gian m? không h?p l?.closeTimeDateTimeCóISO 8601, sau
+openTime, không quá openTime + 30 ngàyTh?i gian dóng không h?p l?.timezoneStringKhôngIANA timezone (vd: Asia/Ho_Chi_Min h), m?c d?nh theo profileTimezone không h?p l?.
+7.8 UC32 - Xu?t d? thi PDF
+
+   UC32: Xu?t d? thi PDF
+Tóm t?t: Teacher xu?t d? thi ra file PDF d? in ?n ho?c luu tr?. Có 2 phiên b?n: b?n giáo viên (có dáp án) và b?n sinh viên (không dáp án).
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Bài thi có câu h?i, status khác Draft.
+   Ði?u ki?n sau (Postcondition):
+? File PDF du?c t?o và t?i v?; audit log ghi test:export_pdf.
+   Lu?ng chính (Main Flow):
+Teacher: m? bài thi, nh?n "Xu?t d? thi PDF".
+
+H? th?ng: hi?n th? tùy ch?n: phiên b?n (GV/SV), có include metadata (môn, mã d?), có watermark, có s? trang riêng cho section.
+Teacher: ch?n tùy ch?n, nh?n "Xu?t".
+H? th?ng: t?o PDF server-side. Tr? link download (TTL 1 gi?). Ghi audit log.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Xu?t nhi?u mã d?: ch?n "T?o N mã d?" (N=1-20), h? th?ng sinh N b?n v?i th? t? câu h?i/dáp án khác nhau + mã d? riêng.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Bài thi có câu h?i Essay: hi?n th? c?nh báo "Ð? thi có câu h?i t? lu?n, không có dáp án cho lo?i này".
+   Quy t?c nghi?p v? liên quan:
+? BR-055: PDF b?n GV có watermark "B?N GIÁO VIÊN - KHÔNG PHÁT HÀNH". B?n SV
+không có watermark.
+? BR-056: Xu?t PDF có ch?a dáp án du?c audit log ghi l?i d? truy v?t rò r? d?.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)testIdUUIDCóT?n t?i, status khác DraftBài thi không h?p l?.versionEnumCóteacher | studentPhiên b?n không h?p l?.watermarkStringKhôngT?i da 50 ký t?Watermark t?i da 50 ký t?.codeCountIntegerKhông1-20, m?c d?nh 1S? mã d? 1-20.
+   Chuong 8. Use Case chi ti?t - Module Tham gia thi
+
+   Chuong này d?c t? 9 use case (UC33-UC41) c?a module Tham gia thi. Ðây là module Student s? d?ng nhi?u nh?t, d?c bi?t trong mùa thi. Module này có yêu c?u cao v? d? tin c?y (không du?c s?p gi?a ch?ng), ch?ng gian l?n m?c trung bình (c?nh báo thoát tab, c?m copy/paste, log s? ki?n), và kh? nang ph?c h?i khi m?t m?ng ng?n (luu t?m local + d?ng b? l?i khi có m?ng).
+
+8.1 UC33 - Xem danh sách bài thi du?c gán
+
+   UC33: Xem danh sách bài thi du?c gán
+Tóm t?t: Student xem danh sách bài thi mình du?c gán, tr?ng thái (chua thi/dang m?/dã dóng/dã thi), s? lu?t dã thi, k?t qu? (n?u dã thi và du?c phép xem).
+Actor chính: Student
+   Ði?u ki?n tru?c (Precondition):
+? Student dã dang nh?p.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? danh sách bài thi du?c gán.
+   Lu?ng chính (Main Flow):
+Student: dang nh?p, vào Dashboard Student.
+H? th?ng: truy v?n enrollment c?a student + thông tin bài thi + s? lu?t dã thi + k?t qu?.
+H? th?ng: hi?n th? b?ng: tên bài thi, k? thi, môn, th?i gian m?-dóng, s? lu?t dã thi / max, nút "Vào thi" (n?u dang m?) ho?c "Xem k?t qu?" (n?u dã thi và showResult=true).
+   Lu?ng thay th? (Alternate Flow):
+? A1: Filter theo tr?ng thái: Ðang m? / S?p m? / Ðã dóng / Ðã thi.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Không có bài thi nào: hi?n th? "B?n chua du?c gán bài thi nào".
+   Quy t?c nghi?p v? liên quan:
+? BR-057: Student ch? th?y bài thi có enrollment c?a mình và bài thi thu?c k? thi Published.
+? BR-058: Nút "Vào thi" ch? enable khi: bài thi status=Open, hi?n t?i trong kho?ng openTime-closeTime, s? lu?t dã thi < maxAttempts.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)pageIntegerKhông= 1, m?c d?nh 1Trang không h?p l?.filterEnumKhôngall | open | upcoming | closed
+| completedFilter không h?p l?.
+
+8.2 UC34 - Vào thi (d?ng ý quy d?nh)
+
+   UC34: Vào thi (d?ng ý quy d?nh)
+Tóm t?t: Student b?t d?u m?t lu?t thi m?i. H? th?ng t?o attempt record, hi?n th? màn hình quy d?nh, yêu c?u d?ng ý tru?c khi vào làm bài.
+Actor chính: Student
+Actor ph?: System (t?o attempt,?? timer)
+   Ði?u ki?n tru?c (Precondition):
+? Bài thi status=Open, trong kho?ng openTime-closeTime.
+? S? lu?t dã thi < maxAttempts (ho?c dang trong grace period c?a l?n tru?c).
+? Không có attempt in_progress khác c?a cùng test.
+   Ði?u ki?n sau (Postcondition):
+? T?o attempt m?i v?i status=in_progress, started_at = now, k?t thúc d? ki?n = now + duration.
+? Timer b?t d?u d?m ngu?c.
+? Student chuy?n vào màn làm bài.
+   Lu?ng chính (Main Flow):
+Student: t? danh sách bài thi, nh?n "Vào thi".
+H? th?ng: ki?m tra di?u ki?n (xem preconditions). N?u không d?t, hi?n th? l?i tuong ?ng.
+H? th?ng: ki?m tra thi?t b?: trình duy?t h? tr? fullscreen, webcam (n?u yêu c?u), k?t n?i m?ng ?n d?nh.
+H? th?ng: hi?n th? màn quy d?nh thi: th?i lu?ng, s? câu, cách tính di?m, các quy t?c anti-cheat, c?nh báo v? vi?c c?m gian l?n, d?ng ý x? lý d? li?u.
+Student: d?c quy d?nh, tick "Tôi dã d?c và d?ng ý", nh?n "B?t d?u".
+H? th?ng: t?o attempt record (status=in_progress, started_at=now, scheduled_end_at = now + duration_minutes). Snapshot danh sách câu h?i v?i th? t? dã shuffle (n?u b?t).
+H? th?ng: yêu c?u browser vào fullscreen (n?u antiCheat_fullscreenRequired). B?t các listener: visibilitychange (tab switch), copy/paste/contextmenu (n?u b?t).
+H? th?ng: chuy?n Student vào màn làm bài. Timer b?t d?u d?m ngu?c.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Resume attempt: n?u Student có attempt in_progress (do m?t m?ng, refresh), h? th?ng hi?n th? "B?n có lu?t thi dang d?, ti?p t?c?". N?u Yes, resume; n?u No, h? th?ng yêu c?u h?y attempt cu tru?c.
+? A2: Thi l?i (lu?t th? N+1): h? th?ng ki?m tra cooldownMinutes t? l?n thi tru?c dã qua chua. N?u chua, hi?n th? "B?n c?n ch? X phút n?a d? thi l?i".
+
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Ðã d? maxAttempts: hi?n th? "B?n dã dùng h?t s? lu?t thi cho phép".
+? E2: Có attempt in_progress khác: hi?n th? "B?n dang có lu?t thi d?. Vui lòng ti?p t?c ho?c h?y lu?t dó tru?c".
+? E3: Browser không h? tr? fullscreen: hi?n th? c?nh báo "Trình duy?t không h? tr? fullscreen. Khuy?n ngh? d?i sang Chrome/Edge. Ti?p t?c không fullscreen?" (cho phép continue n?u Teacher c?u hình fullscreen=khuy?n ngh?).
+? E4: M?t m?ng ngay sau khi t?o attempt: attempt dã luu, Student có th? refresh và resume.
+? E5: Ðã quá closeTime: t? ch?i v?i "Bài thi dã dóng, không th? vào thi".
+   Quy t?c nghi?p v? liên quan:
+? BR-059: Snapshot câu h?i: khi vào thi, th? t? câu h?i và dáp án du?c c? d?nh cho attempt dó (dã shuffle). Student refresh không thay d?i th? t?.
+? BR-060: M?i attempt có ID duy nh?t; multiple attempts c?a cùng test có ID khác nhau, không chia s? state.
+? BR-061: N?u Student dóng tab/browser gi?a ch?ng, attempt v?n ? status=in_progress, timer v?n d?m. Khi timer h?t gi?, auto-submit.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)testIdUUIDCóT?n t?i, status=Open, trong openTime-closeTime, student có enrollmentBài thi không h?p l?.deviceCheckBooleanCóBrowser h? tr? fullscreen (n?u yêu c?u), có webcam (n?u yêu c?u)Thi?t b? không dáp ?ng yêu c?u.agreementAccept edBooleanCótrueB?n ph?i d?ng ý v?i quy d?nh thi.
+
+8.3 UC35 - Tr? l?i câu h?i
+
+   UC35: Tr? l?i câu h?i
+Tóm t?t: Student ch?n/nh?p câu tr? l?i cho t?ng câu h?i trong bài thi. Câu tr? l?i du?c luu t?m local (d? khôi ph?c khi refresh) và d?ng b? lên server d?nh k?.
+Actor chính: Student
+Actor ph?: System (background sync)
+   Ði?u ki?n tru?c (Precondition):
+? Có attempt ? status=in_progress.
+   Ði?u ki?n sau (Postcondition):
+? Câu tr? l?i du?c luu trong attempt_answers; auto-save m?i 30 giây và khi chuy?n câu.
+   Lu?ng chính (Main Flow):
+Student: trong màn làm bài, d?c stem câu h?i, ch?n/nh?p dáp án.
+H? th?ng: luu t?m dáp án vào localStorage c?a browser (ch?ng m?t khi refresh).
+H? th?ng: g?i API save-answer lên server (debounce 1 giây). Server luu vào attempt_answers, tr? v? timestamp.
+H? th?ng: hi?n th? tick xanh "Ðã luu" góc du?i câu h?i.
+   Lu?ng thay th? (Alternate Flow):
+? A1: MCQ-Multiple: tick nhi?u dáp án. H? th?ng luu m?ng dáp án dã ch?n.
+? A2: Essay: nh?p vào textarea, h? tr? paste text (nhung block paste t? ngu?n ngoài n?u Teacher c?u hình). T? d?ng d?m ký t?, hi?n th? "X/3000 ký t?".
+? A3: True/False: 2 nút radio, ch?n 1.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: M?t m?ng khi g?i save: hi?n th? "Ðang k?t n?i l?i..." v?i spinner. T? retry 3 l?n (exponential backoff). Sau 3 l?n th?t b?i, hi?n th? c?nh báo "M?t k?t n?i, dáp án du?c luu t?m trên máy. S? d?ng b? khi có m?ng".
+? E2: Session h?t h?n (refresh token h?t h?n): hi?n th? modal "Phiên h?t h?n, vui lòng dang nh?p l?i trong tab khác. Ðáp án dã du?c luu t?m". Student dang nh?p l?i, attempt du?c resume.
+? E3: Block paste (essay): hi?n th? "Tính nang paste b? t?t cho bài thi này". Cho phép typing bình thu?ng.
+   Quy t?c nghi?p v? liên quan:
+? BR-062: Auto-save m?i 30 giây + m?i khi chuy?n câu + m?i khi Student nh?n "Luu t?m". Ðáp án du?c luu c? local l?n server.
+
+? BR-063: Ðáp án là b?n ghi duy nh?t per (attempt, question) - n?u Student s?a, ghi dè. L?ch s? ch?nh s?a không luu d? don gi?n hóa.
+? BR-064: N?u câu h?i không có dáp án khi submit, câu dó du?c tính 0 di?m.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)attemptIdUUIDCóT?n t?i, status=in_progres s, thu?c v? current studentLu?t thi không h?p l?.questionIdUUIDCóT?n t?i trong attempt (snapshot)Câu h?i không h?p l?.answerMixedKhôngMCQ-Single: optionId (UUID). MCQ-Multiple: array optionId. True/False: boolean. Essay: string 0-3000 ký t?.Ðáp án không h?p l?.
+8.4 UC36 - Luu t?m câu tr? l?i
+
+   UC36: Luu t?m câu tr? l?i
+Tóm t?t: Student ch? d?ng nh?n nút "Luu t?m" d? ép luu toàn b? dáp án lên server ngay l?p t?c (không n?p bài).
+Actor chính: Student
+   Ði?u ki?n tru?c (Precondition):
+? Có attempt in_progress.
+   Ði?u ki?n sau (Postcondition):
+? T?t c? dáp án du?c luu lên server; hi?n th? th?i gian luu cu?i.
+   Lu?ng chính (Main Flow):
+Student: nh?n nút "Luu t?m" ? góc màn.
+H? th?ng: g?i t?t c? dáp án t? localStorage lên server. Hi?n th? spinner. H? th?ng: khi xong, hi?n th? "Ðã luu lúc HH:MM:SS". Timer ti?p t?c d?m. Lu?ng ngo?i l? (Exception Flow):
+
+? E1: M?t m?ng: hi?n th? "Không th? luu. Ðáp án v?n còn trong trình duy?t. Vui lòng ki?m tra k?t n?i".
+   Quy t?c nghi?p v? liên quan:
+? BR-065: Luu t?m không thay d?i status attempt; Student v?n in_progress.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)attemptIdUUIDCóT?n t?i, status=in_progres s, thu?c current studentLu?t thi không h?p l?.
+8.5 UC37 - Chuy?n câu / navigate
+
+   UC37: Chuy?n câu / navigate
+Tóm t?t: Student di chuy?n gi?a các câu h?i trong bài thi b?ng các nút Next/Prev, danh sách câu h?i bên c?nh, ho?c phím t?t.
+Actor chính: Student
+   Ði?u ki?n tru?c (Precondition):
+? Có attempt in_progress.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? câu h?i du?c ch?n; tr?ng thái tr? l?i c?a các câu khác du?c gi?.
+   Lu?ng chính (Main Flow):
+Student: nh?n nút "Câu ti?p" / "Câu tru?c", ho?c nh?n vào s? câu trong b?ng navigation bên ph?i. H? th?ng: luu t?m dáp án câu hi?n t?i, t?i câu m?i hi?n th?.
+H? th?ng: c?p nh?t b?ng navigation: câu hi?n t?i highlight, câu dã tr? l?i có tick xanh, câu dánh d?u có c?.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Phím t?t: ? ? d? chuy?n câu, J/K vim-style, Ctrl+Shift+M d? dánh d?u.
+? A2: Bài thi có section: navigation hi?n th? theo section, có progress bar riêng cho m?i section.
+   Quy t?c nghi?p v? liên quan:
+? BR-066: Bài thi có th? c?u hình "Linear navigation" - ch? cho di t?i, không quay l?i. M?c d?nh: free navigation.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)attemptIdUUIDCóT?n t?i, status=in_progres sLu?t thi không h?p l?.questionIndexIntegerCó0 d?n (s? câu - 1)Ch? s? câu không h?p l?.8.6 UC38 - Ðánh d?u câu c?n xem l?i
+
+   UC38: Ðánh d?u câu c?n xem l?i
+Tóm t?t: Student dánh d?u m?t câu h?i d? xem l?i tru?c khi n?p (vd: câu chua ch?c ch?n dáp án).
+Actor chính: Student
+   Ði?u ki?n tru?c (Precondition):
+? Có attempt in_progress.
+   Ði?u ki?n sau (Postcondition):
+? Câu du?c dánh d?u, hi?n th? c? vàng trong navigation.
+   Lu?ng chính (Main Flow):
+Student: trong câu h?i, nh?n nút "Ðánh d?u xem l?i" (icon c?).
+H? th?ng: luu flag mark_for_review = true cho câu dó. C?p nh?t UI.
+   Lu?ng thay th? (Alternate Flow):
+? A1: B? dánh d?u: nh?n l?i nút, flag = false.
+   Quy t?c nghi?p v? liên quan:
+? BR-067: Ðánh d?u không ?nh hu?ng ch?m di?m. Ch? là UI hint cho Student.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)attemptIdUUIDCóT?n t?i, status=in_progres sLu?t thi không h?p l?.questionIdUUIDCóT?n t?i trong attemptCâu h?i không h?p l?.markedBooleanCótrue | falseGiá tr? không h?p l?.
+
+8.7 UC39 - N?p bài (submit)
+
+   UC39: N?p bài (submit)
+Tóm t?t: Student ch? d?ng n?p bài tru?c khi h?t gi?. H? th?ng ch?m t? d?ng các câu MCQ/True-False,Essay d? ch?m sau.
+Actor chính: Student
+Actor ph?: System (ch?m t? d?ng, snapshot attempt)
+   Ði?u ki?n tru?c (Precondition):
+? Có attempt in_progress.
+   Ði?u ki?n sau (Postcondition):
+? Attempt status=completed, submitted_at=now.
+? Câu MCQ/True-False du?c ch?m t? d?ng; di?m raw du?c tính.
+? N?u bài có câu Essay, status=awaiting_grading; ngu?c l?i status=graded.
+   Lu?ng chính (Main Flow):
+Student: nh?n nút "N?p bài" ? góc ph?i ho?c cu?i bài.
+H? th?ng: hi?n th? modal xác nh?n: s? câu dã tr? l?i, s? câu chua tr? l?i, s? câu dánh d?u, t?ng s? câu. H?i "B?n có ch?c mu?n n?p bài?".
+Student: nh?n "Xác nh?n n?p".
+H? th?ng: luu toàn b? dáp án còn trong localStorage lên server (d?m b?o không m?t). Ðóng attempt: status=completed, submitted_at=now.
+H? th?ng: ch?m t? d?ng các câu MCQ/True-False: so sánh dáp án Student v?i dáp án dúng trong snapshot.
+H? th?ng: tính rawScore = sum(di?m các câu dúng). Quy d?i v? maxScore theo BR-049.
+H? th?ng: luu result. N?u không có câu Essay, status=graded và Student có th? xem k?t qu? (n?u showResultImmediately=true).
+H? th?ng: chuy?n Student sang màn "Ðã n?p bài" v?i thông tin: th?i gian n?p, s? câu dúng/sai (n?u showResultImmediately=true), nút v? Dashboard.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Student nh?n "H?y" trong modal: quay l?i làm bài. Timer ti?p t?c.
+? A2: Có câu chua tr? l?i: modal hi?n th? c?nh báo "B?n còn X câu chua tr? l?i. N?p anyway?". V?n cho phép n?p.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: M?t m?ng gi?a ch?ng khi n?p: hi?n th? "Ðang th? l?i...". V?n có localStorage backup. T? retry d?n khi thành công ho?c h?t gi? (auto-submit).
+
+? E2: Attempt dã du?c auto-submit b?i System (do h?t gi?): t? ch?i submit th? công v?i "Bài c?a b?n dã du?c t? d?ng n?p do h?t gi?".
+   Quy t?c nghi?p v? liên quan:
+? BR-068: Khi submit, h? th?ng uu tiên dáp án trên server; n?u server không có nhung localStorage có, dùng localStorage.
+? BR-069: Sau submit, attempt không th? s?a (immutable). Có th? xem l?i (n?u allowReviewAfterSubmit=true).
+? BR-070: N?u maxAttempts > 1 và scoringPolicy=best, result cu?i cùng = max(rawScore các attempt). N?u =last, result = rawScore attempt cu?i. N?u =avg, =trung bình các attempt.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)attemptIdUUIDCóT?n t?i, status=in_progres s, thu?c current studentLu?t thi không h?p l?.confirmationBooleanCótrue (xác nh?n qua modal)Ph?i xác nh?n n?p bài.
+8.8 UC40 - T? d?ng n?p khi h?t gi? (auto-submit)
+
+   UC40: T? d?ng n?p khi h?t gi? (auto-submit)
+Tóm t?t: Khi timer d?m v? 0 ho?c dã quá closeTime, System t? d?ng n?p bài cho Student. Quá trình tuong t? submit th? công.
+Actor chính: System
+Actor ph?: Student (nh?n thông báo)
+   Ði?u ki?n tru?c (Precondition):
+? Có attempt in_progress và timer = 0, ho?c closeTime dã t?i + grace period 60s.
+   Ði?u ki?n sau (Postcondition):
+? Attempt status=completed v?i reason=auto_submit; ch?m t? d?ng nhu UC39.
+   Lu?ng chính (Main Flow):
+System: job hàng phút ki?m tra các attempt in_progress có scheduled_end_at <= now.
+System: v?i m?i attempt s?p h?t: thông báo cho Student qua WebSocket (còn 5 phút, 1 phút, 30 giây).
+System: khi timer = 0: hi?n th? modal "H?t gi?! Bài dang du?c n?p t? d?ng". Disable t?t c? input.
+
+System: th?c hi?n submit tuong t? UC39: luu dáp án localStorage lên server, ch?m t? d?ng, luu result.
+System: thông báo Student k?t qu? (n?u showResultImmediately=true) ho?c ch? xác nh?n dã n?p.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Grace period closeTime: khi closeTime t?i, m?i attempt in_progress có thêm 60s d? Student k?p submit. Sau 60s, auto-submit.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Server s?p dúng lúc auto-submit: job du?c retry v?i backoff. Khi server ph?c h?i, các attempt này du?c submit v?i submitted_at = scheduled_end_at (không ph?t Student).
+   Quy t?c nghi?p v? liên quan:
+? BR-071: Auto-submit không phân bi?t Student có dang online hay không. N?u offline, submit di?n ra trên server, result v?n du?c ghi. Student th?y k?t qu? khi online l?i.
+? BR-072: Auto-submit ghi rõ reason=auto_submit trong audit log d? phân bi?t v?i submit th? công khi khi?u n?i.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)attemptIdUUIDCó (internal)T?n t?i, status=in_progres s, scheduled_end_at
+<= now-
+8.9 UC41 - Xem l?i bài thi & dáp án dúng
+
+   UC41: Xem l?i bài thi & dáp án dúng
+Tóm t?t: Student xem l?i bài dã n?p: câu h?i, dáp án mình ch?n, dáp án dúng, gi?i thích. Ch? khi Teacher cho phép (allowReviewAfterSubmit=true).
+Actor chính: Student
+   Ði?u ki?n tru?c (Precondition):
+? Attempt status=completed/graded.
+? Bài thi c?u hình allowReviewAfterSubmit=true.
+? N?u có câu Essay, ph?i d?i Teacher ch?m xong (status=graded).
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? chi ti?t attempt.
+   Lu?ng chính (Main Flow):
+
+Student: t? danh sách bài thi (tab Ðã thi), nh?n "Xem l?i".
+H? th?ng: ki?m tra quy?n xem l?i. N?u không, hi?n th? "Bài thi này không cho phép xem l?i".
+H? th?ng: hi?n th? màn review: thông tin t?ng quan (di?m, th?i gian n?p, s? câu dúng/sai), danh sách câu h?i v?i dáp án Student ch?n + dáp án dúng (n?u showCorrectAnswers=true) + gi?i thích (n?u có).
+Student: lu?t xem t?ng câu, có th? navigate nhu khi làm bài.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Essay: hi?n th? dáp án Student + dáp án tham kh?o + di?m Teacher ch?m + comment c?a Teacher.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Bài có Essay chua ch?m xong: hi?n th? "Bài c?a b?n dang du?c ch?m. Vui lòng d?i".
+   Quy t?c nghi?p v? liên quan:
+? BR-073: Review ch? d?c - Student không th? s?a dáp án. Có nút "In" d? in/PDF luu l?i.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)attemptIdUUIDCóT?n t?i, status=graded, thu?c current student, allowReviewAfter Submit=trueKhông th? xem l?i.
+   Chuong 9. Use Case chi ti?t - Module Báo cáo K?t qu?
+
+   Chuong này d?c t? 7 use case (UC42-UC48) c?a module Báo cáo K?t qu?. Module ph?c v? 3 actor: Student xem k?t qu? cá nhân; Teacher xem k?t qu? bài thi/l?p/môn; Admin xem dashboard t?ng quan và export d? li?u. Module có yêu c?u phân quy?n d? li?u nghiêm ng?t (data-level permission): Student ch? th?y k?t qu? c?a mình; Teacher th?y k?t qu? c?a l?p mình ph? trách; Admin th?y t?t c?.
+
+9.1 UC42 - Xem k?t qu? cá nhân
+
+   UC42: Xem k?t qu? cá nhân
+Tóm t?t: Student xem k?t qu? các bài thi dã hoàn thành: di?m, th?i gian làm bài, s? câu dúng/sai, status (d?u/r?t n?u có passingScore).
+Actor chính: Student
+
+   Ði?u ki?n tru?c (Precondition):
+? Có ít nh?t 1 attempt completed.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? danh sách k?t qu? cá nhân.
+   Lu?ng chính (Main Flow):
+Student: vào Dashboard Student ? "K?t qu? thi".
+H? th?ng: truy v?n các attempt thu?c student, join v?i bài thi + k? thi.
+H? th?ng: hi?n th? b?ng: bài thi, k? thi, ngày thi, di?m, maxScore, % dúng, d?u/r?t, nút "Xem l?i".
+   Lu?ng thay th? (Alternate Flow):
+? A1: Filter theo k? thi, môn, kho?ng th?i gian.
+? A2: Sort theo ngày thi / di?m.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Không có k?t qu? nào: hi?n th? "Chua có k?t qu? thi".
+   Quy t?c nghi?p v? liên quan:
+? BR-074: N?u showResultImmediately=false, Student ch? th?y k?t qu? khi Teacher ch? d?ng release (publishResult).
+? BR-075: N?u bài thi có Essay chua ch?m xong, hi?n th? "Ðang ch?m" thay vì di?m s?.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)examIdUUIDKhôngT?n t?iK? thi không h?p l?.fromDateDateKhôngISO 8601Ngày không h?p l?.toDateDateKhôngISO 8601, sau
+fromDateNgày không h?p l?.
+9.2 UC43 - Xem danh sách k?t qu? bài thi
+
+   UC43: Xem danh sách k?t qu? bài thi
+Tóm t?t: Teacher xem danh sách k?t qu? c?a m?t bài thi c? th?: t?ng thí sinh, di?m, th?i gian n?p, status ch?m.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Bài thi thu?c quy?n s? h?u ho?c Teacher du?c Admin phân quy?n xem.
+
+? Có ít nh?t 1 attempt completed thu?c bài thi.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? danh sách k?t qu?.
+   Lu?ng chính (Main Flow):
+Teacher: m? bài thi, vào tab "K?t qu?".
+H? th?ng: truy v?n các attempt thu?c bài thi, join v?i student.
+H? th?ng: hi?n th? b?ng: STT, mã SV, h? tên, l?p, l?n thi, di?m, % dúng, th?i gian n?p, status ch?m, action (xem chi ti?t/ch?m essay).
+Teacher: có th? sort theo c?t, filter theo l?p/status, search theo tên/mã.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Ch?m Essay: nh?n vào attempt có Essay chua ch?m, vào màn ch?m bài.
+? A2: Publish result: nh?n "Công b? k?t qu?" d? release cho Student xem (n?u showResultImmediately=false).
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Bài thi chua có ai thi: hi?n th? "Chua có lu?t thi nào".
+   Quy t?c nghi?p v? liên quan:
+? BR-076: Teacher ch? th?y k?t qu? c?a bài thi do mình s? h?u ho?c du?c Admin ?y quy?n.
+? BR-077: Khi có attempt ? status=awaiting_grading, hi?n th? badge "C?n ch?m" trên tab K?t qu?.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)testIdUUIDCóT?n t?i, thu?c quy?n s? h?u/?y quy?nBài thi không h?p l?.classIdUUIDKhôngT?n t?i trong classesL?p không h?p l?.gradingStatusEnumKhôngall | graded | awaiting_gradingStatus không h?p l?.
+9.3 UC44 - Báo cáo th?ng kê theo l?p / môn / k?
+
+   UC44: Báo cáo th?ng kê theo l?p / môn / k?
+Tóm t?t: Teacher/Admin xem báo cáo t?ng h?p: di?m trung bình, phân b? di?m, t? l? d?u/r?t theo l?p, môn, ho?c k? thi.
+Actor chính: Teacher ho?c Admin
+
+   Ði?u ki?n tru?c (Precondition):
+? Có quy?n report:view.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? báo cáo th?ng kê.
+   Lu?ng chính (Main Flow):
+User: vào "Báo cáo" ? "Th?ng kê".
+H? th?ng: hi?n th? filter: k? thi, bài thi, l?p, môn, kho?ng th?i gian. Ch?n lo?i báo cáo: theo l?p / theo môn / theo k?.
+User: ch?n filter, nh?n "T?o báo cáo".
+H? th?ng: truy v?n DB, t?ng h?p s? li?u. Hi?n th?:
+H? th?ng: (1) B?ng th?ng kê: t?ng l?p có s? SV, s? SV dã thi, di?m TB, di?m cao/th?p, t? l? d?u, d? l?ch chu?n.
+H? th?ng: (2) Bi?u d? phân b? di?m (histogram 0-10).
+H? th?ng: (3) Bi?u d? so sánh di?m TB gi?a các l?p (bar chart). H? th?ng: (4) B?ng x?p h?ng (n?u Teacher c?u hình cho phép). Lu?ng thay th? (Alternate Flow):
+? A1: Drill-down: nh?n vào 1 l?p, xem chi ti?t t?ng sinh viên trong l?p.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: Không có d? li?u: hi?n th? "Không có d? li?u phù h?p filter".
+   Quy t?c nghi?p v? liên quan:
+? BR-078: Báo cáo không hi?n th? danh sách cá nhân n?u Teacher không có quy?n xem l?p dó.
+? BR-079: C?t x?p h?ng có th? b? ?n theo c?u hình t? ch?c (m?t s? tru?ng không công khai x?p h?ng).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)examIdUUIDKhôngT?n t?iK? thi không h?p l?.testIdUUIDKhôngT?n t?iBài thi không h?p l?.classIdUUIDKhôngT?n t?iL?p không h?p l?.reportTypeEnumCóby_class | by_subject | by_examLo?i báo cáo không h?p l?.
+
+9.4 UC45 - Export k?t qu? Excel / PDF
+
+   UC45: Export k?t qu? Excel / PDF
+Tóm t?t: Teacher/Admin export danh sách k?t qu? ra file Excel (d? x? lý thêm) ho?c PDF (d? in/luu tr?).
+Actor chính: Teacher ho?c Admin
+   Ði?u ki?n tru?c (Precondition):
+? Có quy?n report:export.
+   Ði?u ki?n sau (Postcondition):
+? File export du?c t?o; audit log ghi report:export.
+   Lu?ng chính (Main Flow):
+User: t? trang báo cáo ho?c danh sách k?t qu?, nh?n "Export".
+H? th?ng: hi?n th? tùy ch?n: d?nh d?ng (xlsx/pdf), ph?m vi (current page/all/filter result), tru?ng c?n xu?t.
+User: ch?n tùy ch?n, nh?n "Export".
+H? th?ng: truy v?n DB, t?o file. Tr? link download (TTL 1 gi?).
+   Lu?ng thay th? (Alternate Flow):
+? A1: Export template ch?ng ch?: ch?n template, h? th?ng fill d? li?u sinh viên vào template PDF.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: S? dòng quá 10.000: yêu c?u thu h?p filter.
+   Quy t?c nghi?p v? liên quan:
+? BR-080: Export d? li?u cá nhân (PII + di?m s?) du?c audit log ghi chi ti?t d? truy v?t rò r?.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)formatEnumCóxlsx | pdfÐ?nh d?ng không h?p l?.scopeEnumCócurrent_page | all
+| filter_resultPh?m vi không h?p l?.fieldsArray<String>KhôngSubset các tru?ng h?p l?Tru?ng không h?p l?.
+
+9.5 UC46 - Dashboard t?ng quan
+
+   UC46: Dashboard t?ng quan
+Tóm t?t: Admin xem dashboard t?ng quan toàn h? th?ng: s? user, s? k? thi dang m?, s? lu?t thi 24h qua, alert h? th?ng, top 5 bài thi có v?n d?.
+Actor chính: Admin
+   Ði?u ki?n tru?c (Precondition):
+? Admin dã dang nh?p.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? dashboard.
+   Lu?ng chính (Main Flow):
+Admin: vào Dashboard Admin.
+H? th?ng: truy v?n s? li?u t?ng h?p, hi?n th?:
+H? th?ng: (1) KPI cards: t?ng user, user active 7 ngày, k? thi dang m?, lu?t thi 24h, alert chua x? lý.
+H? th?ng: (2) Line chart: s? lu?t thi theo ngày (30 ngày qua).
+H? th?ng: (3) Bar chart: top 5 bài thi có s? SV tham gia nhi?u nh?t tu?n này.
+H? th?ng: (4) B?ng alert: các s? c? g?n dây (server error, login th?t b?i nhi?u, etc.).
+H? th?ng: (5) B?ng top 5 bài thi có t? l? SV không hoàn thành cao (>20%) - flag d? ki?m tra.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Filter theo kho?ng th?i gian: 7/30/90 ngày.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: D? li?u quá l?n d? tính real-time: hi?n th? d? li?u cache (refresh m?i 1 gi?) + nhãn "C?p nh?t lúc HH:MM".
+   Quy t?c nghi?p v? liên quan:
+? BR-081: Dashboard Admin có th? refresh th? công; t? d?ng refresh m?i 5 phút.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)rangeEnumKhông7d | 30d | 90d, m?c d?nh 30dKho?ng th?i gian không h?p l?.
+
+9.6 UC47 - Phân tích d? khó câu h?i (item analysis)
+
+   UC47: Phân tích d? khó câu h?i (item analysis)
+Tóm t?t: Teacher xem th?ng kê d? khó và d? phân bi?t c?a t?ng câu h?i d?a trên k?t qu? thi th?c t?. H? tr? c?i thi?n ch?t lu?ng câu h?i.
+Actor chính: Teacher
+   Ði?u ki?n tru?c (Precondition):
+? Bài thi dã có ít nh?t 30 lu?t thi completed.
+? Bài thi thu?c quy?n s? h?u Teacher.
+   Ði?u ki?n sau (Postcondition):
+? Hi?n th? item analysis.
+   Lu?ng chính (Main Flow):
+Teacher: m? bài thi, vào tab "Item Analysis". H? th?ng: tính cho t?ng câu h?i:
+H? th?ng: (1) Difficulty Index (P-value): t? l? SV tr? l?i dúng. P > 0.85: quá d?; P < 0.15: quá khó. H? th?ng: (2) Discrimination Index (D): correlation gi?a dáp án dúng v?i t?ng di?m. D > 0.3: t?t; D
+< 0.2: c?n xem l?i.
+H? th?ng: (3) Distraction analysis (cho MCQ): t? l? ch?n m?i phuong án sai - phát hi?n distractor không hi?u qu?.
+H? th?ng: hi?n th? b?ng v?i 3 c?t trên + visual indicator (xanh/vàng/d?).
+   Lu?ng thay th? (Alternate Flow):
+? A1: Filter ch? xem câu có v?n d? (P-value ngoài 0.3-0.7 ho?c D < 0.2).
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: S? lu?t thi < 30: hi?n th? "C?n ít nh?t 30 lu?t thi d? phân tích dáng tin c?y".
+   Quy t?c nghi?p v? liên quan:
+? BR-082: Item analysis ch? tính trên attempt dã graded, không tính attempt b? h?y.
+? BR-083: Câu h?i Essay không có P-value/D-index (ch?m th? công).
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)testIdUUIDCóT?n t?i, =30 attempt graded, thu?c quy?n s? h?uBài thi không h?p l?.
+
+9.7 UC48 - In ch?ng ch? / b?ng di?m
+
+   UC48: In ch?ng ch? / b?ng di?m
+Tóm t?t: Teacher/Admin in ch?ng ch? ho?c b?ng di?m cho m?t/nhi?u sinh viên d?a trên k?t qu? thi. Có template tùy ch?nh.
+Actor chính: Teacher ho?c Admin
+   Ði?u ki?n tru?c (Precondition):
+? Có quy?n certificate:print.
+? Có k?t qu? thi dã graded.
+? Ðã c?u hình template ch?ng ch?.
+   Ði?u ki?n sau (Postcondition):
+? File PDF ch?ng ch?/b?ng di?m du?c t?o; audit log ghi certificate:print.
+   Lu?ng chính (Main Flow):
+User: t? danh sách k?t qu?, ch?n 1 ho?c nhi?u SV, nh?n "In ch?ng ch?" ho?c "In b?ng di?m". H? th?ng: hi?n th? tùy ch?n: template (n?u có nhi?u), ngôn ng?, có ch? ký s? hay không.
+User: ch?n, nh?n "T?o".
+H? th?ng: fill d? li?u vào template, t?o PDF. N?u nhi?u SV: t?o file ZIP. H? th?ng: tr? link download. Ghi audit log v?i danh sách SV.
+   Lu?ng thay th? (Alternate Flow):
+? A1: Ch? ký s? (tùy ch?n, c?n tích h?p): g?i service ch? ký s? d? ký file PDF.
+   Lu?ng ngo?i l? (Exception Flow):
+? E1: SV không d?t passingScore: hi?n th? c?nh báo "SV không d?t, không c?p ch?ng ch?. Ti?p t?c in anyway?".
+   Quy t?c nghi?p v? liên quan:
+? BR-084: In ch?ng ch? cho nhi?u SV cùng lúc t?i da 100 SV (gi?i h?n b? nh?).
+? BR-085: Template ch?ng ch? có placeholder: {{fullName}}, {{studentCode}}, {{examName}},
+{{score}}, {{date}}, {{certificateCode}}. H? th?ng t? sinh certificateCode duy nh?t.
+   Quy t?c ki?m tra d? li?u (Validation Rules):
+
+Tru?ngKi?uB?t bu?cRàng bu?cThông báo l?i (ti?ng Vi?t)userIdsArray<UUID>Có1-100 ph?n t?, m?i ID có k?t qu? gradedDanh sách SV không h?p l?.
+
+
+Tru?ng
+
+templateIdKi?u
+
+UUIDB?t bu?c
+
+CóRàng bu?c
+
+T?n t?i trong certificate_templa tesThông báo l?i (ti?ng Vi?t)
+Template không h?p l?.languageEnumCóvi | enNgôn ng? không h?p l?.digitalSignBooleanKhôngM?c d?nh false-
+   Chuong 10. Ma tr?n Quy t?c Nghi?p v? (Business Rules Matrix)
+
+   Chuong này t?ng h?p toàn b? quy t?c nghi?p v? (Business Rules - BR) du?c tham chi?u trong các use case. M?i BR có mã duy nh?t BR-XXX, tên ng?n, mô t? chi ti?t, module liên quan và m?c uu tiên. BR là các quy t?c b?t di b?t d?ch c?a nghi?p v?, không ph? thu?c cách hi?n th?c - chúng b?t bu?c tuân th? khi thi?t k? và phát tri?n h? th?ng.
+
+10.1 Ma tr?n Business Rules
+B?ng 10.1 - Ma tr?n t?ng h?p Business Rules
+
+MãTênMô t?ModuleUu tiênBR-001Audit loginM?i dang nh?p (thành công/th?t b?i) ghi audit log v?i IP, User-Agent, th?i gian msAuthMustBR-002Bcrypt passwordM?t kh?u bam bcrypt cost 12, không bao gi? luu plaintextAuthMustBR-003Refresh token RedisRefresh token luu Redis, ch? h?p l? khi kh?pAuthMustBR-004Max 3 sessionsCùng user không quá 3 thi?t b? d?ng th?i, dang xu?t thi?t b? cu nh?tAuthMustBR-005Draft preservedÐang xu?t không xóa draft attemptAuthMust
+
+
+Mã
+BR-006Tên
+Reset token TTLMô t?
+Token reset m?t kh?u TTL 30 phút, dùng 1 l?nModule
+AuthUu tiên
+MustBR-007Force logout after resetReset m?t kh?u thu h?i toàn b? phiênAuthMustBR-008Password historyLuu 3 m?t kh?u g?n nh?t d? c?m tái s? d?ngAuthMustBR-009Password 90 daysM?t kh?u h?t h?n sau 90 ngày, b?t bu?c d?i ? dang nh?p ti?pAuthMustBR-010Permission formatPermission có d?nh d?ng resource:actionAuthMustBR-011System role immutableRole Admin/Teacher/St udent không xóa/d?i tênAuthMustBR-012Permission cache TTLCache permission TTL 5 phút sau khi role d?iAuthMustBR-013Multi-role unionUser có nhi?u role, quy?n = union t?t c? permissionAuthMustBR-014Min 1 roleM?i user ph?i có ít nh?t 1 roleAuthMustBR-015Audit retentionAudit log luu 12 tháng trong DB, archive S3 thêm 24 thángAuthMustBR-016Audit immutableAudit log không ai s?a/xóa trong 12 tháng d?uAuthMustBR-017Email/username uniqueEmail và username duy nh?t, k? c? soft deletedUserMust
+
+
+Mã
+BR-018Tên
+Pending activationMô t?
+User m?i t?o status=Pending, kích ho?t qua emailModule
+UserUu tiên
+MustBR-019Email/username immutableM?c d?nh không d?i email/usernameUserMustBR-020Ownership transferÐ?i role Teacher?Studen t c?n chuy?n quy?n s? h?uUserShouldBR-021Lock reason requiredKhóa user b?t bu?c có lý do trong audit logUserMustBR-022Reset counter on unlockM? khóa reset b? d?m dang nh?p saiUserMustBR-023Soft delete 30 daysSoft delete gi? 30 ngày, sau dó purgeUserMustBR-024Suffix deleted emailEmail/username soft delete thêm h?u t?
+_deleted_{ts}UserMustBR-025Import non-transactionalImport user không transaction, dòng l?i không rollbackUserMustBR-026Batch activation emailEmail kích ho?t g?i batch sau khi import xongUserMustBR-027Export auditExport user ra file ghi audit chi ti?tUserMustBR-028Full-text searchTìm user full-text GIN index, 200ms cho 1M userUserShouldBR-029Multi-class studentSinh viên thu?c nhi?u l?p cùng lúcUserMustBR-030Draft question not in testCâu h?i Draft không dua vào bài thiQuestionMust
+
+
+
+
+BR-031Bloom 1-6M?c d? khó Bloom 1-6 theo thang chu?nQuestionMustBR-032Question classificationCâu h?i thu?c 1 môn + 1 chuong, có th? nhi?u tagQuestionMustBR-033Edit resets approvalS?a câu h?i Approved ? Draft c?n duy?t l?iQuestionMustBR-034Used question not deletableCâu h?i dã dùng trong attempt không xóa, ch? archiveQuestionMustBR-035Import = DraftCâu h?i import luôn có status=DraftQuestionMustBR-036Export auditExport câu h?i có dáp án ghi audit d? truy v?t rò r?QuestionMustBR-037Subject-Chapter structure1 môn có nhi?u chuong, 1 chuong
+thu?c 1 mônQuestionMustBR-038Tag normalizeTag ch? thu?ng, không d?u, regex
+^[a-z0-9-]+$QuestionMustBR-039Approval workflow toggleWorkflow duy?t b?t/t?t theo configQuestionMustBR-040Self-approval forbiddenKhông duy?t câu h?i do chính mình t?o (4-eye)QuestionMustBR-041Question visibilityTeacher ch? th?y câu h?i c?a mình ho?c du?c chia s?QuestionMustBR-042Draft exam hiddenK? thi Draft không hi?n th? cho StudentExamMustBR-043Archive examArchive ?n k? thi, không cho t?o/s?a bài thi bên trongExamMust
+
+
+Mã
+BR-044Tên
+Test status lifecycleMô t?
+Bài thi: Draft ? Ready ? Open ? ClosedModule
+ExamUu tiên
+MustBR-045Shuffle per attemptShuffle áp d?ng per attempt, c? d?nh trong attemptExamMustBR-046Scoring policy multi-attemptbest/last/avg ch? áp d?ng khi maxAttempts > 1ExamMustBR-047Anti-cheat defaultAnti-cheat m?c d?nh: fullscreen, block tab, block pasteExamMustBR-048Max 200 questionsBài thi 1-200 câu h?iExamMustBR-049Score scalingT?ng di?m ? maxScore ? quy d?i t? l? khi ch?mExamMustBR-050Snapshot archived questionCâu h?i archived sau khi gán v?n gi? trong bài thiExamMustBR-051Enrollment per studentEnrollment cho phép maxAttempts lu?t thiExamMustBR-052Removed student keeps resultsG? enrollment không xóa k?t qu? dã cóExamMustBR-053Timezone UTC+7Timezone m?c d?nh Asia/Ho_Chi_Min h (UTC+7)ExamMustBR-054Close grace period 60sCloseTime + 60s grace period tru?c auto-submitExamMustBR-055PDF watermarkPDF b?n GV có watermarkExamMustBR-056Export PDF auditExport PDF có dáp án ghi auditExamMust
+
+BR-057Student test visibilityStudent ch? th?y test có enrollment, exam PublishedParticipationMustBR-058Start button enableNút Vào thi enable khi test=Open, trong kho?ng time,
+<maxAttemptsParticipationMustBR-059Question snapshotTh? t? câu h?i/dáp án c? d?nh trong attemptParticipationMustBR-060Attempt ID uniqueM?i attempt có ID duy nh?t, không chia s? stateParticipationMustBR-061Timer keeps runningÐóng tab không d?ng timer; auto-submit khi h?t gi?ParticipationMustBR-062Auto-save 30sAuto-save m?i 30s
++ khi chuy?n câu + khi nh?n Luu t?mParticipationMustBR-063Answer upsertÐáp án ghi dè per (attempt, question), không luu l?ch s?ParticipationMustBR-064Unanswered = 0Câu không có dáp án khi submit = 0 di?mParticipationMustBR-065Save draft not submitLuu t?m không d?i status attemptParticipationMustBR-066Linear vs free navigationC?u hình linear (ch? t?i) ho?c free navigationParticipationShouldBR-067Mark no scoring impactÐánh d?u xem l?i ch? là UI hintParticipationMustBR-068Submit priority serverSubmit uu tiên dáp án server, fallback localStorageParticipationMust
+
+BR-069Attempt immutable after submitAttempt không s?a sau submitParticipationMustBR-070Multi-attempt scoringbest=max, last=last attempt, avg=trung bìnhParticipationMustBR-071Auto-submit offline okAuto-submit di?n ra server-side dù Student offlineParticipationMustBR-072Auto-submit reason loggedAuto-submit ghi reason=auto_sub mit trong auditParticipationMustBR-073Review read-onlyReview ch? d?c, có nút InParticipationMustBR-074Result release timingshowResultImmed iately=false ? d?i Teacher publishReportMustBR-075Awaiting grading displayEssay chua ch?m
+* hi?n th? "Ðang ch?m"ReportMustBR-076Teacher data scopeTeacher ch? th?y k?t qu? bài thi mình s? h?u/?y quy?nReportMustBR-077Grading badgeCó attempt awaiting_grading
+* badge "C?n ch?m"ReportMustBR-078Report data permissionBáo cáo không hi?n th? cá nhân ngoài quy?nReportMustBR-079Ranking toggleC?t x?p h?ng có th? ?n theo config t? ch?cReportShouldBR-080Export PII auditExport d? li?u cá nhân + di?m s? ghi audit chi ti?tReportMustBR-081Dashboard refreshDashboard Admin auto-refresh 5 phútReportShould
+
+
+Mã
+BR-082Tên
+Item analysis graded onlyMô t?
+Item analysis ch? tính attempt gradedModule
+ReportUu tiên
+MustBR-083Essay no P-valueCâu Essay không có P-value/D-indexReportMustBR-084Bulk cert max 100In ch?ng ch? hàng lo?t t?i da 100 SVReportMustBR-085Certificate template varsTemplate có placeholder
+{{fullName}},
+{{studentCode}}, etc.ReportMust
+   Chuong 11. Data Dictionary
+
+   Chuong này d?c t? chi ti?t c?u trúc các th?c th? (entity) d? li?u chính c?a h? th?ng Exam-Sys. M?i th?c th? có b?ng li?t kê các tru?ng, ki?u d? li?u, d? dài, tính b?t bu?c, giá tr? m?c d?nh, mô t? và ràng bu?c. Ðây là co s? d? thi?t k? co s? d? li?u v?t lý (physical schema) và d?m b?o tính nh?t quán gi?a các module. Các th?c th? du?c s?p x?p theo th? t? ph? thu?c: entities n?n t?ng (User, Role) tru?c, entities phái sinh (Attempt, Result) sau.
+
+11.1 Th?c th? User
+Luu thông tin ngu?i dùng h? th?ng. Bao g?m c? Admin, Teacher, Student.
+B?ng 11.1 - Entity: users
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Cógen_rando m_uuid()Khóa chínhPKemailVARCHAR254Có-Email dang nh?pUNIQUE, RFC 5322usernameVARCHAR50Có-Tên dang nh?p thay th?UNIQUE,
+^[a-zA-Z0-9._-]{3,50}$password_h ashVARCHAR100Có-M?t kh?u bam bcryptKhông tr? v? APIfull_nameVARCHAR100Có-H? tên d?y d?2-100 ký t?
+
+
+Tru?ng
+employee_c odeKi?u
+VARCHARÐ? dài
+20B?t bu?c
+KhôngDefault
+NULLMô t?
+Mã nhân viên/gi?ng viênRàng bu?c
+UNIQUE per rolestudent_co deVARCHAR20KhôngNULLMã sinh viênUNIQUE per role, d?nh d?ng tru?ngphoneVARCHAR15KhôngNULLSÐT Vi?t Nam^(0|\+84) (\d{9,10})$birth_dateDATE-KhôngNULLNgày sinh1920 ?
+currentYear
+-5genderENUM-KhôngNULLGi?i tínhmale | female | otherstatusENUM-CópendingTr?ng thái tài kho?npending | active | locked | deletedpassword_c hanged_atTIMESTAMP-Cónow()L?n d?i m?t kh?u cu?i-failed_login
+_countINTEGER-Có0S? l?n sai liên ti?pReset khi dang nh?p dúnglocked_untilTIMESTAMP-KhôngNULLTh?i h?n khóa t?m-last_login_a tTIMESTAMP-KhôngNULLL?n dang nh?p cu?i-last_login_i pVARCHAR45KhôngNULLIP dang nh?p cu?iH? tr? IPv4/IPv6deleted_atTIMESTAMP-KhôngNULLTh?i di?m soft delete-created_atTIMESTAMP-Cónow()Th?i di?m t?o-updated_atTIMESTAMP-Cónow()Th?i di?m c?p nh?t cu?i-created_byUUID-KhôngNULLAdmin t?o userFK ? users.id (self-ref)
+
+11.2 Th?c th? Role & Permission
+B?ng 11.2 - Entity: roles
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Cógen_rando m_uuid()Khóa chínhPKnameVARCHAR50Có-Tên roleUNIQUEdescriptionVARCHAR255KhôngNULLMô t?-is_systemBOOLEAN-CófalseRole h? th?ng (Admin/Tea cher/Studen t)Không xóa du?cstatusENUM-CóactiveTr?ng tháiactive | inactivecreated_atTIMESTAMP-Cónow()--B?ng 11.3 - Entity: permissions
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-Khóa chínhPKcodeVARCHAR100Có-Mã permission d?ng resource:ac tionUNIQUEdescriptionVARCHAR255Không-Mô t?-B?ng 11.4 - Entity: role_permissions (junction N-N)
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?crole_idUUID-Có-FK rolePK, FK ?
+roles.idpermission_ idUUID-Có-FK
+permissionPK, FK ?
+permissions
+.idB?ng 11.5 - Entity: user_roles (junction N-N)
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cuser_idUUID-Có-FK userPK, FK ?
+users.id
+
+
+Tru?ng
+role_idKi?u
+UUIDÐ? dài
+-B?t bu?c
+CóDefault
+-Mô t?
+FK roleRàng bu?c
+PK, FK ?
+roles.idassigned_atTIMESTAMP-Cónow()Th?i di?m gán-assigned_byUUID-KhôngNULLAdmin gánFK ? users.id11.3 Th?c th? Class (L?p h?c) & Subject
+B?ng 11.6 - Entity: classes
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-Khóa chínhPKnameVARCHAR100Có-Tên l?p-codeVARCHAR20Có-Mã l?pUNIQUEacademic_y earVARCHAR9Có-Nam h?cYYYY-YYYYteacher_idUUID-KhôngNULLGV ch? nhi?mFK ? users.id (role=teach er)descriptionVARCHAR500KhôngNULLMô t?-statusENUM-CóactiveTr?ng tháiactive | archivedcreated_atTIMESTAMP-Cónow()--B?ng 11.7 - Entity: subjects
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-PK-nameVARCHAR100Có-Tên môn-codeVARCHAR20Có-Mã mônUNIQUEdescriptionVARCHAR500Không---created_atTIMESTAMP-Cónow()--B?ng 11.8 - Entity: chapters
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-PK-
+
+
+Tru?ng
+subject_idKi?u
+UUIDÐ? dài
+-B?t bu?c
+CóDefault
+-Mô t?
+FK subjectRàng bu?c
+FK ? subjects.idnameVARCHAR100Có-Tên chuong-codeVARCHAR20Có-Mã chuongUNIQUE per subjectorder_numINTEGER-Có1Th? t?= 1descriptionVARCHAR500Không---11.4 Th?c th? Question & liên quan
+B?ng 11.9 - Entity: questions
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-PK-typeENUM-Có-Lo?imcq_single
+| mcq_multip le | true_false | essaystemTEXT-Có-N?i dung câu h?i (HTML)10-5000 ký
+t? (stripped)explanationTEXT-KhôngNULLGi?i thíchT?i da 3000 ký t?subject_idUUID-Có-FK subjectFK ? subjects.idchapter_idUUID-Có-FK chapterFK ? chapters.idbloom_levelSMALLINT-Có-M?c d? khó Bloom1-6scoreDECIMAL5,2Có-Ði?m t?i da câu0.01 -
+100.00statusENUM-CódraftTr?ng tháidraft | pending | approved | rejected | archivedowner_idUUID-Có-Teacher s? h?uFK ? users.id
+
+
+
+
+approver_idUUID-KhôngNULLNgu?i duy?tFK ? users.idapproved_a tTIMESTAMP-KhôngNULLTh?i di?m duy?t-rejection_co mmentTEXT-KhôngNULLLý do t? ch?i-usage_coun tINTEGER-Có0S? l?n dùng trong attemptT? tangdeleted_atTIMESTAMP-KhôngNULLSoft delete-created_atTIMESTAMP-Cónow()--updated_atTIMESTAMP-Cónow()--B?ng 11.10 - Entity: question_options
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-PK-question_idUUID-Có-FK questionFK ? questions.idcontentTEXT-Có-N?i dung phuong án (HTML)1-1000 ký
+t?is_correctBOOLEAN-CófalseÐáp án dúng-score_weig htDECIMAL5,2Không1.00Tr?ng s? di?m (MCQ-Multiple)0.00 - 1.00order_numINTEGER-Có-Th? t? hi?n th?= 1B?ng 11.11 - Entity: question_tags (junction)
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cquestion_idUUID-Có-FKPK, FK ?
+questions.idtagVARCHAR30Có-Tag ch? thu?ng^[a-z0-9-]+$
+
+11.5 Th?c th? Exam & Test
+B?ng 11.12 - Entity: exams
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-PK-nameVARCHAR150Có-Tên k? thi5-150 ký t?codeVARCHAR30Có-Mã k? thiUNIQUEsemesterENUM-Có-H?c k?1 | 2 | 3academic_y earVARCHAR9Có-Nam h?cYYYY-YYYYsubject_idUUID-Có-FK subjectFK ? subjects.iddescriptionTEXT-KhôngNULL--start_dateTIMESTAMP-Có-Ngày b?t d?u-end_dateTIMESTAMP-Có-Ngày k?t thúcSau start_datestatusENUM-CódraftTr?ng tháidraft | published | archivedowner_idUUID-Có-CreatorFK ? users.idcreated_atTIMESTAMP-Cónow()--updated_atTIMESTAMP-Cónow()--B?ng 11.13 - Entity: tests (bài thi)
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-PK-exam_idUUID-Có-FK examFK ? exams.idnameVARCHAR100Có-Tên bài thi5-100 ký t?typeENUM-CómainLo?imain | supplement arydescriptionTEXT-KhôngNULL--duration_mi nutesINTEGER-Có-Th?i lu?ng (phút)1-300
+
+
+
+
+max_scoreDECIMAL6,2Có-Ði?m t?i da1.00 -
+1000.00passing_sco reDECIMAL6,2Không50%Ði?m d?u0 -
+max_scoremax_attem ptsSMALLINT-Có1S? l?n thi1-5cooldown_ minutesINTEGER-Không0Ch? gi?a 2 l?n0-10080scoring_poli cyENUM-CóbestChính sách tính di?mbest | last | avgshuffle_que stionsBOOLEAN-Cótrue--shuffle_opti onsBOOLEAN-Cótrue--show_result
+_immediate lyBOOLEAN-Cófalse--allow_revie w_after_su bmitBOOLEAN-Cótrue--show_corre ct_answersBOOLEAN-Cófalse--anti_cheat_ configJSONB-Có{}C?u hình anti-cheat-open_timeTIMESTAMP-KhôngNULLTh?i gian m?-close_timeTIMESTAMP-KhôngNULLTh?i gian dóngSau open_timetimezoneVARCHAR50CóAsia/ Ho_Chi_Min hIANA tz-statusENUM-CódraftTr?ng tháidraft | ready | open | closedowner_idUUID-Có-FK TeacherFK ? users.idcreated_atTIMESTAMP-Cónow()--
+
+
+B?ng 11.14 - Entity: test_questions (junction, có metadata)
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?ctest_idUUID-Có-FK testPK, FK ?
+tests.idquestion_idUUID-Có-FK questionPK, FK ?
+questions.idorder_numINTEGER-Có-Th? t? trong bài= 1scoreDECIMAL5,2Có-Ði?m câu trong bài0.01 - 100section_idUUID-KhôngNULLFK section (n?u có)FK ? test_section s.idB?ng 11.15 - Entity: enrollments
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-PK-test_idUUID-Có-FK testFK ? tests.iduser_idUUID-Có-FK studentFK ? users.id (role=stude nt)attempts_u sedSMALLINT-Có0S? lu?t dã thi0 -
+max_attem ptsassigned_atTIMESTAMP-Cónow()--assigned_byUUID-KhôngNULL-FK ? users.id
+11.6 Th?c th? Attempt & Result
+B?ng 11.16 - Entity: attempts (lu?t thi)
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidUUID-Có-PK-test_idUUID-Có-FK testFK ? tests.iduser_idUUID-Có-FK studentFK ? users.id
+
+
+Tru?ng
+attempt_nu mberKi?u
+SMALLINTÐ? dài
+-B?t bu?c
+CóDefault
+-Mô t?
+L?n th? m?yRàng bu?c
+1 -
+max_attem ptsstatusENUM-Cóin_progressTr?ng tháiin_progress
+| completed
+| awaiting_gr ading | graded | cancelledstarted_atTIMESTAMP-Cónow()B?t d?u-scheduled_ end_atTIMESTAMP-Có-D? ki?n k?t thúcstarted_at + durationsubmitted_ atTIMESTAMP-KhôngNULLTh?i di?m n?p-submit_reas onENUM-KhôngNULLLý do n?pmanual | auto_submi t | cancelledraw_scoreDECIMAL6,2KhôngNULLÐi?m thô-final_scoreDECIMAL6,2KhôngNULLÐi?m quy d?i0 -
+max_scoregraded_atTIMESTAMP-KhôngNULLTh?i di?m ch?m xong-graded_byUUID-KhôngNULLNgu?i ch?m (Essay)FK ? users.idclient_ipVARCHAR45Có-IP khi b?t d?u thi-user_agentTEXT-Có-User-Agent-tab_switch_ countSMALLINT-Có0S? l?n thoát tab-anti_cheat_l ogJSONB-Có[]Log s? ki?n anti-cheat-B?ng 11.17 - Entity: attempt_answers (dáp án thí sinh)
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cattempt_idUUID-Có-FK attemptPK, FK ?
+attempts.idquestion_idUUID-Có-FK questionPK, FK ?
+questions.id
+
+
+
+
+answer_dat aJSONB-KhôngNULLÐáp án (linh ho?t theo lo?i)-is_correctBOOLEAN-KhôngNULLCh?m t? d?ng (MCQ/TF)-scoreDECIMAL5,2KhôngNULLÐi?m câu0 -
+question.sc oremarked_for
+_reviewBOOLEAN-CófalseÐánh d?u xem l?i-first_saved_ atTIMESTAMP-Cónow()L?n luu d?u-last_saved_ atTIMESTAMP-Cónow()L?n luu cu?i-graded_byUUID-KhôngNULLTeacher ch?m EssayFK ? users.idgrading_co mmentTEXT-KhôngNULLComment ch?m Essay-11.7 Th?c th? Audit Log
+B?ng 11.18 - Entity: audit_logs
+
+Tru?ngKi?uÐ? dàiB?t bu?cDefaultMô t?Ràng bu?cidBIGSERIAL-Có-PK-event_typeVARCHAR50Có-Lo?i s? ki?nIndexeduser_idUUID-KhôngNULLUser th?c hi?nFK ? users.idtarget_typeVARCHAR50KhôngNULLLo?i d?i tu?ng tác d?ng-target_idUUID-KhôngNULLID d?i tu?ng-actionVARCHAR50Có-Hành d?ng (create/upd ate/delete/.
+..)-detailsJSONB-Có{}Chi ti?t s? ki?n + diff-
+
+
+Tru?ng
+ip_addressKi?u
+VARCHARÐ? dài
+45B?t bu?c
+CóDefault
+-Mô t?
+IPRàng bu?c
+-user_agentTEXT-KhôngNULL--created_atTIMESTAMP-Cónow()Th?i di?mIndexed, partition by month
+   Chuong 12. Domain Model
+
+   Chuong này mô t? mô hình th?c th? - quan h? (entity-relationship) c?a h? th?ng Exam-Sys du?i d?ng text. Mô hình du?c trình bày theo t?ng nhóm th?c th? và b?ng t?ng h?p các m?i quan h? v?i cardinality, participation (total/partial) và identifying/non-identifying relationship. Mô hình này là co s? cho vi?c thi?t k? database schema v?t lý và ORM mapping.
+
+12.1 Nhóm th?c th? Identity & Access
+   Nhóm này qu?n lý ngu?i dùng, vai trò và phân quy?n. Ðây là nhóm c?t lõi, m?i th?c th? nghi?p v? khác d?u tham chi?u v? user.
+? users: th?c th? trung tâm, ch?a thông tin ngu?i dùng.
+? roles: d?nh nghia vai trò (Admin, Teacher, Student, custom).
+? permissions: d?nh nghia quy?n tinh (resource:action).
+? user_roles: b?ng junction N-N gi?a users và roles.
+? role_permissions: b?ng junction N-N gi?a roles và permissions. Quan h?:
+? users (1) - (N) user_roles: m?t user có nhi?u role, m?i user_role thu?c v? 1 user. Participation: total ? phía user (m?i user ph?i có ít nh?t 1 role), partial ? phía role.
+? roles (1) - (N) role_permissions: m?t role có nhi?u permission. Total ? phía role (m?i role ph?i có ít nh?t 1 permission).
+? users (1) - (N) audit_logs: m?t user t?o nhi?u s? ki?n audit. Total ? phía audit_logs (m?i log ph?i có user, tr? log h? th?ng).
+
+12.2 Nhóm th?c th? Organization
+Nhóm này qu?n lý don v? t? ch?c: l?p h?c, môn h?c, chuong.
+? classes: l?p h?c ch?a sinh viên.
+? class_members: junction N-N gi?a classes và users (ch? user role=Student).
+? subjects: môn h?c.
+
+? chapters: chuong trong môn h?c. Quan h?:
+? subjects (1) - (N) chapters: m?t môn có nhi?u chuong. Total ? phía chapter (m?i chuong ph?i thu?c 1 môn).
+? users (1) - (N) classes (teacher_id): m?t Teacher làm ch? nhi?m nhi?u l?p. Partial.
+? classes (1) - (N) class_members: m?t l?p có nhi?u sinh viên. Total.
+? users (1) - (N) class_members: m?t sinh viên có th? thu?c nhi?u l?p. Total.
+
+12.3 Nhóm th?c th? Question Bank
+Nhóm này qu?n lý ngân hàng câu h?i.
+? questions: câu h?i.
+? question_options: phuong án tr? l?i cho MCQ/True-False.
+? question_tags: tag c?a câu h?i. Quan h?:
+? subjects (1) - (N) questions: m?t môn có nhi?u câu h?i. Total.
+? chapters (1) - (N) questions: m?t chuong có nhi?u câu h?i. Total.
+? users (1) - (N) questions (owner_id): m?t Teacher s? h?u nhi?u câu h?i. Total.
+? questions (1) - (N) question_options: m?t câu h?i có nhi?u phuong án. Total cho MCQ, partial cho Essay (không có options).
+? questions (1) - (N) question_tags: m?t câu h?i có nhi?u tag. Partial.
+
+12.4 Nhóm th?c th? Exam
+Nhóm này qu?n lý k? thi, bài thi, gán thí sinh.
+? exams: k? thi.
+? tests: bài thi trong k? thi.
+? test_sections: ph?n c?a bài thi (tùy ch?n).
+? test_questions: junction N-N gi?a tests và questions (có metadata di?m).
+? enrollments: gán thí sinh vào bài thi. Quan h?:
+? subjects (1) - (N) exams: m?t môn có nhi?u k? thi.
+? exams (1) - (N) tests: m?t k? thi có nhi?u bài thi. Total - test ph?i thu?c 1 exam.
+? tests (1) - (N) test_sections: m?t bài thi có nhi?u section (optional).
+? tests (1) - (N) test_questions: m?t bài thi có nhi?u câu h?i. Total.
+? questions (1) - (N) test_questions: m?t câu h?i có th? có trong nhi?u bài thi. Partial.
+
+? tests (1) - (N) enrollments: m?t bài thi có nhi?u enrollment. Total.
+? users (1) - (N) enrollments: m?t sinh viên có nhi?u enrollment. Total.
+
+12.5 Nhóm th?c th? Attempt & Result
+Nhóm này qu?n lý lu?t thi và k?t qu?.
+? attempts: lu?t thi.
+? attempt_answers: dáp án thí sinh trong lu?t thi.
+? (results du?c tính t? attempts, có th? materialize thành b?ng n?u c?n). Quan h?:
+? tests (1) - (N) attempts: m?t bài thi có nhi?u lu?t thi. Total.
+? users (1) - (N) attempts: m?t sinh viên có nhi?u lu?t thi (tr?i qua nhi?u bài). Total.
+? enrollments (1) - (N) attempts: m?t enrollment cho phép max_attempts lu?t thi. Total.
+? attempts (1) - (N) attempt_answers: m?t lu?t thi có nhi?u câu tr? l?i. Total.
+? questions (1) - (N) attempt_answers: m?t câu h?i có nhi?u answer t? các lu?t thi khác nhau. Partial.
+
+12.6 B?ng t?ng h?p quan h?
+B?ng 12.1 - T?ng h?p các m?i quan h? gi?a th?c th?
+
+Entity 1CardinalityEntity 2ParticipationTypeMô t?users1 - Nuser_rolesTotal - PartialIdentifyingUser có nhi?u roleroles1 - Nuser_rolesTotal - PartialIdentifyingRole gán cho nhi?u userroles1 - Nrole_permissio nsTotal - PartialIdentifyingRole có nhi?u permissionusers1 - Nclasses (teacher)Partial - PartialNon-identifyingTeacher ch? nhi?mclasses1 - Nclass_member sTotal - PartialIdentifyingL?p có nhi?u SVusers1 - Nclass_member sPartial - TotalIdentifyingSV thu?c nhi?u l?psubjects1 - NchaptersTotal - TotalIdentifyingMôn có nhi?u chuongsubjects1 - NquestionsTotal - TotalNon-identifyingMôn có nhi?u câu h?i
+
+
+
+
+chapters1 - NquestionsTotal - TotalNon-identifyingChuong có nhi?u câu h?iusers1 - Nquestions (owner)Partial - TotalNon-identifyingGV s? h?u câu h?iquestions1 - Nquestion_opti onsPartial - TotalIdentifyingCâu h?i có phuong ánquestions1 - Nquestion_tagsPartial - PartialIdentifyingCâu h?i có tagsubjects1 - NexamsTotal - TotalNon-identifyingMôn có nhi?u k? thiexams1 - NtestsTotal - TotalIdentifyingK? thi có nhi?u bài thitests1 - Ntest_sectionsPartial - TotalIdentifyingBài thi có section (optional)tests1 - Ntest_questionsTotal - PartialIdentifyingBài thi có câu h?iquestions1 - Ntest_questionsPartial - TotalIdentifyingCâu h?i dùng trong nhi?u bàitests1 - NenrollmentsTotal - PartialIdentifyingBài thi có thí sinhusers1 - NenrollmentsPartial - TotalIdentifyingSV có nhi?u enrollmenttests1 - NattemptsTotal - PartialIdentifyingBài thi có nhi?u lu?t thiusers1 - NattemptsPartial - TotalIdentifyingSV có nhi?u lu?t thienrollments1 - NattemptsTotal - PartialIdentifyingEnrollment cho maxAttempts lu?tattempts1 - Nattempt_answ ersTotal - TotalIdentifyingLu?t thi có câu tr? l?iquestions1 - Nattempt_answ ersPartial - TotalIdentifyingCâu h?i có nhi?u answerusers1 - Naudit_logsPartial - PartialNon-identifyingUser t?o log
+
+   Chuong 13. Mockup mô t? màn hình chính
+
+   Chuong này mô t? wireframe d?ng text cho 8 màn hình chính c?a h? th?ng. M?i mô t? bao g?m: layout t?ng th?, các thành ph?n UI chính, tuong tác chính, validation hi?n th?. Ðây là co s? cho d?i UI/UX thi?t k? chi ti?t (Figma) và d?i frontend xây d?ng component. Mô t? không thay th? thi?t k? visual - ch? d?nh nghia c?u trúc thông tin và lu?ng tuong tác.
+
+13.1 Màn Login
+Layout: trang don, centered card 480px r?ng, background navy gradient.
+? Header: logo Exam-Sys (top-left), link "Liên h? h? tr?" (top-right).
+? Card chính ch?a:
+? Tiêu d? "Ðang nh?p h? th?ng" (centered, bold 24pt).
+? Field email/username (label trên, input du?i, placeholder "Nh?p email ho?c tên dang nh?p").
+? Field m?t kh?u (input type=password, icon eye d? show/hide).
+? Row: checkbox "Ghi nh? tôi" (trái) + link "Quên m?t kh?u?" (ph?i).
+? Button "Ðang nh?p" (full-width, primary color, 44px height).
+? Footer card: text "Chua có tài kho?n? Liên h? qu?n tr? viên".
+   Validation hi?n th?: l?i d? bên du?i field, icon c?nh báo. Loading state: spinner trong button khi submit. Success: redirect dashboard theo role.
+
+13.2 Dashboard Admin
+Layout: sidebar trái (240px) + main content.
+? Sidebar: logo + nav menu (Dashboard, User, Role, Audit Log, Classes, Subjects, Exams, Settings). Active item có background accent.
+? Topbar: search global (gi?a) + icon thông báo (có badge) + avatar menu (ph?i).
+? Main content (khu v?c chính):
+? Row 1: 5 KPI cards (T?ng user, Active 7 ngày, K? thi dang m?, Lu?t thi 24h, Alert chua x? lý) - m?i card 1/5 width, icon + s? l?n + label + so sánh v?i ngày tru?c.
+? Row 2: chart line (s? lu?t thi theo ngày, 30 ngày) - chi?m 2/3 width; bar chart top 5 bài thi - 1/3 width.
+? Row 3: b?ng alert g?n dây (5 dòng) - full width, có link "Xem t?t c?".
+? Row 4: b?ng top 5 bài thi có t? l? không hoàn thành cao - full width.
+
+13.3 Dashboard Teacher
+Layout: sidebar trái (240px) + main content.
+? Sidebar: nav menu (Dashboard, Câu h?i, Bài thi, K? thi, L?p h?c, Báo cáo).
+? Main content:
+? Row 1: 4 KPI cards (T?ng câu h?i, Bài thi dang m?, C?n ch?m, Thí sinh dang thi).
+? Row 2: b?ng "C?n x? lý" - g?p các item c?n attention: câu h?i ch? duy?t, bài thi c?n ch?m Essay, alert.
+? Row 3: list "Bài thi s?p m?" - 5 bài thi s?p t?i v?i openTime, s? SV dã enroll, nút vào ch?nh.
+
+13.4 Dashboard Student
+Layout: sidebar trái (240px) + main content.
+? Sidebar: nav menu (Dashboard, Bài thi c?a tôi, K?t qu?, H? so).
+? Main content:
+? Row 1: 3 KPI cards (Bài dang m?, S?p m?, Ðã hoàn thành).
+? Row 2: b?ng "Bài thi dang m?" - tên, k?, môn, th?i gian còn l?i (countdown), nút "Vào thi".
+? Row 3: list "K?t qu? g?n dây" - 5 k?t qu? m?i nh?t v?i di?m + d?u/r?t badge.
+
+13.5 Màn Qu?n lý câu h?i
+Layout: filter bar trên + b?ng du?i.
+? Filter bar: ô search (full-text), dropdown môn, dropdown chuong, dropdown d? khó, dropdown tag (multi-select), dropdown status, dropdown lo?i, nút "L?c", nút "Reset", nút "Thêm câu h?i" (primary), nút "Import", nút "Export".
+? B?ng: 10 c?t (checkbox, Stem (rút g?n 80 ký t?), Môn, Chuong, Ð? khó, Lo?i, Ði?m, Status, Owner, Action menu).
+? Action menu per row: Xem, S?a, Nhân b?n, Xóa, G?i duy?t (n?u Draft).
+? Pagination du?i: 1 2 3 ... 20, page size selector (10/20/50).
+? Bulk action bar (xu?t hi?n khi tick): "Ðã ch?n X câu" + nút Bulk tag, Bulk xóa.
+
+13.6 Màn T?o bài thi (Wizard 4 bu?c)
+Layout: wizard stepper trên + content du?i.
+? Stepper: 1. Thông tin co b?n ? 2. C?u hình ? 3. Câu h?i ? 4. Thí sinh & L?ch.
+
+? Bu?c 1: form thông tin co b?n (tên, k? thi, mô t?, lo?i, th?i lu?ng, maxScore, scoringPolicy, maxAttempts).
+? Bu?c 2: form c?u hình chi ti?t - nhóm tab (Th?i gian, Shuffle, Hi?n th?, Anti-cheat, Ch?m di?m).
+? Bu?c 3: 2 c?t - trái: danh sách câu h?i dã thêm (kéo th? s?p x?p); ph?i: panel ch?n câu h?i (filter + tick + nút Thêm). Có tùy ch?n random.
+? Bu?c 4: form l?ch (openTime, closeTime, timezone) + b?ng thí sinh (gán cá nhân/l?p) + nút "Luu và Publish".
+
+13.7 Màn Làm bài thi
+Layout: 3 khu v?c - topbar (timer + info) + main content (câu h?i) + sidebar ph?i (navigation).
+? Topbar: tên bài thi (trái) + timer d?m ngu?c (gi?a, màu d? n?u < 5 phút) + nút "N?p bài" (ph?i).
+? Main content (70% width): câu h?i hi?n t?i - s? câu (vd: Câu 5/30), stem (rich text, có hình ?nh), options (radio cho MCQ-Single, checkbox cho MCQ-Multiple, textarea cho Essay). Nút "Câu tru?c" / "Câu sau" du?i cùng.
+? Sidebar ph?i (30% width):
+? Card timer mini + c?nh báo.
+? Grid 5x6 ô câu h?i - m?i ô là 1 câu, màu khác nhau: xám (chua tr? l?i), xanh (dã tr? l?i), vàng (dánh d?u xem l?i). Nh?n d? chuy?n d?n câu.
+? Legend du?i: màu = ý nghia.
+? Nút "Luu t?m".
+? Modal xác nh?n n?p: hi?n th? s? câu dã/không tr? l?i, dánh d?u, t?ng. 2 nút H?y / Xác nh?n.
+? Modal h?t gi?: "H?t gi?! Bài dang du?c n?p t? d?ng" + spinner + k?t qu? (n?u showResultImmediately).
+
+13.8 Màn Báo cáo k?t qu?
+Layout: filter bar trên + KPI cards + b?ng chính.
+? Filter bar: k? thi, bài thi, l?p, môn, kho?ng th?i gian, nút "T?o báo cáo", nút "Export".
+? KPI cards (4): S? SV dã thi, Ði?m TB, T? l? d?u, Ði?m cao nh?t.
+? Tab 1 - B?ng chi ti?t: STT, mã SV, h? tên, l?p, l?n thi, di?m, % dúng, status ch?m, action (Xem chi ti?t, Ch?m Essay).
+? Tab 2 - Th?ng kê: histogram phân b? di?m (0-10), bar chart so sánh di?m TB các l?p.
+? Tab 3 - Item analysis: b?ng câu h?i v?i P-value, D-index, status (xanh/vàng/d?).
+
+? Footer: export Excel/PDF, in ch?ng ch? (n?u có quy?n).
+
+
+   Chuong 14. Yêu c?u phi ch?c nang (NFR)
+
+   Chuong này d?c t? các yêu c?u phi ch?c nang (Non-Functional Requirements - NFR) c?a h? th?ng Exam-Sys. NFRs d?nh nghia cách h? th?ng ho?t d?ng thay vì h? th?ng làm gì - bao g?m hi?u nang, b?o m?t, tuong thích và kh? nang m? r?ng. M?i NFR có mã NFR-XX, mô t?, metric do lu?ng c? th? (d? QA ki?m ch?ng du?c) và m?c uu tiên. NFRs là di?u ki?n b?t bu?c d? nghi?m thu phiên b?n 1.0.
+
+14.1 Hi?u nang (Performance)
+   Nhóm yêu c?u hi?u nang d?m b?o tr?i nghi?m ngu?i dùng mu?t mà, d?c bi?t trong mùa thi khi có t?i cao. Các metric do lu?ng du?c th?c hi?n qua công c? load testing (k6 ho?c Locust) trong môi tru?ng staging.
+B?ng 14.1 - NFR Hi?u nang
+
+MãMô t?Metric do lu?ngUu tiênNFR-01Th?i gian response API chungP95 < 2 giây cho 95% requestMustNFR-02Th?i gian response API loginP95 < 1.5 giâyMustNFR-03Th?i gian t?i câu h?i khi vào thiP95 < 500ms cho 200 câuMustNFR-04Th?i gian save answerP95 < 800msMustNFR-05Th?i gian submit bài thiP95 < 3 giây (bao g?m ch?m t? d?ng)MustNFR-06Th?i gian t?i dashboard AdminP95 < 2 giâyShouldNFR-07Th?i gian render trang danh sách (20 dòng)P95 < 1 giâyMustNFR-08Th?i gian query DB don l?P95 < 100msMustNFR-09S? ngu?i dùng d?ng th?iH? tr? 500 SV thi d?ng th?i + 50 GV/Admin s? d?ng n?nMustNFR-10S? ngu?i dùng d?ng th?i d?nhH? tr? 1000 SV thi d?ng th?i trong ng?n h?n (15 phút)Should
+
+
+
+
+NFR-11Throughput API= 200 request/giây trên 1 instance backendMustNFR-12Th?i gian export Excel 1000 dòng< 5 giâyShouldNFR-13Th?i gian import 500 user< 30 giây (background)MustNFR-14Th?i gian sinh PDF d? thi 50 câu< 3 giâyMustNFR-15Th?i gian t?o report th?ng kê 1000 SV< 10 giâyShould14.2 B?o m?t (Security)
+   Nhóm yêu c?u b?o m?t d?m b?o d? li?u ngu?i dùng và d? li?u thi không b? xâm ph?m. Tuân th? các tiêu chu?n OWASP Top 10 và quy d?nh pháp lu?t Vi?t Nam v? b?o v? d? li?u cá nhân.
+B?ng 14.2 - NFR B?o m?t
+
+MãMô t?Metric do lu?ng / Tuân th?Uu tiênNFR-16Mã hóa m?t kh?ubcrypt cost factor = 12MustNFR-17JWT access tokenTTL 15 phút, ký b?ng RS256 (asymmetric)MustNFR-18Refresh tokenTTL 7 ngày (30 ngày n?u remember), luu RedisMustNFR-19HTTPS b?t bu?cTLS 1.2+; HSTS header; redirect HTTP ? HTTPSMustNFR-20Ch?ng SQL injectionS? d?ng prepared statements / ORM toàn b?; OWASP A03MustNFR-21Ch?ng XSSOutput escaping, CSP header, sanitize HTML stemMustNFR-22Ch?ng CSRFSamesite cookie + CSRF token cho formMustNFR-23RBAC enforcementM?i API endpoint check permission; deny by defaultMustNFR-24Rate limit login5 l?n sai / 15 phút ? khóa 30 phút; max 30 request / phút / IPMust
+
+
+Mã
+
+NFR-25Mô t?
+
+Rate limit API chungMetric do lu?ng / Tuân th?
+1000 request / phút / user; 100 request / phút / IP (unauthenticated)Uu tiên
+
+MustNFR-26Audit logGhi log m?i s? ki?n quan tr?ng; immutable 12 thángMustNFR-27Mã hóa d? li?u at-restPII (email, SÐT) mã hóa AES-256 trong DB; disk encryptionMustNFR-28OWASP Top 10Pass scan OWASP ZAP v?i 0 l?i High/Critical tru?c releaseMustNFR-29Secret managementSecret trong vault (HashiCorp Vault ho?c AWS Secrets Manager); không hardcodeMustNFR-30Backup encryptionBackup DB mã hóa AES-256MustNFR-31Session invalidationLogout/lock/reset password thu h?i token ngay l?p t?cMustNFR-32Password policy8-64 ký t?, có hoa/thu?ng/s?/d?c bi?t; không trùng 3 g?n nh?tMust14.3 Tuong thích (Compatibility)
+   H? th?ng ph?i ho?t d?ng nh?t quán trên các trình duy?t và thi?t b? ph? bi?n. Phiên b?n 1.0 t?p trung vào tr?i nghi?m desktop; mobile h? tr? gi?i h?n (ch? xem k?t qu?, không thi).
+B?ng 14.3 - NFR Tuong thích
+
+MãMô t?Metric do lu?ngUu tiênNFR-33Trình duy?t desktopChrome, Edge, Firefox, Safari - 2 phiên b?n g?n nh?tMust
+
+
+Mã
+NFR-34Mô t?
+Mobile responsiveMetric do lu?ng
+Layout responsive t? 1280px; b?ng hi?n th? t?t; không h? tr? thi trên mobileUu tiên
+MustNFR-35Mobile xem k?t qu?Sinh viên có th? xem danh sách k?t qu? + chi ti?t trên mobile (= 375px width)ShouldNFR-36Ð? phân gi?i màn hìnhT?i uu cho 1366x768, 1920x1080; h? tr? 2560x1440MustNFR-37H? di?u hành clientWindows 10+, macOS
+11+, Ubuntu 22.04+ (ch? qua trình duy?t)MustNFR-38K?t n?i m?ng t?i thi?u5 Mbps cho tr?i nghi?m thi; t? d?ng retry khi m?t m?ng < 3 phútMustNFR-39Webcam (tùy ch?n)H? tr? webcam cho roadmap 2.0; không yêu c?u ? 1.0CouldNFR-40Printer-friendlyTrang k?t qu?, ch?ng ch? có CSS @media print t?i uuMust14.4 Kh? nang m? r?ng (Scalability)
+   H? th?ng thi?t k? d? có th? scale ngang khi t?i tang. C?u trúc stateless, có th? thêm instance backend mà không c?n thay d?i code.
+B?ng 14.4 - NFR Kh? nang m? r?ng
+
+MãMô t?Metric do lu?ngUu tiênNFR-41Stateless backendM?i state luu Redis/DB; instance interchange-ableMustNFR-42Horizontal scalingScale t? 2 ? 10 instance backend trong 5 phút; auto-scaling tùy ch?nMustNFR-43Database read replica1 primary + 2 read replicas; queries report di replicaShould
+
+
+Mã
+NFR-44Mô t?
+Cache layerMetric do lu?ng
+Redis cache cho permission, danh sách câu h?i, k?t qu? thi; TTL 5 phútUu tiên
+MustNFR-45CDN cho file tinhHình ?nh câu h?i, file PDF d? thi ph?c v? qua CDN (CloudFront ho?c tuong duong)ShouldNFR-46Queue cho tác v? n?ngImport user/question, sinh PDF hàng lo?t, g?i email batch qua queue (BullMQ + Redis)MustNFR-47Connection poolingDB pool 20 connection/instance; Redis pool 10/instanceMustNFR-48Database sharding (roadmap)Shard theo organization_id cho multi-tenant; không yêu c?u 1.0Could14.5 Kh? d?ng & V?n hành (Availability & Operations)
+   Nhóm yêu c?u kh? d?ng áp d?ng cho môi tru?ng production. M?c d?nh phiên b?n 1.0 không yêu c?u HA cao, nhung có các bi?n pháp d?m b?o uptime ch?p nh?n du?c.
+B?ng 14.5 - NFR Kh? d?ng
+
+MãMô t?Metric do lu?ngUu tiênNFR-49Uptime SLA= 99.5% trong tháng (cho phép 3.6 gi? downtime)MustNFR-50Planned maintenanceThông báo tru?c 48 gi?; th?c hi?n ngoài gi? thi chính (22:00-06:00)MustNFR-51RTORecovery Time Objective = 4 gi?MustNFR-52RPORecovery Point Objective = 1 gi? (backup ???)MustNFR-53Backup DBFull backup h?ng ngày 02:00; incremental m?i gi?; retention 30 ngàyMust
+
+
+Mã
+NFR-54Mô t?
+Backup file (S3)Metric do lu?ng
+Versioning b?t; lifecycle 90 ngày sang GlacierUu tiên
+MustNFR-55Health checkEndpoint /health cho load balancer check m?i 10sMustNFR-56MonitoringAPM (Datadog/New Relic) + log aggregation (ELK/Loki); alert qua Slack/PagerDutyMustNFR-57Graceful degradationKhi Redis s?p, h? th?ng v?n ho?t d?ng (skip cache, query DB tr?c ti?p) v?i c?nh báoMustNFR-58Blue-green deploymentH? tr? blue-green deploy d? zero-downtime releaseShould
+   Chuong 15. Yêu c?u Giao di?n & Tr?i nghi?m
+
+15.1 Nguyên t?c UX
+   Thi?t k? UX c?a Exam-Sys tuân theo các nguyên t?c c?t lõi sau dây, du?c rút ra t? heuristic c?a Nielsen và tiêu chu?n WCAG 2.1 AA. Các nguyên t?c này là kim ch? nam cho m?i quy?t d?nh thi?t k? UI.
+? Consistency (Tính nh?t quán): Cùng m?t hành d?ng ph?i có cùng bi?u tu?ng, cùng v? trí trên m?i trang. VD: nút "Xóa" luôn có icon thùng rác màu d?, luôn ? góc ph?i b?ng.
+? Feedback (Ph?n h?i): M?i tuong tác c?a user ph?i có ph?n h?i t?c thì (< 100ms visual feedback, < 2s data response). Loading spinner cho tác v? > 1s. Toast notification cho k?t qu? tác v?.
+? Error prevention (Phòng ng?a l?i): Disable nút submit khi form invalid. Confirm dialog cho hành d?ng nguy hi?m (xóa, n?p bài). Inline validation khi r?i tru?ng, không d?i submit.
+? Accessibility (Ti?p c?n): Tuân th? WCAG 2.1 AA. Contrast ratio = 4.5:1 cho text. T?t c? interactive element keyboard-navigable. ARIA label cho screen reader. Alt text cho m?i hình ?nh.
+? Visibility of system status: User luôn bi?t h? th?ng dang làm gì. Timer thi hi?n th? rõ, progress bar cho tác v? dài, status badge cho m?i entity.
+? Recognition rather than recall: Menu và action hi?n th? rõ, không b?t user nh? phím t?t (tr? khi tùy ch?n). Icon có tooltip.
+
+15.2 Hu?ng d?n UI
+H? th?ng s? d?ng design system nh?t quán, l?y c?m h?ng t? Material Design 3 và shadcn/ui.
+B?ng du?i t?ng h?p các thông s? UI chu?n.
+B?ng 15.1 - Color Palette
+
+TokenHexS? d?ngPrimary (Navy)#0B1C2CHeading, sidebar, topbar backgroundAccent (Blue)#1E5F8CButton primary, link, focus ringBackground#FFFFFFPage backgroundSurface#EEF3F8Table alternating row, card backgroundBody text#1A2533Body text, table contentSecondary text#5B6B7DCaption, label, helper textSuccess#15803DSuccess message, save indicatorWarning#F59E0BWarning, attempt warningError#DC2626Error message, delete buttonInfo#0891B2Info message, info badgeB?ng 15.2 - Typography
+
+ElementFontSizeWeightLine heightH1Inter / Be Vietnam Pro32px (2rem)7001.2H2Inter / Be Vietnam Pro26px7001.3H3Inter / Be Vietnam Pro22px6001.4BodyInter / Be Vietnam Pro16px (1rem)4001.5Body smallInter / Be Vietnam Pro14px4001.5CaptionInter / Be Vietnam Pro12px4001.4ButtonInter / Be Vietnam Pro14px6001.2Math (KaTeX)KaTeX Main1.1rem400-CodeJetBrains Mono14px4001.5
+
+   Luu ý: Be Vietnam Pro du?c dùng làm font primary cho ti?ng Vi?t (h? tr? d?u d?y d?). Inter là fallback cho ti?ng Anh. C? hai du?c load t? Google Fonts ho?c self-hosted.
+B?ng 15.3 - Spacing & Layout
+
+ElementValueBase spacing unit8px (grid 8)Page max width1440px (centered, with sidebar 240px)Page padding24px desktop, 16px tablet, 12px mobileCard padding24pxForm field vertical spacing16pxButton padding12px 24px (medium), 8px 16px (small)Table row height48px (default), 56px (comfortable)Border radius8px (card), 4px (input/button), 50% (avatar)Shadow0 1px 3px rgba(0,0,0,0.1) (sm), 0 4px 6px rgba(0,0,0,0.1) (md)Z-index scale10 (dropdown), 100 (modal), 1000 (toast)
+15.3 Ða ngôn ng? (i18n)
+   H? th?ng h? tr? 2 ngôn ng?: Ti?ng Vi?t (m?c d?nh) và English. Toàn b? UI text du?c luu trong file i18n (vi.json, en.json). User có th? d?i ngôn ng? trong Profile; preference luu trong DB. Các format theo locale:
+? Date: Ti?ng Vi?t dùng DD/MM/YYYY; English dùng MM/DD/YYYY.
+? Time: 24h cho c? 2 ngôn ng?.
+? Number: d?u ph?y th?p phân cho VN, d?u ch?m cho EN.
+? Currency (n?u có): VND cho VN, USD cho EN (roadmap 1.1).
+N?i dung câu h?i, dáp án, comment không d?ch - gi? nguyên ngôn ng? g?c c?a Teacher so?n.
+
+15.4 Responsive breakpoints
+H? th?ng áp d?ng mobile-first design v?i các breakpoint sau:
+B?ng 15.4 - Responsive Breakpoints
+
+BreakpointWidthLayout chínhMobile< 768pxSingle column, sidebar collapse thành drawer, b?ng scroll ngangTablet768px - 1023pxSidebar collapse 64px (icon only), 2-column grid
+
+
+
+
+Desktop1024px - 1439pxSidebar full 240px, multi-column gridLarge desktop= 1440pxLayout t?i uu, max-width 1440px centered   Luu ý quan tr?ng: màn làm bài thi KHÔNG h? tr? mobile. N?u Student m? màn thi trên mobile, h? th?ng hi?n th? c?nh báo "Vui lòng s? d?ng máy tính d? tham gia thi" và không cho vào thi. Lý do: mobile d? m?t m?ng, d? chuy?n app, khó ch?ng gian l?n.
+
+   Chuong 16. Ràng bu?c Công ngh? & Tích h?p
+
+16.1 Tech stack khuy?n ngh?
+   H? th?ng Exam-Sys phiên b?n 1.0 d? xu?t tech stack du?i dây. Stack du?c ch?n d?a trên 3 tiêu chí: (1) H? sinh thái tru?ng thành, nhi?u thu vi?n; (2) D? tuy?n dev; (3) Hi?u nang dáp ?ng NFR.
+B?ng 16.1 - Tech Stack khuy?n ngh?
+
+LayerCông ngh?Phiên b?nLý doFrontendReact 18 + TypeScript + Next.js 1418.x / 5.xSSR cho SEO dashboard, file-system routing, RSC cho performanceUI Libraryshadcn/ui + Tailwind CSS 4LatestComponent copy-paste không lock-in, customize d?, design system s?nState managementZustand + TanStack Query5.x / 5.xÐon gi?n, không boilerplate nhu Redux; Query lo cache/fetchFormReact Hook Form + Zod7.x / 3.xPerformance t?t, validation schema type-safeBackendNode.js + NestJS20 LTS / 10.xTypeScript-first, DI m?nh, modular, enterprise-readyORMPrisma5.xType-safe, migration d?, PostgreSQL support t?t
+
+
+
+
+DatabasePostgreSQL16ACID, JSONB, GIN index,
+partition - phù h?p nghi?p v? ph?c t?pCacheRedis7.xPermission cache, refresh token, queue backend, rate limitQueueBullMQ5.xBuilt trên Redis, retry/schedule/delay d?Object storageMinIO (on-prem) ho?c S3 (cloud)LatestS3-compatible, luu file d? thi, hình ?nh câu h?iEmailNodemailer + SMTP relayLatestHo?c dùng service nhu SendGrid, AWS SESSearch (optional)Meilisearch ho?c PostgreSQL FTS1.xFTS cho 1M user - n?u l?n hon, dùng MeilisearchReverse proxyNginx1.25TLS termination, static file serving, rate limitContainerDocker + Docker Compose24+Dev/prod nh?t quán; prod dùng Kubernetes (tùy ch?n)CI/CDGitHub Actions ho?c GitLab CI-Auto test, build, deployMonitoringPrometheus + Grafana
++ LokiLatestMetrics, dashboard, log aggregationAPMOpenTelemetry + JaegerLatestDistributed tracing cho debug performance16.2 Tích h?p h? th?ng ngoài
+   H? th?ng Exam-Sys có th? tích h?p v?i các h? th?ng ngoài d? m? r?ng kh? nang. Các tích h?p du?c phân lo?i: Must (b?t bu?c cho 1.0), Should (1.1), Could (2.0).
+16.2.1 SMTP Email (Must)
+   M?c dích: g?i email kích ho?t tài kho?n, reset m?t kh?u, thông báo k?t qu?, thông báo thay d?i c?u hình bài thi.
+? Protocol: SMTP ho?c API (SendGrid, AWS SES, Postmark).
+? Volume: t?i da 500 email/gi?, 5000 email/ngày.
+
+? Template: HTML responsive, có branding, có link unsubscribe cho email marketing (n?u có).
+? Retry: 3 l?n v?i backoff 1/5/15 phút.
+? Tracking: log m?i email vào email_logs table v?i status (sent/bounced/failed).
+
+16.2.2 SMS Gateway (Could)
+   M?c dích: g?i OTP qua SMS (cho dang nh?p 2FA tùy ch?n), g?i m?t kh?u t?m th?i, thông báo kh?n.
+? Provider: SpeedSMS, Viettel SMS, Twilio (qu?c t?).
+? Volume: t?i da 100 SMS/phút.
+? Cost: tính theo tin nh?n; ch? b?t n?u t? ch?c d?ng ý chi phí.
+
+16.2.3 SSO / OAuth2 (Should)
+   M?c dích: cho phép dang nh?p b?ng Google/Microsoft account, tích h?p v?i Azure AD c?a t? ch?c.
+? Protocol: OAuth 2.0 / OpenID Connect.
+? Provider: Google, Microsoft, Azure AD, Auth0.
+? Map: email t? IdP ? user trong Exam-Sys. N?u chua có ? t? ch?i (không t? t?o user).
+
+16.2.4 LDAP / Active Directory (Could)
+M?c dích: d?ng b? user t? LDAP/AD n?i b? c?a t? ch?c. Ðang nh?p b?ng credential LDAP.
+? Protocol: LDAP v3.
+? Sync: hàng dêm, full sync + incremental theo modifyTimestamp.
+? Map: LDAP attribute (mail, uid, displayName) ? field tuong ?ng trong users.
+
+16.2.5 LTI 1.3 integration (Could, roadmap 1.1)
+M?c dích: tích h?p Exam-Sys nhu m?t tool trong LMS ngoài (Moodle, Canvas, Blackboard).
+? Protocol: LTI 1.3 Advantage (LTI Launch, AGS, NRPS).
+? Use case: GV t? Moodle t?o assignment ? redirect vào bài thi Exam-Sys ? di?m tr? v? Moodle gradebook.
+? Auth: OAuth 2.0 client credentials + LTI launch with JWT.
+
+16.2.6 Safe Exam Browser (Could, roadmap 2.0)
+M?c dích: lockdown browser cho k? thi quan tr?ng, ch?n m?i ?ng d?ng khác khi dang thi.
+? Integration: SEB config file (.seb) generated per test, download link trong màn vào thi.
+? Validation: SEB g?i header riêng, backend verify; t? ch?i request không t? SEB n?u b?t.
+
+16.2.7 Ch? ký s? (Could, roadmap 1.1)
+M?c dích: ký s? ch?ng ch? d? có giá tr? pháp lý theo quy d?nh Vi?t Nam.
+? Provider: VNPT-CA, Viettel-CA, FPT-CA.
+? Integration: API ký PDF dã có, tr? v? file PDF ký.
+
+16.3 Browser lockdown strategy
+   H? th?ng Exam-Sys 1.0 áp d?ng chi?n lu?c ch?ng gian l?n m?c trung bình, không yêu c?u Safe Exam Browser nhung có các bi?n pháp k? thu?t trong trình duy?t thông thu?ng:
+? Fullscreen API: yêu c?u browser vào fullscreen khi vào thi. N?u user thoát fullscreen, hi?n th? c?nh báo + tang b? d?m tab switch.
+? Visibility API: l?ng nghe s? ki?n visibilitychange. Khi tab ?n di (user chuy?n tab ho?c minimize), log + tang counter. Quá maxTabSwitches (m?c d?nh 3) ? auto-submit.
+? Block copy/paste: event listener copy/paste/contextmenu, preventDefault. Hi?n th? toast "Tính nang b? t?t khi dang thi".
+? Block right-click: preventDefault contextmenu (tùy ch?n).
+? Block keyboard shortcut: F12, Ctrl+Shift+I (DevTools), Ctrl+C/V (paste).
+? Detect DevTools open: heuristic (window size vs viewport size) ? c?nh báo + log.
+? Refresh counter: n?u user refresh quá 3 l?n trong 1 lu?t thi ? c?nh báo + log. Quá 5 l?n
+* flag d? GV review.
+? IP logging: ghi IP lúc vào thi; n?u IP thay d?i gi?a ch?ng ? log d? GV review.
+? Single tab enforcement: khi vào thi, g?i signal lên server. N?u phát hi?n 2 tab cùng attempt (qua WebSocket), tab th? 2 b? t? ch?i.
+
+16.4 Backup & Recovery
+Chi?n lu?c backup d?m b?o RTO = 4 gi? và RPO = 1 gi? theo NFR-51/52.
+B?ng 16.2 - Backup Schedule
+
+Lo?iT?n su?tLuu tr?RetentionDB full backupH?ng ngày 02:00 UTC+7S3 + local30 ngàyDB incrementalM?i gi?S37 ngàyDB WAL archiveRealtimeS37 ngày (cho point-in-time recovery)File storage (S3/MinIO)Versioning b?tS3 native90 ngày, sau dó GlacierRedis snapshotM?i 6 gi?S37 ngàyConfig backupM?i deployGit + S3Vinh vi?n (trong Git)
+
+   Restore procedure: (1) Restore DB full backup g?n nh?t; (2) Apply WAL archive d?n th?i di?m yêu c?u; (3) Restore file storage t? S3; (4) Restart services. DR drill h?ng quý d? xác nh?n procedure ho?t d?ng.
+
+   Chuong 17. Yêu c?u D? li?u & Luu tr?
+
+17.1 Mô hình d? li?u logic
+   Mô hình d? li?u v?t lý du?c hi?n th?c b?ng PostgreSQL v?i schema chia theo nhóm nghi?p v?: identity (users, roles, permissions), organization (classes, subjects, chapters), question_bank (questions, options, tags), exam (exams, tests, enrollments), attempt (attempts, answers), audit (audit_logs). Vi?c chia schema giúp phân quy?n truy c?p DB d? hon và migration theo nhóm d?c l?p. Chi ti?t entity dã du?c trình bày trong Chuong 11.
+
+17.2 Quy t?c luu tr? file
+   H? th?ng luu tr? các lo?i file: (1) Hình ?nh trong câu h?i (PNG, JPG, GIF, SVG); (2) Âm thanh/Video (MP3, MP4) cho câu h?i nghe nhìn; (3) File PDF d? thi xu?t ra; (4) File import (Excel/Word); (5) Avatar user. T?t c? luu trong S3-compatible object storage (MinIO on-prem ho?c S3 cloud).
+B?ng 17.1 - Quy t?c luu tr? file
+
+Lo?i fileMIME h?p l?Dung lu?ng maxPath prefixRetentionHình ?nh câu h?iimage/png, image/jpeg, image/gif, image/svg+xml2 MBquestions/
+{questionId}/img/Vinh vi?n (theo câu h?i)Âm thanh câu h?iaudio/mpeg, audio/wav5 MBquestions/
+{questionId}/ audio/Vinh vi?nVideo câu h?ivideo/mp420 MBquestions/
+{questionId}/ video/Vinh vi?nPDF d? thi (GV)application/pdf50 MBtests/{testId}/ pdf/teacher/90 ngàyPDF d? thi (SV)application/pdf50 MBtests/{testId}/ pdf/student/90 ngàyFile import userxlsx, xls, csv5 MBimports/users/
+{timestamp}/30 ngày
+
+
+
+
+File import questiondocx, xlsx10 MBimports/ questions/
+{timestamp}/30 ngàyFile exportxlsx, pdf, csv50 MBexports/{userId}/
+{timestamp}/1 gi? (TTL)Avatar userimage/png, image/jpeg1 MBusers/{userId}/ avatar/Vinh vi?n   T?t c? file d?u du?c quét virus (ClamAV) tru?c khi accept. File ????? b? t? ch?i và log. CDN cache file tinh 1 gi?; file import/export không cache.
+
+17.3 B?o m?t d? li?u
+   H? th?ng x? lý d? li?u cá nhân (PII) c?a công dân Vi?t Nam - ph?i tuân th? Ngh? d?nh 13/2023/NÐ-CP v? b?o v? d? li?u cá nhân. Các bi?n pháp b?o m?t d? li?u:
+? Mã hóa at-rest: PII (email, SÐT, mã s?) mã hóa AES-256-GCM trong DB b?ng key qu?n lý b?i KMS. Key rotation 90 ngày.
+? Mã hóa in-transit: toàn b? traffic HTTPS TLS 1.2+. Internal traffic gi?a services cung TLS.
+? Disk encryption: EBS volume encryption (cloud) ho?c LUKS (on-prem).
+? Data masking: trong log, email/SÐT hi?n th? masked (vd: j***@example.com). Trong export cho non-admin, mask PII.
+? Access control: DB role per service; application-level RBAC; data-level permission (Teacher ch? th?y data c?a mình).
+? Consent: khi import user, Admin ph?i xác nh?n dã có consent c?a user (checkbox). Log consent trong audit.
+? Right to erasure: user có th? yêu c?u xóa data (right to be forgotten). Soft delete 30 ngày, sau dó purge. Tr? data b?t bu?c gi? theo lu?t (vd: di?m thi theo quy ch? tru?ng).
+
+17.4 Retention policy
+   Chính sách luu tr? d? li?u theo lo?i và yêu c?u pháp lu?t/nghi?p v?. Sau th?i gian retention, d? li?u du?c purge ho?c archive.
+B?ng 17.2 - Retention Policy
+
+Lo?i d? li?uRetain trong DBArchivePurgeUser activeVinh vi?n-Khi soft delete 30 ngàyAudit log12 tháng24 tháng (S3 Glacier)Sau 36 thángCâu h?iVinh vi?n-Khi archive (manual)
+
+
+Lo?i d? li?u
+Bài thi + attemptRetain trong DB
+5 namArchive
+5 nam ti?p (S3)Purge
+Sau 10 namK?t qu? thi5 nam5 nam ti?pSau 10 namFile tinh (?nh, audio)Vinh vi?n-Khi câu h?i b? purgePDF d? thi export-90 ngàySau 90 ngàyLog import/export3 tháng-Sau 3 thángEmail log6 tháng-Sau 6 thángSession data (Redis)TTL 7 ngày-Sau TTL17.5 Migration & versioning schema
+   H? th?ng s? d?ng Prisma Migrate cho database schema migration. M?i thay d?i schema ph?i qua migration file (không s?a DB tr?c ti?p).
+? Migration files: version controlled trong Git, tên d?ng {timestamp}_{description}.sql.
+? Apply: t? d?ng trong CI/CD pipeline tru?c khi deploy service m?i. Migration ph?i backward-compatible (add column nullable, không drop column ngay).
+? Rollback: m?i migration có file rollback. N?u deploy fail, auto rollback migration.
+? Data migration: riêng bi?t so v?i schema migration; ch?y job riêng, có progress tracking.
+? Multi-tenant: n?u tri?n khai multi-tenant (roadmap 2.0), dùng schema-per-tenant ho?c row-level security (RLS) PostgreSQL.
+? Seed data: script seed cho dev/staging (3 role h? th?ng, 1 admin, 5 teacher, 20 student, 5 môn, 10 l?p, 100 câu h?i m?u).
+
+   Chuong 18. Ph? l?c
+
+18.1 Ph? l?c A - B?ng t?ng h?p Use Case
+   B?ng t?ng h?p toàn b? 48 use case v?i mã, tên, module, m?c uu tiên và d? ph?c t?p u?c lu?ng (d? team dev u?c lu?ng effort). Ð? ph?c t?p: S (Small, 1-3 dev-day), M (Medium, 3-7), L (Large, 7-15), XL (>15).
+B?ng A.1 - T?ng h?p 48 Use Case
+
+MãTên UCModuleUu tiênPh?c t?pUC01Ðang nh?pAuthMustMUC02Ðang xu?tAuthMustSUC03Quên m?t kh?uAuthMustM
+
+
+Mã
+UC04Tên UC
+Ð?i m?t kh?uModule
+AuthUu tiên
+MustPh?c t?p
+SUC05Qu?n lý Role (RBAC)AuthMustMUC06Phân quy?n User-RoleAuthMustSUC07Xem Audit LogAuthMustMUC08T?o userUserMustMUC09S?a userUserMustSUC10Khóa/M? khóa userUserMustSUC11Xóa user (soft delete)UserMustSUC12Import user t? Excel/CSVUserMustLUC13Export danh sách userUserMustMUC14Tìm ki?m & l?c userUserMustMUC15Qu?n lý l?p h?cUserMustMUC16T?o câu h?iQuestionMustLUC17S?a câu h?iQuestionMustMUC18Xóa câu h?iQuestionMustSUC19Import câu h?i Word/ExcelQuestionMustXLUC20Export câu h?iQuestionMustMUC21Phân lo?i câu h?iQuestionMustMUC22Tag câu h?iQuestionMustSUC23Duy?t câu h?iQuestionMustMUC24Tìm ki?m & l?c câu h?iQuestionMustMUC25T?o k? thiExamMustMUC26S?a/xóa k? thiExamMustSUC27T?o bài thiExamMustMUC28C?u hình bài thiExamMustLUC29Gán câu h?i vào bài thiExamMustL
+
+
+Mã
+UC30Tên UC
+Gán thí sinh/l?pModule
+ExamUu tiên
+MustPh?c t?p
+MUC31M?/dóng bài thi (l?ch)ExamMustMUC32Xu?t d? thi PDFExamMustLUC33Xem bài thi du?c gánParticipationMustSUC34Vào thi (d?ng ý quy d?nh)ParticipationMustLUC35Tr? l?i câu h?iParticipationMustLUC36Luu t?m câu tr? l?iParticipationMustSUC37Chuy?n câu/navigateParticipationMustMUC38Ðánh d?u câu xem l?iParticipationMustSUC39N?p bài (submit)ParticipationMustLUC40Auto-submit h?t gi?ParticipationMustMUC41Xem l?i bài thiParticipationMustMUC42Xem k?t qu? cá nhânReportMustSUC43Xem k?t qu? bài thiReportMustMUC44Báo cáo th?ng kêReportMustLUC45Export k?t qu?ReportMustMUC46Dashboard t?ng quanReportShouldLUC47Item analysisReportShouldLUC48In ch?ng ch?/b?ng di?mReportShouldL18.2 Ph? l?c B - B?ng mã l?i h? th?ng
+   H? th?ng s? d?ng mã l?i th?ng nh?t ERR-XXX cho m?i API response. Mã l?i du?c phân nhóm: 1xx Auth, 2xx User, 3xx Question, 4xx Exam, 5xx Participation, 6xx Report, 9xx System. Message ti?ng Vi?t d? SV/GV d? hi?u; message trong API response có c? code và message d? frontend hi?n th? phù h?p.
+
+
+B?ng B.1 - Mã l?i h? th?ng
+
+MãHTTPMessage ti?ng Vi?tERR-001401Phiên dang nh?p h?t h?n. Vui lòng dang nh?p l?i.ERR-002401Email ho?c m?t kh?u không dúng.ERR-003403Tài kho?n dã b? khóa. Vui lòng liên h? qu?n tr? viên.ERR-004403Tài kho?n chua du?c kích ho?t.ERR-005429Ðang nh?p sai quá nhi?u l?n. Tài kho?n t?m khóa 30 phút.ERR-006400Token reset m?t kh?u không h?p l? ho?c dã h?t h?n.ERR-007403B?n không có quy?n th?c hi?n hành d?ng này.ERR-008400D? li?u không h?p l?. Vui lòng ki?m tra l?i.ERR-101404Ngu?i dùng không t?n t?i.ERR-102409Email dã du?c s? d?ng.ERR-103409Tên dang nh?p dã du?c s? d?ng.ERR-104400File import không dúng d?nh d?ng.ERR-105400File import vu?t quá kích thu?c cho phép.ERR-201404Câu h?i không t?n t?i.ERR-202400Câu h?i không h?p l?. Vui lòng ki?m tra dáp án dúng.ERR-203403B?n không có quy?n s?a câu h?i này.ERR-204409Câu h?i dang du?c dùng trong bài thi, không th? s?a.ERR-205400File import câu h?i không dúng template.ERR-301404K? thi không t?n t?i.ERR-302404Bài thi không t?n t?i.ERR-303400Bài thi chua d? di?u ki?n m? (thi?u câu h?i ho?c thí sinh).ERR-304409Ðã quá th?i gian dóng bài thi.
+
+
+
+
+ERR-401404B?n không du?c gán bài thi này.ERR-402400B?n dã dùng h?t s? lu?t thi cho phép.ERR-403409B?n dang có lu?t thi d?. Vui lòng ti?p t?c ho?c h?y tru?c.ERR-404400Bài thi dã dóng, không th? vào thi.ERR-405400C?n ch? X phút n?a d? thi l?i.ERR-406400Thi?t b? không dáp ?ng yêu c?u thi (c?n fullscreen).ERR-501404Không tim th?y k?t qu?.ERR-502403B?n không có quy?n xem d? li?u này.ERR-901500L?i h? th?ng. Vui lòng th? l?i sau ho?c liên h? h? tr?.ERR-902503H? th?ng dang b?o trì. Vui lòng quay l?i sau.ERR-903504Timeout. Vui lòng th? l?i.ERR-904507H? th?ng t?m quá t?i. Vui lòng th? l?i sau ít phút.18.3 Ph? l?c C - Template file import
+   Mô t? c?u trúc template file Excel/CSV dùng cho import user và import câu h?i. Template d?y d? có th? t?i t? trang Import tuong ?ng trong h? th?ng.
+18.3.1 Template import user
+B?ng C.1 - Template import user (Excel/CSV)
+
+C?tTên headerB?t bu?cÐ?nh d?ngMô t?AfullNameCóString 2-100 ký t?H? tên d?y d?BemailCóEmail RFC 5322Email dang nh?pCusernameCó3-50 ký t? a-z0-9._-Tên dang nh?pDroleCóadmin | teacher | studentVai tròEstudentCodeCó n?u role=student3-20 ký t?Mã sinh viên
+
+
+C?t
+FTên header
+employeeCodeB?t bu?c
+Có n?u role=teacher/adm inÐ?nh d?ng
+3-20 ký t?Mô t?
+Mã nhân viênGclassCodeKhôngMã l?p dã có trong h? th?ngL?p (n?u student)HphoneKhôngSÐT VNS? di?n tho?iIbirthDateKhôngDD/MM/YYYYNgày sinhJgenderKhôngmale | female | otherGi?i tínhKsendActivationKhôngyes | no (m?c d?nh yes)G?i email kích ho?t18.3.2 Template import câu h?i (Excel)
+B?ng C.2 - Template import câu h?i
+
+C?tTên headerB?t bu?cÐ?nh d?ngMô t?AtypeCómcq_single | mcq_multiple | true_false | essayLo?i câu h?iBstemCóString 10-5000 ký t?N?i dung câu h?iCoptionACó (MCQ/TF)String 1-1000 ký t?Phuong án ADoptionBCó (MCQ/TF)String 1-1000 ký t?Phuong án BEoptionCKhôngString 1-1000 ký t?Phuong án CFoptionDKhôngString 1-1000 ký t?Phuong án DGoptionEKhôngString 1-1000 ký t?Phuong án EHoptionFKhôngString 1-1000 ký t?Phuong án FIcorrectOptionsCó (MCQ/TF)A ho?c A,B,C (nhi?u)Ðáp án dúngJexplanationKhôngString 0-3000 ký t?Gi?i thíchKsubjectCodeCóMã môn dã có trong h? th?ngMôn h?c
+
+
+C?t
+LTên header
+chapterCodeB?t bu?c
+CóÐ?nh d?ng
+Mã chuong dã cóMô t?
+ChuongMbloomLevelCó1-6M?c d? khó BloomNscoreCó0.01 - 100.00Ði?m câuOtagsKhôngtag1,tag2,tag3Tag (ph?y ngan cách)18.4 Ph? l?c D - Changelog d? ki?n
+   Ph? l?c này li?t kê các thay d?i l?n d? ki?n cho các phiên b?n ti?p theo. Ðây là k? ho?ch cao c?p, có th? di?u ch?nh theo ph?n h?i c?a khách hàng và th?c t? tri?n khai.
+B?ng D.1 - Changelog d? ki?n
+
+Phiên b?nTính nangMô t?Quý d? ki?n1.0MVP6 module c?t lõi + 48 UCQ3/20261.1LTI 1.3 integrationTích h?p LMS ngoài (Moodle, Canvas)Q4/20261.1Public APIREST API cho tích h?p bên th? 3Q4/20261.1Dashboard nâng caoReal-time WebSocket, custom widgetQ4/20261.1Item analysis nâng caoThêm B-index, A-value, distractor efficiencyQ4/20261.1Ch? ký s? ch?ng ch?Tích h?p VNPT-CA, Viettel-CAQ4/20261.1SSO Google/MicrosoftOAuth2 loginQ4/20262.0Webcam monitoringCh?p ?nh d?nh k? + nh?n di?n khuôn m?t (tùy ch?n)Q2/20272.0AI generate questionSinh câu h?i t? tài li?u b?ng LLMQ2/20272.0Safe Exam BrowserLockdown browser cho k? thi quan tr?ngQ2/20272.0Mobile app nativeiOS + Android, h? tr? thi offline-firstQ3/20272.0Multi-tenantH? tr? nhi?u t? ch?c trên 1 instanceQ3/2027
+
+

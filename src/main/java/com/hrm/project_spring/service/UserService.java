@@ -131,8 +131,6 @@ public class UserService {
                     .build();
         }
 
-
-
         private UserResponseDto mapTo(User user) {
             String roleName = null;
             if (user.getRoles() != null && !user.getRoles().isEmpty()) {
@@ -143,6 +141,7 @@ public class UserService {
                     .username(user.getUsername())
                     .fullName(user.getFullName())
                     .email(user.getEmail())
+                    .status(user.getStatus())
                     .roleName(roleName)
                     .build();
         }

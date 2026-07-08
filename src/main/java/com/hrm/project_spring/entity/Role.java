@@ -1,5 +1,7 @@
 package com.hrm.project_spring.entity;
 
+import com.hrm.project_spring.enums.RoleStatus;
+import com.hrm.project_spring.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,4 +40,8 @@ public class Role {
 
     @Column(name = "is_system", nullable = false)
     private boolean isSystem = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private RoleStatus status = RoleStatus.ACTIVE;
 }
