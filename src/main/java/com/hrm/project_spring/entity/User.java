@@ -36,6 +36,8 @@ public class User {
     @Column(nullable = false, length = 20)
     private UserStatus status = UserStatus.ACTIVE;
 
+
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -75,5 +77,6 @@ public class User {
         User user = (User) o;
         return id != null && id.equals(user.id);
     }
+
 
 }

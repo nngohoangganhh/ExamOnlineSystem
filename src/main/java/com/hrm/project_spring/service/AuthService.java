@@ -30,18 +30,6 @@ public class AuthService {
     private final JwtService jwtService;
 
     // ======================== ĐĂNG NHẬP (UC01) ========================
-
-    /**
-     * Luồng đăng nhập:
-     * 1. Tìm user theo email hoặc username
-     * 2. Kiểm tra trạng thái tài khoản (DELETED → PENDING → INACTIVE → LOCKED)
-     *    → Luôn check STATUS TRƯỚC khi check password (tránh timing attack)
-     * 3. Kiểm tra mật khẩu bcrypt → sai thì tăng failedLoginCount, lock nếu >= 5 lần
-     * 4. Flag mật khẩu hết hạn 90 ngày (BR-009) → không block, chỉ báo
-     * 5. Giới hạn 3 thiết bị đồng thời (BR-004) → revoke token cũ nhất nếu cần
-     * 6. Lưu RefreshToken vào DB
-     * 7. Cập nhật lastLoginAt, lastLoginIp, reset failedLoginCount
-     */
     @Transactional
     public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
 
@@ -179,11 +167,6 @@ public class AuthService {
     }
 
     // ======================== REFRESH TOKEN ========================
-
-    /**
-     * Cấp AccessToken mới từ RefreshToken hợp lệ.
-     * Không cấp RefreshToken mới (rotation không áp dụng ở đây).
-     */
     @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
 
@@ -266,13 +249,6 @@ public class AuthService {
 
     // ======================== ĐĂNG XUẤT (UC02) ========================
 
-    /**
-     * Đăng xuất:
-     * - Xóa toàn bộ RefreshToken của user khỏi DB (BR-003)
-     * - Clear SecurityContext
-     * Lưu ý: AccessToken vẫn còn hạn dùng cho đến khi hết TTL (~15 phút)
-     * → Đây là giới hạn của stateless JWT. Nếu cần revoke ngay, phải thêm blacklist.
-     */
     @Transactional
     public AuthResponse logout() {
 
@@ -306,11 +282,6 @@ public class AuthService {
 
     // ======================== QUÊN MẬT KHẨU (UC03) ========================
 
-    /**
-     * Gửi email reset mật khẩu:
-     * - Luôn trả HTTP 200 dù email có tồn tại hay không (tránh lộ thông tin – SRS UC03)
-     * - Token TTL = 30 phút (BR-006), dùng được đúng 1 lần
-     */
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request) {
 
@@ -332,15 +303,6 @@ public class AuthService {
     }
 
     // ======================== RESET MẬT KHẨU (UC03) ========================
-
-    /**
-     * Đặt lại mật khẩu bằng token từ email:
-     * 1. Validate token hợp lệ và chưa hết hạn
-     * 2. Validate confirmPassword khớp
-     * 3. Cập nhật mật khẩu mới + passwordChangedAt
-     * 4. Xóa token (dùng 1 lần – BR-006)
-     * 5. Thu hồi toàn bộ phiên đăng nhập (BR-007)
-     */
     @Transactional
     public void resetPassword(ResetPasswordRequest request) {
 
@@ -385,16 +347,6 @@ public class AuthService {
     }
 
     // ======================== ĐỔI MẬT KHẨU (UC04) ========================
-
-    /**
-     * Đổi mật khẩu khi đã đăng nhập:
-     * 1. Lấy user từ SecurityContext
-     * 2. Validate currentPassword đúng
-     * 3. Validate newPassword ≠ currentPassword (không đổi thành cái cũ)
-     * 4. Validate confirmPassword khớp newPassword
-     * 5. Cập nhật mật khẩu + passwordChangedAt (BR-009)
-     * 6. Thu hồi tất cả phiên KHÁC (thiết bị hiện tại vẫn giữ phiên)
-     */
     @Transactional
     public void changePassword(ChangePasswordRequest request, HttpServletRequest httpRequest) {
 
