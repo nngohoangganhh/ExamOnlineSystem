@@ -86,13 +86,13 @@ public class JwtService {
                 && !isTokenExpired(token);
     }
 
-//    public boolean isAccessTokenValid(String token, UserDetails userDetails) {
-//        return isAccessToken(token) && isTokenValid(token, userDetails);
-//    }
-//
-//    public boolean isRefreshTokenValid(String token, UserDetails userDetails) {
-//        return isRefreshToken(token) && isTokenValid(token, userDetails);
-//    }
+    public boolean isAccessTokenValid(String token, UserDetails userDetails) {
+        return isAccessToken(token) && isTokenValid(token, userDetails);
+    }
+
+    public boolean isRefreshTokenValid(String token, UserDetails userDetails) {
+        return isRefreshToken(token) && isTokenValid(token, userDetails);
+    }
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());

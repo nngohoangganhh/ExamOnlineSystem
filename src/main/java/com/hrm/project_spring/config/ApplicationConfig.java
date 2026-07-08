@@ -1,6 +1,8 @@
 package com.hrm.project_spring.config;
 
+import com.hrm.project_spring.entity.User;
 import com.hrm.project_spring.repository.UserRepository;
+import com.hrm.project_spring.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +23,10 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+      return username -> {
+          User user = userRepository.findByUsernameOrEmail(username,username).orElseThrow(()-> new UsernameNotFoundException(" không tìm thấy user"));
+          return new CustomUserDetails(user);
+      };
     }
     @Bean
     public AuthenticationProvider authenticationProvider() {

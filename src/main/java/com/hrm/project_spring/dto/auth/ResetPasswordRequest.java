@@ -6,11 +6,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class ChangePasswordRequest {
+public class ResetPasswordRequest {
 
-    // Tên field đổi từ oldPassword → currentPassword cho đúng ngữ nghĩa SRS UC04
-    @NotBlank(message = "Mật khẩu hiện tại không được để trống")
-    private String currentPassword;
+    @NotBlank(message = "Token không được để trống")
+    private String token;
 
     @NotBlank(message = "Mật khẩu mới không được để trống")
     @Size(min = 8, max = 64, message = "Mật khẩu mới phải từ 8 đến 64 ký tự")
