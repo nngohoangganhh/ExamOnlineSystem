@@ -96,6 +96,19 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Apache POI — đọc/ghi file Excel (.xlsx, .xls) -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.5</version>
+        </dependency>
+        <!-- OpenCSV — đọc/ghi file CSV -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.9</version>
+        </dependency>
+
     </dependencies>
 
     <build>
