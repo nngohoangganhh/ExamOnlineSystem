@@ -18,11 +18,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    /**
-     * POST /api/auth/login
-     * Đăng nhập bằng username hoặc email + password.
-     * Trả về accessToken + refreshToken.
-     */
+
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(
             @Valid @RequestBody LoginRequest request,
@@ -36,11 +32,7 @@ public class AuthController {
                 .build());
     }
 
-    /**
-     * POST /api/auth/refresh-token
-     * Cấp AccessToken mới từ RefreshToken hợp lệ.
-     * Không yêu cầu xác thực (vì AccessToken đã hết hạn).
-     */
+
     @PostMapping("/refresh-token")
     public ResponseEntity<ApiResponse<AuthResponse>> refreshToken(
             @Valid @RequestBody RefreshTokenRequest request
@@ -53,11 +45,7 @@ public class AuthController {
                 .build());
     }
 
-    /**
-     * POST /api/auth/logout
-     * Đăng xuất: thu hồi RefreshToken trong DB, clear SecurityContext.
-     * Yêu cầu: gửi kèm AccessToken hợp lệ trong header Authorization.
-     */
+
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout() {
         authService.logout();
@@ -69,11 +57,6 @@ public class AuthController {
                 .build());
     }
 
-    /**
-     * POST /api/auth/forgot-password
-     * Gửi email hướng dẫn reset mật khẩu.
-     * Luôn trả HTTP 200 dù email có tồn tại hay không (bảo mật – SRS UC03).
-     */
     @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<Void>> forgotPassword(
             @Valid @RequestBody ForgotPasswordRequest request
@@ -88,11 +71,7 @@ public class AuthController {
                 .build());
     }
 
-    /**
-     * POST /api/auth/reset-password
-     * Đặt lại mật khẩu bằng token nhận qua email.
-     * Không yêu cầu xác thực (user chưa đăng nhập được).
-     */
+
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<Void>> resetPassword(
             @Valid @RequestBody ResetPasswordRequest request
@@ -105,12 +84,6 @@ public class AuthController {
                 .data(null)
                 .build());
     }
-
-    /**
-     * PUT /api/auth/change-password
-     * Đổi mật khẩu khi đang đăng nhập.
-     * Yêu cầu: AccessToken hợp lệ trong header Authorization.
-     */
     @PutMapping("/change-password")
     public ResponseEntity<ApiResponse<Void>> changePassword(
             @Valid @RequestBody ChangePasswordRequest request,

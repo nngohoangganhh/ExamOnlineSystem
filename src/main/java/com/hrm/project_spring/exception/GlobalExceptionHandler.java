@@ -22,7 +22,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // ✅ Xử lý lỗi validation từ @Valid trên @RequestBody
     // Trả về map field → message lỗi cụ thể từng field
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(
@@ -47,7 +46,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    // ✅ Xử lý ResponseStatusException – exception thủ công throw trong service
     // VD: throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mật khẩu không đúng")
     // BUG #1 (ĐÃ SỬA): Kiểu cũ là ApiResponse<Objects> – Objects là java.util.Objects (utility class),
     //   không phải kiểu dữ liệu. Phải dùng ApiResponse<Object> (không có 's')
@@ -68,7 +66,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, ex.getStatusCode());
     }
 
-    // ✅ Xử lý lỗi vi phạm constraint DB (unique, not null...) do JPA/Hibernate ném ra
     // VD: insert trùng email (unique constraint) → DataIntegrityViolationException
     // BUG #4 (ĐÃ SỬA): getMostSpecificCause() có thể null nếu không có nested cause
     //   → gây NullPointerException ngay trong handler, phản tác dụng
@@ -86,7 +83,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
-    // ✅ Xử lý BadRequestException tự định nghĩa trong project
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiResponse<String>> handleBadRequest(BadRequestException ex) {
         ApiResponse<String> response = new ApiResponse<>(
@@ -98,7 +94,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    // ✅ Xử lý lỗi validation từ @Validated trên @PathVariable, @RequestParam (không phải @RequestBody)
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleConstraintViolation(ConstraintViolationException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -109,7 +104,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    // ✅ Xử lý 403 Forbidden – đã xác thực nhưng không có quyền
     // QUAN TRỌNG: phải khai báo TRƯỚC handler Exception.class
     // vì AccessDeniedException extends RuntimeException extends Exception
     // → nếu Exception.class đặt trước, Spring sẽ match handler đó thay vì cái này
@@ -124,7 +118,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
-    // ✅ Catch-all: bắt mọi exception chưa được xử lý ở trên
     // Tránh lộ stacktrace ra client (bảo mật)
     // Phải đặt CUỐI CÙNG
     @ExceptionHandler(Exception.class)

@@ -14,6 +14,8 @@ public class RoleResponse {
     private String code;
     private String name;
     private String description;
-    private Boolean isSystem;
+    private boolean isSystem;               // FE dùng để ẩn nút Xóa/Đổi tên
+    private String status;                  // "ACTIVE" / "INACTIVE"
+    private int totalUser;                  // Số user đang giữ role này
     private List<PermissionResponse> permissions;
 }

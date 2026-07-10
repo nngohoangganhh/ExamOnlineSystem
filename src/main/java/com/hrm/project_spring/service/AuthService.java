@@ -31,7 +31,7 @@ public class AuthService {
     private final EmailService emailService;
     private final JwtService jwtService;
 
-    // ======================== ĐĂNG NHẬP (UC01) ========================
+    //  ĐĂNG NHẬP
     @Transactional
     public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
 
@@ -168,7 +168,7 @@ public class AuthService {
                 .build();
     }
 
-    // ======================== REFRESH TOKEN ========================
+    // REFRESH TOKEN
     @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
 
@@ -249,7 +249,7 @@ public class AuthService {
                 .build();
     }
 
-    // ======================== ĐĂNG XUẤT (UC02) ========================
+    //  ĐĂNG XUẤT
 
     @Transactional
     public AuthResponse logout() {
@@ -282,7 +282,7 @@ public class AuthService {
         return AuthResponse.builder().message("Đăng xuất thành công").build();
     }
 
-    // ======================== QUÊN MẬT KHẨU (UC03) ========================
+    //  QUÊN MẬT KHẨU
 
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request) {
@@ -304,7 +304,7 @@ public class AuthService {
         // Không throw, luôn im lặng – FE nhận message chung bên dưới
     }
 
-    // ======================== RESET MẬT KHẨU (UC03) ========================
+    //RESET MẬT KHẨU
     @Transactional
     public void resetPassword(ResetPasswordRequest request) {
 
@@ -348,7 +348,7 @@ public class AuthService {
         refreshTokenRepository.deleteAllByUser(user);
     }
 
-    // ======================== ĐỔI MẬT KHẨU (UC04) ========================
+    //  ĐỔI MẬT KHẨU (UC04)
     @Transactional
     public void changePassword(ChangePasswordRequest request, HttpServletRequest httpRequest) {
 
