@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 public class LockedRequest {
     @NotNull(message = " Lý do khoá tài khoản không được trống ")
     private String reason;
-    @NotBlank(message = "vui lòng chọn ngày đến hạn khoá tài khoản")
+
     private LocalDateTime lockUntil;
 }

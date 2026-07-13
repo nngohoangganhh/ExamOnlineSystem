@@ -31,7 +31,6 @@ public class RoleService {
 
     @Transactional
     public Object getAllRoles(Integer pageNo, Integer pageSize) {
-
         // Chỉ truyền một trong hai param thì không hợp lệ
         if (pageNo == null ^ pageSize == null) {
             throw new ResponseStatusException(

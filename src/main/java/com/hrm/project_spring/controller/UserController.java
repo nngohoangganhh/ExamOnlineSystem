@@ -115,7 +115,7 @@ public class UserController {
                 .data(response)
                 .build());
     }
-    // ======================== ASSIGN/REVOKE ROLE (UC06) ========================
+    // ======================== ASSIGN/REVOKE ROLE ========================
 
     @PreAuthorize("hasAuthority('ROLE:UPDATE')")
     @PostMapping("/{userId}/roles")
