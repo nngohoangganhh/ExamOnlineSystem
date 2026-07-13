@@ -9,7 +9,6 @@ import com.hrm.project_spring.entity.Role;
 import com.hrm.project_spring.enums.RoleStatus;
 import com.hrm.project_spring.repository.PermissionRepository;
 import com.hrm.project_spring.repository.RoleRepository;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,29 +29,59 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
 
-
     @Transactional
-    public PageResponse<RoleResponse> getAllRoles(int pageNo, int pageSize) {
+    public Object getAllRoles(Integer pageNo, Integer pageSize) {
 
+        // Chỉ truyền một trong hai param thì không hợp lệ
+        if (pageNo == null ^ pageSize == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Phải truyền đồng thời pageNo và pageSize"
+            );
+        }
+        // Có truyền param thì kiểm tra giá trị
+        if (pageNo != null) {
+            if (pageNo < 0) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "pageNo không được nhỏ hơn 0"
+                );
+            }
+            if (pageSize <= 0) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "pageSize phải lớn hơn 0"
+                );
+            }
+        }
+        // Query số user của từng role
+        List<Object[]> rows = roleRepository.countUsersByRole();
+
+        Map<Long, Integer> userCountMap = rows.stream()
+                .collect(Collectors.toMap(
+                        row -> ((Number) row[0]).longValue(),
+                        row -> ((Number) row[1]).intValue()
+                ));
+
+        // Không truyền param: lấy toàn bộ role
+        if (pageNo == null && pageSize == null) {
+
+            return roleRepository.findAll()
+                    .stream()
+                    .map(role -> mapToResponse(
+                            role,
+                            userCountMap.getOrDefault(role.getId(), 0)
+                    ))
+                    .toList();
+        }
+        // Có truyền đủ param: lấy dữ liệu phân trang
         Page<Role> page = roleRepository.findAll(
                 PageRequest.of(pageNo, pageSize)
         );
-        List<Object[]> rows = roleRepository.countUsersByRole();
-
-        Map<Long, Long> userCountMap = rows.stream()
-                .collect(Collectors.toMap(
-                        row -> ((Number) row[0]).longValue(),
-                        row -> ((Number) row[1]).longValue()
-                ));
 
         List<RoleResponse> data = page.getContent()
                 .stream()
-                .map(role -> mapToResponse(
-                        role,
-                        userCountMap
-                                .getOrDefault(role.getId(), 0L)
-                                .intValue()
-                ))
+                .map(role -> mapToResponse(role, userCountMap.getOrDefault(role.getId(), 0)))
                 .toList();
         return PageResponse.<RoleResponse>builder()
                 .content(data)
@@ -67,11 +95,9 @@ public class RoleService {
 
     public RoleResponse getRoleById(Long id) {
         Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Role không tồn tại"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role không tồn tại"));
         return mapToResponse(role);
     }
-
 
     @Transactional
     public RoleResponse createRole(RoleRequest request) {

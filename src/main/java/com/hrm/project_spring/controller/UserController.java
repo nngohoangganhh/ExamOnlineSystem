@@ -2,7 +2,6 @@ package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
-import com.hrm.project_spring.dto.role.RoleResponse;
 import com.hrm.project_spring.dto.user.*;
 import com.hrm.project_spring.service.UserService;
 import jakarta.validation.Valid;
@@ -10,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -93,9 +90,32 @@ public class UserController {
         );
     }
 
+    //========================= LOCK/UNLOCK =============================
+
+    @PreAuthorize("hasAuthority('LOCK:USER')")
+    @PatchMapping("/{id}/lock")
+    public ResponseEntity<ApiResponse<UserResponse>> lockUser(@PathVariable Long id, @Valid @RequestBody LockedRequest request) {
+        UserResponse response = userService.lockUser(id,request);
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                .success(true)
+                .code(200)
+                .message(" Khóa thành công ")
+                .data(response)
+                .build());
+    }
+
+    @PreAuthorize("hasAuthority('UNLOCK:USER')")
+    @PatchMapping("/{id}/unlock")
+    public ResponseEntity<ApiResponse<UserResponse>> unlockUser(@PathVariable Long id) {
+        UserResponse response = userService.unlockUser(id);
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                .success(true)
+                .code(200)
+                .message(" Mở khóa thành công ")
+                .data(response)
+                .build());
+    }
     // ======================== ASSIGN/REVOKE ROLE (UC06) ========================
-
-
 
     @PreAuthorize("hasAuthority('ROLE:UPDATE')")
     @PostMapping("/{userId}/roles")
@@ -108,8 +128,7 @@ public class UserController {
                         .code(200)
                         .message("Gán role thành công")
                         .data(userService.assignRoles(userId, request.getRoleIds()))
-                        .build()
-        );
+                        .build());
     }
 
 
@@ -127,4 +146,6 @@ public class UserController {
                         .build()
         );
     }
+
+
 }

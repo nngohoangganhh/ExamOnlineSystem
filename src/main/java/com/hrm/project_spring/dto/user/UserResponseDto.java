@@ -13,5 +13,5 @@ public class UserResponseDto {
     private String email;
     private String roleNames;// Code của role đầu tiên: ADMIN, STUDENT, ...
     private UserStatus status;
-    private String classCode;
+    private String classCodes;
 }

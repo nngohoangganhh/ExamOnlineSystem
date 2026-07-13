@@ -22,15 +22,17 @@ public class RoleController {
 
     @PreAuthorize("hasAuthority('ROLE:READ')")
     @GetMapping
-    public ResponseEntity<ApiResponse<PageResponse<RoleResponse>>> getAllRoles(
-            @RequestParam(defaultValue = "0") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize) {
-        return ResponseEntity.ok(ApiResponse.<PageResponse<RoleResponse>>builder()
-                .success(true)
-                .code(200)
-                .message("Lấy danh sách role thành công")
-                .data(roleService.getAllRoles(pageNo, pageSize))
-                .build());
+    public ResponseEntity<ApiResponse<?>> getAllRoles(
+            @RequestParam(required = false) Integer pageNo,
+            @RequestParam(required = false) Integer pageSize) {
+        return ResponseEntity.ok(
+                ApiResponse.builder()
+                        .success(true)
+                        .code(200)
+                        .message("Lấy danh sách role thành công")
+                        .data(roleService.getAllRoles(pageNo,pageSize))
+                        .build()
+        );
     }
 
     @PreAuthorize("hasAuthority('ROLE:READ')")
