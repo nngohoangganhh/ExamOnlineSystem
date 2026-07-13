@@ -59,8 +59,10 @@ Dựa trên hệ thống API hiện tại, dự án gồm các controller chính
 | `test-controller` | Quản lý test thuộc exam |
 | `question-controller` | Quản lý câu hỏi |
 | `answer-controller` | Quản lý đáp án |
+| `class-controller` | Quản lý lớp học |
 | `exam-attempt-controller` | Quản lý lượt làm bài của thí sinh |
 | `dashboard-controller` | Thống kê tổng quan hệ thống |
+
 
 ---
 
