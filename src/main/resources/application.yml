@@ -8,19 +8,31 @@ spring:
     password: ${DB_PASSWORD:123456}
     driver-class-name: org.postgresql.Driver
 
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      connection-timeout: 30000
+
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
+    open-in-view: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT:10000}
+  address: 0.0.0.0
+
+  tomcat:
+    threads:
+      max: 20
+      min-spare: 2
 
 jwt:
-    secret: ${JWT_SECRET:MyVerySecureSecretKeyThatIsAtLeast256BitsLongForJWTSigningPurposesOnly}
-    access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:3600000}
-    refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:604800000}
+  secret: ${JWT_SECRET:MyVerySecureSecretKeyThatIsAtLeast256BitsLongForJWTSigningPurposesOnly}
+  access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:3600000}
+  refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:604800000}
