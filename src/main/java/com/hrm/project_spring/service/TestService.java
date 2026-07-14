@@ -12,6 +12,7 @@ import com.hrm.project_spring.repository.ExamRepository;
 import com.hrm.project_spring.repository.QuestionRepository;
 import com.hrm.project_spring.repository.TestRepository;
 import com.hrm.project_spring.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TestService {
 
     private final TestRepository testRepository;
@@ -35,13 +37,6 @@ public class TestService {
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
 
-    public TestService(TestRepository testRepository, ExamRepository examRepository,
-                       UserRepository userRepository, QuestionRepository questionRepository) {
-        this.testRepository = testRepository;
-        this.examRepository = examRepository;
-        this.userRepository = userRepository;
-        this.questionRepository = questionRepository;
-    }
     public PageResponse<TestResponse> getAllTest(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Test> page = testRepository.findAll(pageable);

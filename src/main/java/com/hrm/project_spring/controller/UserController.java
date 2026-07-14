@@ -93,7 +93,7 @@ public class UserController {
     //========================= LOCK/UNLOCK =============================
 
     @PreAuthorize("hasAuthority('LOCK:USER')")
-    @PatchMapping("/{id}/lock")
+    @PatchMapping("/{userid}/lock")
     public ResponseEntity<ApiResponse<UserResponse>> lockUser(@PathVariable Long id, @Valid @RequestBody LockedRequest request) {
         UserResponse response = userService.lockUser(id,request);
         return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
@@ -105,7 +105,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('UNLOCK:USER')")
-    @PatchMapping("/{id}/unlock")
+    @PatchMapping("/{userid}/unlock")
     public ResponseEntity<ApiResponse<UserResponse>> unlockUser(@PathVariable Long id) {
         UserResponse response = userService.unlockUser(id);
         return ResponseEntity.ok(ApiResponse.<UserResponse>builder()

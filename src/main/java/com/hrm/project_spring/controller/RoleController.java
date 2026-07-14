@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class RoleController {
 
     private final RoleService roleService;
-    private final PermissionService permissionService;
 
     @PreAuthorize("hasAuthority('ROLE:READ')")
     @GetMapping
