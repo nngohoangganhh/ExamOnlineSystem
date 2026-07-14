@@ -26,4 +26,28 @@ public class EmailService {
         log.info("Vui lòng nhập mã này cùng với mật khẩu mới vào form reset password.");
         log.info("----------------------------------------------------------");
     }
+
+    /**
+     * UC08: Gửi email kích hoạt tài khoản cho user mới.
+     * Trong thực tế sẽ dùng JavaMailSender + template HTML.
+     *
+     * @param toEmail         Địa chỉ email người nhận
+     * @param fullName        Tên người dùng
+     * @param activationToken Token kích hoạt (32 byte hex)
+     */
+    public void sendActivationEmail(String toEmail, String fullName, String activationToken) {
+        String activationLink = "http://localhost:8080/api/auth/activate?token=" + activationToken;
+        log.info("==========================================================");
+        log.info("ĐANG GỬI EMAIL KÍCH HOẠT TÀI KHOẢN...");
+        log.info("Đến: {}", toEmail);
+        log.info("Chủ đề: Kích hoạt tài khoản Exam-Sys của bạn");
+        log.info("Nội dung:");
+        log.info("Xin chào {},", fullName);
+        log.info("Tài khoản của bạn đã được tạo trên hệ thống Exam-Sys.");
+        log.info("Vui lòng click link dưới đây để kích hoạt tài khoản:");
+        log.info("Link kích hoạt: {}", activationLink);
+        log.info("Link này có hiệu lực trong 7 ngày.");
+        log.info("==========================================================");
+    }
 }
+

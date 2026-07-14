@@ -47,16 +47,51 @@ public class UserController {
         );
     }
 
+    /**
+     * UC08: Tạo user mới theo SRS.
+     * Admin nhập thông tin, hệ thống tự sinh mật khẩu + gửi email kích hoạt.
+     */
     @PreAuthorize("hasAuthority('USER:CREATE')")
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponse>> createUser(
-            @Valid @RequestBody UserRequest request) {
+    public ResponseEntity<ApiResponse<CreateUserResponse>> createUser(
+            @Valid @RequestBody CreateUserRequest request) {
         return ResponseEntity.ok(
-                ApiResponse.<UserResponse>builder()
+                ApiResponse.<CreateUserResponse>builder()
                         .success(true)
                         .code(201)
                         .message("Tạo user thành công")
                         .data(userService.createUser(request))
+                        .build()
+        );
+    }
+
+    /**
+     * Kích hoạt tài khoản qua activation token (từ link email).
+     */
+    @GetMapping("/activate")
+    public ResponseEntity<ApiResponse<Void>> activateUser(@RequestParam String token) {
+        userService.activateUser(token);
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .success(true)
+                        .code(200)
+                        .message("Tài khoản đã được kích hoạt thành công. Bạn có thể đăng nhập.")
+                        .build()
+        );
+    }
+
+    /**
+     * UC08-E3: Gửi lại email kích hoạt khi SMTP thất bại lần đầu.
+     */
+    @PreAuthorize("hasAuthority('USER:CREATE')")
+    @PostMapping("/{id}/resend-activation")
+    public ResponseEntity<ApiResponse<Void>> resendActivation(@PathVariable Long id) {
+        userService.resendActivationEmail(id);
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .success(true)
+                        .code(200)
+                        .message("Email kích hoạt đã được gửi lại thành công.")
                         .build()
         );
     }
