@@ -38,6 +38,7 @@ public class SecurityConfig {
                     "/api/auth/refresh-token",
                     "/api/auth/forgot-password",
                     "/api/auth/reset-password",
+                    "/api/users/activate",
                     "/error"
                 ).permitAll()
                 // Swagger UI & OpenAPI docs

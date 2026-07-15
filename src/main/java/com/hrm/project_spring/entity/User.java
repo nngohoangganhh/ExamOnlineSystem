@@ -1,10 +1,13 @@
 package com.hrm.project_spring.entity;
 
+import com.hrm.project_spring.enums.Gender;
 import com.hrm.project_spring.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,13 +35,53 @@ public class User {
 
     private String fullName;
 
+    // ===== Trường mới theo SRS UC08 =====
+
+    @Column(length = 15)
+    private String phone;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private Gender gender;
+
+    @Column(name = "student_code", length = 20)
+    private String studentCode;
+
+    @Column(name = "employee_code", length = 20)
+    private String employeeCode;
+
+    // ===== Activation token cho luồng kích hoạt email =====
+
+    @Column(name = "activation_token", length = 64)
+    private String activationToken;
+
+    @Column(name = "activation_token_expiry")
+    private LocalDateTime activationTokenExpiry;
+
+    // ===== Status & timestamps =====
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
+    @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
 
-
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    // ===== Lock =====
+
+    @Column(name = "lock_reason", length = 500)
+    private String lockReason;
 
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
