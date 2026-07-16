@@ -8,6 +8,7 @@ import com.hrm.project_spring.entity.ClassRoom;
 import com.hrm.project_spring.entity.User;
 import com.hrm.project_spring.repository.ClassRoomRepository;
 import com.hrm.project_spring.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ public class ClassRoomService {
     private final ClassRoomRepository classRoomRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public ClassRoomResponse createClassRoom(ClassRoomRequest request) {
         if (classRoomRepository.existsByCode(request.getCode())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mã lớp đã tồn tại");
@@ -41,6 +43,7 @@ public class ClassRoomService {
         return mapToResponse(classRoom);
     }
 
+    @Transactional
     public ClassRoomResponse updateClassRoom(Long id, ClassRoomRequest request) {
         ClassRoom classRoom = classRoomRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lớp học không tồn tại"));
@@ -63,6 +66,7 @@ public class ClassRoomService {
         classRoomRepository.delete(classRoom);
     }
 
+    @Transactional
     public PageResponse<ClassRoomResponse> getAllClassRooms(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<ClassRoom> page = classRoomRepository.findAll(pageable);
@@ -80,14 +84,16 @@ public class ClassRoomService {
                 .last(page.isLast())
                 .build();
     }
-    public ClassRoomResponse getClassRoom(Long id){
+
+    @Transactional
+    public ClassRoomResponse getClassRoom(Long id) {
         ClassRoom classRoom = classRoomRepository.findById(id).orElseThrow(
-                ()-> new ResponseStatusException(HttpStatus.NOT_FOUND," Không tìm thấy lớp học "));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, " Không tìm thấy lớp học "));
         return mapToResponse(classRoom);
     }
 
 
-
+    @Transactional
     public ClassRoomResponse assignStudents(Long id, AssignStudentsToClassRequest request) {
         ClassRoom classRoom = classRoomRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lớp học không tồn tại"));
@@ -99,6 +105,7 @@ public class ClassRoomService {
         return mapToResponse(classRoom);
     }
 
+    @Transactional
     public ClassRoomResponse removeStudents(Long id, AssignStudentsToClassRequest request) {
         ClassRoom classRoom = classRoomRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lớp học không tồn tại"));

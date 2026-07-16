@@ -43,7 +43,7 @@ public class UserService {
     private final EmailService emailService;
 
     // ======================== LẤY DANH SÁCH USER ========================
-
+    @Transactional
     public PageResponse<UserResponseDto> getAllUsers(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<User> users = userRepository.findAll(pageable);
@@ -62,7 +62,7 @@ public class UserService {
     }
 
     // ======================== LẤY USER THEO ID ========================
-
+    @Transactional
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
         return mapToResponse(user);

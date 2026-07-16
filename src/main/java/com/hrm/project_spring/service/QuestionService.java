@@ -8,6 +8,7 @@ import com.hrm.project_spring.entity.User;
 import com.hrm.project_spring.mapper.QuestionMapper;
 import com.hrm.project_spring.repository.QuestionRepository;
 import com.hrm.project_spring.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
 //1
+    @Transactional
     public PageResponse<QuestionResponse> getAllQuestion(int pageNo, int pageSize) {
         Page<Question> page = questionRepository.findAll(PageRequest.of(pageNo, pageSize));
         List<QuestionResponse> data = page.getContent()
@@ -41,12 +43,13 @@ public class QuestionService {
                 .build();
     }
 //2
+    @Transactional
     public QuestionResponse getQuestionById(Long id) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found"));
         return QuestionMapper.toResponse(question);
     }
-
+    @Transactional
     public QuestionResponse create(QuestionRequest request) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -63,6 +66,7 @@ public class QuestionService {
         return QuestionMapper.toResponse(saved);
     }
 //3
+    @Transactional
     public QuestionResponse update(Long id, QuestionRequest request) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found"));
@@ -73,6 +77,7 @@ public class QuestionService {
         return QuestionMapper.toResponse(updated);
     }
 //4
+    @Transactional
     public void delete(Long id) {
         if (!questionRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found");
