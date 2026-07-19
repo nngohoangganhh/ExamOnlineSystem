@@ -27,7 +27,7 @@ public class DashboardController {
     public ResponseEntity<ApiResponse<AdminDashboardResponse>> getAdminDashboard() {
         return ResponseEntity.ok(ApiResponse.<AdminDashboardResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy thống kê admin thành công")
                 .data(dashboardService.getAdminDashboard())
                 .build());
@@ -37,7 +37,7 @@ public class DashboardController {
     public ResponseEntity<ApiResponse<StudentDashboardResponse>> getStudentDashboard() {
         return ResponseEntity.ok(ApiResponse.<StudentDashboardResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy thống kê học sinh thành công")
                 .data(dashboardService.getStudentDashboard())
                 .build());
@@ -49,7 +49,7 @@ public class DashboardController {
     public ResponseEntity<ApiResponse<List<MyExamResponse>>> getMyExams() {
         return ResponseEntity.ok(ApiResponse.<List<MyExamResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách kỳ thi thành công")
                 .data(dashboardService.getMyExams())
                 .build());

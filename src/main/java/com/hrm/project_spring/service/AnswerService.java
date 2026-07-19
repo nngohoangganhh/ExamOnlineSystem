@@ -8,7 +8,6 @@ import com.hrm.project_spring.exception.BadRequestException;
 import com.hrm.project_spring.repository.AnswerRepository;
 import com.hrm.project_spring.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

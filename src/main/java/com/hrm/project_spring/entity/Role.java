@@ -1,5 +1,7 @@
 package com.hrm.project_spring.entity;
 
+import com.hrm.project_spring.enums.RoleStatus;
+import com.hrm.project_spring.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +24,7 @@ public class Role {
     private String code;        // ví dụ: "ADMIN", "TEACHER", "STUDENT"
 
     private String name;
+
     private String description;
 
     @ManyToMany(mappedBy = "roles")
@@ -34,4 +37,11 @@ public class Role {
         inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissions = new HashSet<>();
+
+    @Column(name = "is_system", nullable = false)
+    private boolean isSystem = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private RoleStatus status = RoleStatus.ACTIVE;
 }

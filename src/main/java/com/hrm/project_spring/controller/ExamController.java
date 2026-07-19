@@ -5,8 +5,8 @@ import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.exam.ExamDetailResponse;
 import com.hrm.project_spring.dto.exam.ExamListResponse;
 import com.hrm.project_spring.dto.exam.ExamRequest;
-import com.hrm.project_spring.dto.student.StudentResponse;
 import com.hrm.project_spring.dto.student.AssignStudentsRequest;
+import com.hrm.project_spring.dto.student.StudentResponse;
 import com.hrm.project_spring.service.ExamService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @RequestMapping("/api/exams")
 @RestController
@@ -36,7 +35,7 @@ public class ExamController {
         return ResponseEntity.ok(
                 ApiResponse.<PageResponse<ExamListResponse>>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("lấy danh sách thành công")
                         .data(examService.getAllExam(pageNo, pageSize))
                         .build()
@@ -48,7 +47,7 @@ public class ExamController {
         return ResponseEntity.ok(
                 ApiResponse.<ExamDetailResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("tìm kỳ thi theo id thành công")
                         .data(examService.getExamById(id))
                         .build()
@@ -61,7 +60,7 @@ public class ExamController {
            return ResponseEntity.ok(
                 ApiResponse.<ExamDetailResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message(" Tạo kỳ thi thành công")
                         .data(examService.create(request))
                         .build()
@@ -76,7 +75,7 @@ public class ExamController {
         return ResponseEntity.ok(
                 ApiResponse.<ExamDetailResponse>builder()
                         .success(true)
-                        .status(200)
+                        .code(200)
                         .message("tìm kỳ thi theo id thành công")
                         .data(examService.update(id,request))
                         .build()
@@ -89,7 +88,7 @@ public class ExamController {
         examService.deleteExam(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa thành công")
                 .data(null)
                 .build());
@@ -103,7 +102,7 @@ public class ExamController {
         return ResponseEntity.ok(
                  ApiResponse.<List<StudentResponse>>builder()
                         .success(true)
-                        .status(200)
+                         .code(200)
                         .message("lấy danh sách học sinh theo id kỳ thi thành công")
                         // Fix: Wrap Set<StudentResponse> into List to avoid ClassCastException
                         .data(new ArrayList<>(examService.getStudentsByExamId(examId)))
@@ -118,7 +117,7 @@ public class ExamController {
             @RequestBody @Valid AssignStudentsRequest request) {
         return ResponseEntity.ok(ApiResponse.<ExamDetailResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Gán học sinh thành công")
                 .data(examService.assignStudentsToExam(examId, request.getStudentIds()))
                 .build());
@@ -131,9 +130,22 @@ public class ExamController {
             @RequestBody @Valid AssignStudentsRequest request) {
         return ResponseEntity.ok(ApiResponse.<ExamDetailResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa học sinh thành công")
                 .data(examService.removeStudentsFromExam(examId, request.getStudentIds()))
+                .build());
+    }
+
+    @PreAuthorize("hasAuthority('EXAM:UPDATE')")
+    @PostMapping("/{examId}/classes/{classId}")
+    public ResponseEntity<ApiResponse<ExamDetailResponse>> assignClass(
+            @PathVariable Long examId,
+            @PathVariable Long classId) {
+        return ResponseEntity.ok(ApiResponse.<ExamDetailResponse>builder()
+                .success(true)
+                .code(200)
+                .message("Gán lớp học vào kỳ thi thành công")
+                .data(examService.assignClassToExam(examId, classId))
                 .build());
     }
 }

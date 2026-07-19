@@ -28,7 +28,7 @@ public class TestController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<TestResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách thành công")
                 .data(testService.getAllTest(pageNo, pageSize))
                 .build());
@@ -39,7 +39,7 @@ public class TestController {
     public ResponseEntity<ApiResponse<TestResponse>> getTestById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<TestResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Chi tiết test")
                 .data(testService.getTestById(id))
                 .build());
@@ -50,7 +50,7 @@ public class TestController {
     public ResponseEntity<ApiResponse<TestResponse>> createTest(@RequestBody TestRequest request) {
         return ResponseEntity.ok(ApiResponse.<TestResponse>builder()
                 .success(true)
-                .status(201)
+                .code(201)
                 .message("Tạo test thành công")
                 .data(testService.createTest(request))
                 .build());
@@ -61,7 +61,7 @@ public class TestController {
     public ResponseEntity<ApiResponse<TestResponse>> updateTest(@PathVariable Long id, @RequestBody TestRequest request) {
         return ResponseEntity.ok(ApiResponse.<TestResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Cập nhật test thành công")
                 .data(testService.updateTest(id, request))
                 .build());
@@ -73,7 +73,7 @@ public class TestController {
         testService.deleteTest(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa test thành công")
                 .data(null)
                 .build());
@@ -86,7 +86,7 @@ public class TestController {
             @Valid @RequestBody AssignQuestionsRequest request) {
         return ResponseEntity.ok(ApiResponse.<TestResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Gán câu hỏi vào test thành công")
                 .data(testService.assignQuestions(testId, request))
                 .build());

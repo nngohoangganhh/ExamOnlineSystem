@@ -2,7 +2,6 @@ package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
-import com.hrm.project_spring.dto.permission.PermissionResponse;
 import com.hrm.project_spring.dto.role.RoleRequest;
 import com.hrm.project_spring.dto.role.RoleResponse;
 import com.hrm.project_spring.service.PermissionService;
@@ -13,27 +12,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-
 @RequestMapping("/api/roles")
 @RestController
 @RequiredArgsConstructor
 public class RoleController {
 
     private final RoleService roleService;
-    private final PermissionService permissionService;
 
     @PreAuthorize("hasAuthority('ROLE:READ')")
     @GetMapping
-    public ResponseEntity<ApiResponse<PageResponse<RoleResponse>>> getAllRoles(
-            @RequestParam(defaultValue = "0") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize) {
-        return ResponseEntity.ok(ApiResponse.<PageResponse<RoleResponse>>builder()
-                .success(true)
-                .status(200)
-                .message("Lấy danh sách role thành công")
-                .data(roleService.getAllRoles(pageNo, pageSize))
-                .build());
+    public ResponseEntity<ApiResponse<?>> getAllRoles(
+            @RequestParam(required = false) Integer pageNo,
+            @RequestParam(required = false) Integer pageSize) {
+        return ResponseEntity.ok(
+                ApiResponse.builder()
+                        .success(true)
+                        .code(200)
+                        .message("Lấy danh sách role thành công")
+                        .data(roleService.getAllRoles(pageNo,pageSize))
+                        .build()
+        );
     }
 
     @PreAuthorize("hasAuthority('ROLE:READ')")
@@ -41,7 +39,7 @@ public class RoleController {
     public ResponseEntity<ApiResponse<RoleResponse>> getRoleById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<RoleResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Chi tiết role")
                 .data(roleService.getRoleById(id))
                 .build());
@@ -52,7 +50,7 @@ public class RoleController {
     public ResponseEntity<ApiResponse<RoleResponse>> createRole(@RequestBody @Valid RoleRequest request) {
         return ResponseEntity.ok(ApiResponse.<RoleResponse>builder()
                 .success(true)
-                .status(201)
+                .code(201)
                 .message("Tạo role thành công")
                 .data(roleService.createRole(request))
                 .build());
@@ -65,7 +63,7 @@ public class RoleController {
             @RequestBody @Valid RoleRequest request) {
         return ResponseEntity.ok(ApiResponse.<RoleResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Cập nhật role thành công")
                 .data(roleService.updateRole(id, request))
                 .build());
@@ -77,7 +75,7 @@ public class RoleController {
         roleService.deleteRole(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa role thành công")
                 .data(null)
                 .build());

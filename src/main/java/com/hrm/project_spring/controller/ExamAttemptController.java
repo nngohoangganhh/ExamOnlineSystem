@@ -2,7 +2,10 @@ package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
+import com.hrm.project_spring.dto.exam.ExamAttemptStart;
+import com.hrm.project_spring.dto.exam.ExamAttemptSubmit;
 import com.hrm.project_spring.dto.result.AttemptDetailResponse;
+import com.hrm.project_spring.dto.result.AttemptSubmitRequest;
 import com.hrm.project_spring.dto.result.AttemptSummaryResponse;
 import com.hrm.project_spring.service.ExamAttemptService;
 import jakarta.validation.Valid;
@@ -11,10 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import com.hrm.project_spring.dto.result.AttemptSubmitRequest;
-import com.hrm.project_spring.dto.exam.ExamAttemptStart;
-import com.hrm.project_spring.dto.exam.ExamAttemptSubmit;
 
 @RestController
 @RequestMapping("/api/attempts")
@@ -32,7 +31,7 @@ public class ExamAttemptController {
             Authentication authentication) {
         return ResponseEntity.ok(ApiResponse.<ExamAttemptStart>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Bắt đầu bài thi thành công")
                 .data(attemptService.startAttempt(testId, authentication.getName()))
                 .build());
@@ -46,7 +45,7 @@ public class ExamAttemptController {
             Authentication authentication) {
         return ResponseEntity.ok(ApiResponse.<ExamAttemptSubmit>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Nộp bài thành công")
                 .data(attemptService.submitAttempt(attemptId, authentication.getName(), request))
                 .build());
@@ -61,7 +60,7 @@ public class ExamAttemptController {
             Authentication authentication) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<AttemptSummaryResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy lịch sử thi thành công")
                 .data(attemptService.getMyAttempts(authentication.getName(), pageNo, pageSize))
                 .build());
@@ -73,7 +72,7 @@ public class ExamAttemptController {
             Authentication authentication) {
         return ResponseEntity.ok(ApiResponse.<AttemptDetailResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy chi tiết bài thi thành công")
                 .data(attemptService.getAttemptDetail(attemptId, authentication.getName()))
                 .build());
@@ -89,7 +88,7 @@ public class ExamAttemptController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<AttemptSummaryResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách bài thi theo test thành công")
                 .data(attemptService.getAttemptsByTest(testId, pageNo, pageSize))
                 .build());
@@ -103,7 +102,7 @@ public class ExamAttemptController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<AttemptSummaryResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách bài thi theo kỳ thi thành công")
                 .data(attemptService.getAttemptsByExam(examId, pageNo, pageSize))
                 .build());
@@ -114,7 +113,7 @@ public class ExamAttemptController {
             @PathVariable Long attemptId) {
         return ResponseEntity.ok(ApiResponse.<AttemptDetailResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy chi tiết bài thi thành công")
                 .data(attemptService.getAttemptDetailAdmin(attemptId))
                 .build());

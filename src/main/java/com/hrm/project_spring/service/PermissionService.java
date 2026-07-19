@@ -20,7 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +29,7 @@ public class PermissionService {
     private final FeatureRepository featureRepository;
     private final RoleRepository roleRepository;
 //1
+    @Transactional
     public PageResponse<PermissionResponse> getAllPermissions(int pageNo, int pageSize) {
         Page<Permission> page = permissionRepository.findAll(PageRequest.of(pageNo, pageSize));
         List<PermissionResponse> data = page.getContent().stream()
@@ -44,12 +44,14 @@ public class PermissionService {
                 .build();
     }
 //2
+    @Transactional
     public PermissionResponse getPermissionById(Long id) {
         Permission permission = permissionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Permission not found"));
         return mapToResponse(permission);
     }
 //3
+    @Transactional
     public PermissionResponse createPermission(PermissionRequest request) {
         if (permissionRepository.existsByCode(request.getCode().toUpperCase())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Permission code already exists: " + request.getCode());
@@ -67,6 +69,7 @@ public class PermissionService {
         return mapToResponse(permissionRepository.save(permission));
     }
 //4
+    @Transactional
     public PermissionResponse updatePermission(Long id, PermissionRequest request) {
         Permission permission = permissionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Permission not found"));
@@ -81,6 +84,7 @@ public class PermissionService {
         return mapToResponse(permissionRepository.save(permission));
     }
 //5
+    @Transactional
     public void deletePermission(Long id) {
         Permission permission = permissionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Permission not found"));

@@ -1,17 +1,16 @@
 package com.hrm.project_spring.entity;
 
+import com.hrm.project_spring.enums.Gender;
+import com.hrm.project_spring.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,11 +34,61 @@ public class User implements UserDetails {
     private String email;
 
     private String fullName;
-    private String status;
+
+    // ===== Trường mới theo SRS UC08 =====
+
+    @Column(length = 15)
+    private String phone;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private Gender gender;
+
+    @Column(name = "student_code", length = 20)
+    private String studentCode;
+
+    @Column(name = "employee_code", length = 20)
+    private String employeeCode;
+
+    // ===== Activation token cho luồng kích hoạt email =====
+
+    @Column(name = "activation_token", length = 64)
+    private String activationToken;
+
+    @Column(name = "activation_token_expiry")
+    private LocalDateTime activationTokenExpiry;
+
+    // ===== Status & timestamps =====
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    // ===== Lock =====
+
+    @Column(name = "lock_reason", length = 500)
+    private String lockReason;
+
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
+    @Column(name = "reset_password_expiry")
+    private LocalDateTime resetPasswordExpiry;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_roles",
@@ -48,32 +97,26 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    /**
-     * Trả về cả ROLE_XXX và permission authorities (EXAM:READ, USER:CREATE, ...)
-     * để hỗ trợ cả hasRole() lẫn hasAuthority() trong @PreAuthorize
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+    @Builder.Default
+    @Column(name = "failed_login_count", nullable = false)
+    private Integer failedLoginCount = 0;
 
-        if (roles == null || roles.isEmpty()) {
-            return Set.of(new SimpleGrantedAuthority("ROLE_USER"));
-        }
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
 
-        for (Role role : roles) {
-            // Thêm ROLE_XXX (dùng cho hasRole())
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getCode()));
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
 
-            // Thêm permission authorities (dùng cho hasAuthority('EXAM:READ'))
-            if (role.getPermissions() != null) {
-                role.getPermissions().stream()
-                    .map(permission -> new SimpleGrantedAuthority(permission.getCode()))
-                    .forEach(authorities::add);
-            }
-        }
+    @Column(name = "last_login_ip", length = 45)
+    private String lastLoginIp;
 
-        return authorities;
-    }
+    @Builder.Default
+    @Column(name = "password_changed_at", nullable = false)
+    private LocalDateTime passwordChangedAt = LocalDateTime.now();
+
+    @Builder.Default
+    @Column(name = "require_password_change", nullable = false)
+    private Boolean requirePasswordChange = false;
 
     @Override
     public boolean equals(Object o) {
@@ -83,38 +126,8 @@ public class User implements UserDetails {
         return id != null && id.equals(user.id);
     }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    @ManyToMany(mappedBy = "students", fetch = FetchType.LAZY)
+    private Set<ClassRoom> classRooms = new HashSet<>();
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return "ACTIVE".equalsIgnoreCase(status) || status == null;
-    }
 }

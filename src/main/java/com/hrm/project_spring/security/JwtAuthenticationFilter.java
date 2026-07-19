@@ -43,12 +43,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // 2. Trích xuất token và loại bỏ khoảng trắng thừa
             jwt = authHeader.substring(7).trim();
-
-
             // 3. Kiểm tra xem token có thực sự tồn tại sau chữ "Bearer " hay không
             // Nếu token là chuỗi rỗng hoặc chữ "null" (lỗi từ frontend), bỏ qua filter này
-            if (jwt.isEmpty() || jwt.equalsIgnoreCase("null")) {
-                log.warn("JWT Token is empty or 'null' string");
+            if (jwt.isBlank() || jwt.chars().filter(ch -> ch == '.').count() != 2) {
+                log.warn("Invalid JWT format");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -61,11 +59,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
                 // 6. Kiểm tra tính hợp lệ của token
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                if (jwtService.isAccessTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
+                            userDetails, null, userDetails.getAuthorities()
                     );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

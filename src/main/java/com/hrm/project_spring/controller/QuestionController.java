@@ -23,7 +23,7 @@ public class QuestionController {
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(ApiResponse.<PageResponse<QuestionResponse>>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Lấy danh sách thành công")
                 .data(questionService.getAllQuestion(pageNo, pageSize))
                 .build());
@@ -34,7 +34,7 @@ public class QuestionController {
     public ResponseEntity<ApiResponse<QuestionResponse>> getQuestionById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<QuestionResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Chi tiết câu hỏi")
                 .data(questionService.getQuestionById(id))
                 .build());
@@ -45,7 +45,7 @@ public class QuestionController {
     public ResponseEntity<ApiResponse<QuestionResponse>> create(@RequestBody QuestionRequest request) {
         return ResponseEntity.ok(ApiResponse.<QuestionResponse>builder()
                 .success(true)
-                .status(201)
+                .code(201)
                 .message("Tạo câu hỏi thành công")
                 .data(questionService.create(request))
                 .build());
@@ -58,7 +58,7 @@ public class QuestionController {
             @RequestBody QuestionRequest request) {
         return ResponseEntity.ok(ApiResponse.<QuestionResponse>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Cập nhật thành công")
                 .data(questionService.update(id, request))
                 .build());
@@ -70,7 +70,7 @@ public class QuestionController {
         questionService.delete(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .status(200)
+                .code(200)
                 .message("Xóa câu hỏi thành công")
                 .data(null)
                 .build());

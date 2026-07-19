@@ -1,13 +1,15 @@
 package com.hrm.project_spring.service;
 
 import com.hrm.project_spring.dto.common.PageResponse;
+import com.hrm.project_spring.dto.exam.ExamDetailResponse;
 import com.hrm.project_spring.dto.exam.ExamListResponse;
 import com.hrm.project_spring.dto.exam.ExamRequest;
-import com.hrm.project_spring.dto.exam.ExamDetailResponse;
 import com.hrm.project_spring.dto.student.StudentResponse;
+import com.hrm.project_spring.entity.ClassRoom;
 import com.hrm.project_spring.entity.Exam;
 import com.hrm.project_spring.entity.User;
 import com.hrm.project_spring.mapper.ExamMapper;
+import com.hrm.project_spring.repository.ClassRoomRepository;
 import com.hrm.project_spring.repository.ExamRepository;
 import com.hrm.project_spring.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -25,16 +27,18 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ExamService {
 
+    private static final String ROLE_STUDENT = "STUDENT";
     private final ExamRepository examRepository;
     private final UserRepository userRepository;
+    private final ClassRoomRepository classRoomRepository;
 
-    private static final String ROLE_STUDENT = "STUDENT";
-
+    @Transactional
     public PageResponse<ExamListResponse> getAllExam(int pageNo, int pageSize) {
         Page<Exam> page = examRepository.findAll(PageRequest.of(pageNo, pageSize));
         List<ExamListResponse> data = page.getContent()
@@ -50,12 +54,16 @@ public class ExamService {
                 .last(page.isLast())
                 .build();
     }
+
+    @Transactional
     public ExamDetailResponse getExamById(Long id) {
         Exam exam = examRepository.findByIdWithStudents(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
 
         return ExamMapper.toDetailResponse(exam);
     }
+
+    @Transactional
     public ExamDetailResponse create(ExamRequest request) {
         validate(request);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -72,6 +80,8 @@ public class ExamService {
                 .build();
         return ExamMapper.toDetailResponse(examRepository.save(exam));
     }
+
+    @Transactional
     public ExamDetailResponse update(Long id, ExamRequest request) {
         validate(request);
         Exam exam = examRepository.findById(id)
@@ -83,6 +93,8 @@ public class ExamService {
         exam.setStatus(request.getStatus());
         return ExamMapper.toDetailResponse(examRepository.save(exam));
     }
+
+    @Transactional
     public void deleteExam(Long id) {
         if (!examRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Exam not found");
@@ -90,7 +102,7 @@ public class ExamService {
         examRepository.deleteById(id);
     }
 
-
+    @Transactional
     public ExamDetailResponse assignStudentsToExam(Long examId, Set<Long> studentIds) {
         Exam exam = examRepository.findByIdWithStudents(examId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
@@ -101,6 +113,20 @@ public class ExamService {
         return ExamMapper.toDetailResponse(exam);
     }
 
+    @Transactional
+    public ExamDetailResponse assignClassToExam(Long examId, Long classId) {
+        Exam exam = examRepository.findByIdWithStudents(examId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
+        ClassRoom classRoom = classRoomRepository.findById(classId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Class not found"));
+
+        Set<User> students = classRoom.getStudents();
+        students.removeAll(exam.getStudents());
+        exam.getStudents().addAll(students);
+        return ExamMapper.toDetailResponse(exam);
+    }
+
+    @Transactional
     public ExamDetailResponse removeStudentsFromExam(Long examId, Set<Long> studentIds) {
         Exam exam = examRepository.findByIdWithStudents(examId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
@@ -108,6 +134,7 @@ public class ExamService {
         return ExamMapper.toDetailResponse(exam);
     }
 
+    @Transactional
     public Set<StudentResponse> getStudentsByExamId(Long examId) {
         Exam exam = examRepository.findByIdWithStudents(examId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
@@ -119,15 +146,16 @@ public class ExamService {
                 .collect(Collectors.toSet());
     }
 
+    @Transactional
     private Set<User> getValidStudents(Set<Long> ids) {
         // Lấy tất cả user tồn tại, chỉ giữ những user có role STUDENT
         Set<User> users = userRepository.findAllById(ids).stream()
-                        .filter(u -> u.getRoles().stream()
+                .filter(u -> u.getRoles().stream()
                         .anyMatch(r -> ROLE_STUDENT.equals(r.getCode())))
-                        .collect(Collectors.toSet());
+                .collect(Collectors.toSet());
         if (users.isEmpty() && !ids.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                "Không tìm thấy user hợp lệ có role STUDENT");
+                    "Không tìm thấy user hợp lệ có role STUDENT");
         }
         return users;
     }
