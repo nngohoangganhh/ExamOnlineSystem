@@ -21,4 +21,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
      */
     @Query("SELECT r.id, COUNT(u) FROM Role r LEFT JOIN r.users u GROUP BY r.id")
     List<Object[]> countUsersByRole();
+
+
 }

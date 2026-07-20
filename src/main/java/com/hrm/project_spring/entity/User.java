@@ -35,8 +35,6 @@ public class User {
 
     private String fullName;
 
-    // ===== Trường mới theo SRS UC08 =====
-
     @Column(length = 15)
     private String phone;
 

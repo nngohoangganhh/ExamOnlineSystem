@@ -20,13 +20,12 @@ public class SwaggerConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("Hệ Thống Thi Trắc Nghiệm API")
+                        .title("Exam Online")
                         .description("""
-                                ## API quản lý hệ thống thi trắc nghiệm
-                                
-                                ### Hướng dẫn sử dụng:
-                                1. Gọi **POST /api/auth/login** để lấy token
-                                2. Nhấn nút **Authorize 🔒**
+                                ## Exam online management system
+                                ## Hướng dẫn sử dụng:
+                                1. Gọi **POST /api/auth/login** để lấy accessToken
+                                2. Nhấn nút **Authorize**
                                 3. Nhập JWT token
                                 4. Gọi các API khác bình thường
                                 

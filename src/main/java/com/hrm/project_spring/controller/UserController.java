@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -155,6 +158,8 @@ public class UserController {
                 .data(response)
                 .build());
     }
+
+
     // ======================== ASSIGN/REVOKE ROLE ========================
 
     @PreAuthorize("hasAuthority('ROLE:UPDATE')")
@@ -175,16 +180,18 @@ public class UserController {
     @DeleteMapping("/{userId}/roles/{roleId}")
     public ResponseEntity<ApiResponse<UserResponse>> revokeRole(
             @PathVariable Long userId,
-            @PathVariable Long roleId) {
+            @Valid @RequestBody AssignRoleRequest request) {
         return ResponseEntity.ok(
                 ApiResponse.<UserResponse>builder()
                         .success(true)
                         .code(200)
                         .message("Thu hồi role thành công")
-                        .data(userService.revokeRole(userId, roleId))
+                        .data(userService.revokeRole(userId, request.getRoleIds()))
                         .build()
         );
     }
+
+
     @PreAuthorize("hasAuthority('EXPORT:USER')")
     @GetMapping(value = "/export", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     public ResponseEntity<byte[]> exportUsers() {

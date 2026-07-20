@@ -53,20 +53,13 @@ public class UserExportService {
 
     private void writeUserData(Sheet sheet, List<User> users) {
         int rowIndex = 1;
-
         for (User user : users) {
             Row row = sheet.createRow(rowIndex++);
-
             row.createCell(0).setCellValue(user.getId());
-
             row.createCell(1).setCellValue(safe(user.getUsername()));
-
             row.createCell(2).setCellValue(safe(user.getFullName()));
-
             row.createCell(3).setCellValue(safe(user.getEmail()));
-
             row.createCell(4).setCellValue(user.getStatus() == null ? "" : user.getStatus().name());
-
             row.createCell(5).setCellValue(user.getCreatedAt() == null ? "" : user.getCreatedAt().toString());
         }
     }

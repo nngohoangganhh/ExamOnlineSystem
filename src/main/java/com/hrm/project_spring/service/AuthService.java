@@ -32,7 +32,6 @@ public class AuthService {
     private final JwtService jwtService;
 
     //  ĐĂNG NHẬP
-    @Transactional
     public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
 
         // Bước 1: Tìm user (tìm theo cả username lẫn email)
@@ -97,11 +96,7 @@ public class AuthService {
                 user.setLockedUntil(LocalDateTime.now().plusMinutes(30));
             }
             userRepository.save(user);
-
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Mật khẩu không đúng"
-            );
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mật khẩu không đúng");
         }
 
         // Bước 4: Kiểm tra mật khẩu quá hạn 90 ngày (BR-009)

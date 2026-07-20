@@ -25,10 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -364,27 +361,31 @@ public class UserService {
         if (newRoles.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không tìm thấy role nào hợp lệ");
         }
-
         user.getRoles().addAll(newRoles);  // Thêm, không ghi đè
         return mapToResponse(userRepository.save(user));
     }
 
 
     @Transactional
-    public UserResponse revokeRole(Long userId, Long roleId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+    public UserResponse revokeRole(Long userId,List <Long> roleId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
 
-        // BR-014: Mỗi user phải có ít nhất 1 role
-        if (user.getRoles().size() <= 1) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Không thể thu hồi role cuối cùng. Mỗi user phải có ít nhất 1 role.");
+        List<Role> roleToRemove = user.getRoles()
+                .stream()
+                .filter(role -> roleId.contains(role.getId()))
+                .toList();
+
+        if (roleToRemove.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"user không có role cần thu hồi ");
         }
 
-        Role roleToRemove = user.getRoles().stream().filter(r -> r.getId().equals(roleId)).findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không có role này"));
-
-        user.getRoles().remove(roleToRemove);
+        if (user.getRoles().size() - roleToRemove.size() < 1) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"Không thể thu hồi role cuối cùng");
+        }
+        user.getRoles().removeAll(roleToRemove);
         return mapToResponse(userRepository.save(user));
     }
-
 
     // ======================== MAPPING ========================
 

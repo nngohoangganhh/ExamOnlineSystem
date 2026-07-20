@@ -35,7 +35,8 @@ public class JwtService {
     }
 
     public String extractTokenType(String token) {
-        return extractClaim(token, claims -> claims.get(TOKEN_TYPE_CLAIM, String.class));
+        return extractClaim(token,
+                claims -> claims.get(TOKEN_TYPE_CLAIM, String.class));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
