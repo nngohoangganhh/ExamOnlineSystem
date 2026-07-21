@@ -1,108 +1,230 @@
 # Exam Online System
 
-Hệ thống thi trắc nghiệm trực tuyến được xây dựng bằng **Java Spring Boot**, hỗ trợ quản lý người dùng, phân quyền, đề thi, câu hỏi, đáp án, bài thi và quá trình làm bài của thí sinh.
+A RESTful backend system for managing online examinations, built with **Java Spring Boot**. The system supports authentication, role-based access control (RBAC), exam management, question banks, online test attempts, and reporting.
 
-Dự án phù hợp cho các hệ thống kiểm tra online trong trường học, trung tâm đào tạo hoặc nội bộ doanh nghiệp.
-
----
-
-## 1. Mục tiêu hệ thống
-
-Hệ thống Exam Online giúp:
-
-- Quản lý tài khoản người dùng
-- Phân quyền theo Role, Feature, Permission
-- Quản lý kỳ thi / đề thi / bài test
-- Quản lý câu hỏi và đáp án
-- Cho phép thí sinh làm bài thi online
-- Lưu lại kết quả làm bài
-- Cung cấp dữ liệu thống kê cho dashboard
+> This project is designed for schools, training centers, and organizations that need a scalable online examination platform.
 
 ---
 
-## 2. Công nghệ sử dụng
+# Features
 
-### Backend
-
-- Java 17+
-- Spring Boot
-- Spring Web
-- Spring Security
-- JWT Authentication
-- Spring Data JPA / Hibernate
-- PostgreSQL
-- Maven
-- Swagger / OpenAPI
-
-### Tools
-
-- IntelliJ IDEA / VS Code
-- Postman
-- pgAdmin
-- Docker
-- Render
+- JWT Authentication & Authorization
+- Role-Based Access Control (RBAC)
+- User & Role Management
+- Question Bank Management
+- Exam & Test Management
+- Online Exam Attempts
+- Dashboard Statistics
+- RESTful APIs
+- Swagger API Documentation
 
 ---
 
-## 3. Các module chính
+# Tech Stack
 
-Dựa trên hệ thống API hiện tại, dự án gồm các controller chính:
-
-| Module | Chức năng |
-|---|---|
-| `auth-controller` | Đăng nhập, xác thực người dùng, cấp JWT |
-| `user-controller` | Quản lý người dùng |
-| `role-controller` | Quản lý vai trò |
-| `feature-controller` | Quản lý chức năng hệ thống |
-| `permission-controller` | Quản lý quyền truy cập |
-| `exam-controller` | Quản lý kỳ thi / bài thi |
-| `test-controller` | Quản lý test thuộc exam |
-| `question-controller` | Quản lý câu hỏi |
-| `answer-controller` | Quản lý đáp án |
-| `class-controller` | Quản lý lớp học |
-| `exam-attempt-controller` | Quản lý lượt làm bài của thí sinh |
-| `dashboard-controller` | Thống kê tổng quan hệ thống |
-
+| Category | Technology |
+|----------|------------|
+| Language | Java 17 |
+| Framework | Spring Boot |
+| Security | Spring Security, JWT |
+| ORM | Spring Data JPA, Hibernate |
+| Database | PostgreSQL |
+| Migration | Flyway |
+| Build Tool | Maven |
+| API Documentation | Swagger / OpenAPI |
+| Deployment | Docker, Render |
 
 ---
 
-## 4. Chức năng chính
+# System Architecture
 
-### 4.1. Authentication
+```
+Client
+    │
+ REST API
+    │
+Controller
+    │
+Service
+    │
+Repository
+    │
+PostgreSQL
+```
 
-- Đăng nhập tài khoản
-- Sinh JWT token
-- Bảo vệ API bằng Spring Security
-- Phân quyền truy cập theo role / permission
+---
 
-### 4.2. User Management
+# Main Modules
 
-- Tạo người dùng
-- Cập nhật thông tin người dùng
-- Xem danh sách người dùng
-- Xem chi tiết người dùng
-- Xóa hoặc vô hiệu hóa người dùng
-- Gán role cho người dùng
+| Module | Description |
+|---------|-------------|
+| Authentication | Login, JWT, Authorization |
+| User Management | CRUD users, assign roles |
+| Role Management | Manage system roles |
+| Permission Management | RBAC permissions |
+| Feature Management | Functional permissions |
+| Exam Management | Create and manage exams |
+| Test Management | Manage tests inside exams |
+| Question Management | Manage question bank |
+| Answer Management | Manage answers |
+| Classroom Management | Manage classrooms |
+| Exam Attempt | Student exam sessions |
+| Dashboard | System statistics |
 
-### 4.3. Role & Permission
+---
 
-Hệ thống RBAC gồm các thành phần chính:
+# Security
 
-- User
-- Role
-- Feature
-- Permission
+The project implements **Role-Based Access Control (RBAC)**.
 
-Ý nghĩa:
+```
+User
+   │
+ Role
+   │
+Permission
+   │
+Feature
+```
 
-- `User`: tài khoản sử dụng hệ thống
-- `Role`: vai trò như ADMIN, TEACHER, STUDENT
-- `Feature`: chức năng trong hệ thống
-- `Permission`: quyền thao tác như VIEW, CREATE, UPDATE, DELETE
+Example:
 
-Ví dụ:
+```
+ADMIN
+    ├── User Management
+    ├── Role Management
+    ├── Exam Management
+    └── Dashboard
 
-```text
-ADMIN  -> có toàn quyền
-TEACHER -> quản lý exam, test, question, answer
-STUDENT -> làm bài thi, xem kết quả cá nhân
+TEACHER
+    ├── Question Management
+    ├── Exam Management
+    └── Grade Exams
+
+STUDENT
+    ├── Take Exam
+    └── View Results
+```
+
+---
+
+# API Documentation
+
+Swagger UI
+
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+---
+
+# Getting Started
+
+## Clone repository
+
+```bash
+git clone https://github.com/nngohoangganhh/ExamOnlineSystem.git
+```
+
+## Configure Database
+
+Update the database configuration in
+
+```
+application.yml
+```
+
+Example:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/exam_online
+    username: postgres
+    password: your_password
+```
+
+---
+
+## Run Flyway Migration
+
+The database schema will be created automatically when the application starts.
+
+---
+
+## Start Project
+
+```bash
+mvn clean install
+
+mvn spring-boot:run
+```
+
+or
+
+```bash
+./mvnw spring-boot:run
+```
+
+---
+
+# Project Structure
+
+```
+src
+ ├── config
+ ├── security
+ ├── controller
+ ├── service
+ ├── repository
+ ├── entity
+ ├── dto
+ ├── mapper
+ ├── exception
+ └── util
+```
+
+---
+
+# Screenshots
+
+Coming soon.
+
+---
+
+# Deployment
+
+Backend
+
+```
+https://your-render-url.onrender.com
+```
+
+Swagger
+
+```
+https://your-render-url.onrender.com/swagger-ui/index.html
+```
+
+---
+
+# Future Improvements
+
+- Unit Testing
+- Integration Testing
+- Docker Compose
+- GitHub Actions CI/CD
+- Redis Cache
+- Email Notification
+- Audit Logging
+- Monitoring (Prometheus + Grafana)
+
+---
+
+# Author
+
+Ngô Hoàng Anh
+
+GitHub
+
+https://github.com/nngohoangganhh
