@@ -3,8 +3,10 @@ package com.hrm.project_spring.entity;
 import com.hrm.project_spring.enums.QuestionStatus;
 import com.hrm.project_spring.enums.QuestionType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -19,6 +21,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Question {
 
     @Id

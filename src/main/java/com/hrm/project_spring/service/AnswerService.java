@@ -4,6 +4,7 @@ import com.hrm.project_spring.dto.answer.AnswerRequest;
 import com.hrm.project_spring.dto.answer.AnswerResponse;
 import com.hrm.project_spring.entity.Answer;
 import com.hrm.project_spring.entity.Question;
+import com.hrm.project_spring.enums.QuestionType;
 import com.hrm.project_spring.exception.BadRequestException;
 import com.hrm.project_spring.repository.AnswerRepository;
 import com.hrm.project_spring.repository.QuestionRepository;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AnswerService{
+public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
@@ -47,8 +48,8 @@ public class AnswerService{
             throw new BadRequestException("Nội dung đáp án đã tồn tại trong câu hỏi này.");
         }
 
-        // Validation: Single correct answer constraint
-        if (isSingleChoice(question.getQuestionType()) && request.getIsCorrect()) {
+        // Validation: Single correct answer constraint (dùng enum QuestionType)
+        if (isSingleChoice(question.getType()) && request.getIsCorrect()) {
             boolean hasCorrectAnswer = question.getAnswers().stream().anyMatch(Answer::getIsCorrect);
             if (hasCorrectAnswer) {
                 throw new BadRequestException("Câu hỏi này chỉ cho phép một đáp án đúng duy nhất.");
@@ -58,12 +59,15 @@ public class AnswerService{
         Answer answer = Answer.builder()
                 .content(request.getContent())
                 .isCorrect(request.getIsCorrect())
+                .question(question)
                 .build();
-        question.addAnswer(answer);
+
+        // Thêm vào danh sách answers của question
+        question.getAnswers().add(answer);
         Answer savedAnswer = answerRepository.save(answer);
         return mapToResponse(savedAnswer, true);
     }
-    
+
     @Transactional
     public List<AnswerResponse> addBulkAnswers(Long questionId, List<AnswerRequest> requests) {
         if (requests == null || requests.isEmpty()) {
@@ -103,16 +107,13 @@ public class AnswerService{
                 .filter(r -> Boolean.TRUE.equals(r.getIsCorrect()))
                 .count();
 
-        // Validation: Single choice constraint
-        if (isSingleChoice(question.getQuestionType())) {
+        // Validation: Single choice constraint (dùng enum QuestionType)
+        if (isSingleChoice(question.getType())) {
             if (existingCorrect + newCorrect > 1) {
                 throw new BadRequestException("Câu hỏi trắc nghiệm này chỉ được phép có 1 đáp án đúng.");
             }
         }
 
-        // Validation: After adding, there must be at least one correct answer if we're filling up to 4 answers
-        // or if it's the final submission.
-        // For now, let's just ensure if they add all answers at once, they must include one correct one.
         if (currentSize + requests.size() == 4 && (existingCorrect + newCorrect == 0)) {
             throw new BadRequestException("Câu hỏi phải có ít nhất một đáp án đúng.");
         }
@@ -122,11 +123,13 @@ public class AnswerService{
                     Answer ans = Answer.builder()
                             .content(req.getContent().trim())
                             .isCorrect(req.getIsCorrect())
+                            .question(question)
                             .build();
-                    question.addAnswer(ans);
+                    question.getAnswers().add(ans);
                     return ans;
                 })
                 .collect(Collectors.toList());
+
         List<Answer> savedAnswers = answerRepository.saveAll(newAnswers);
         return savedAnswers.stream().map(a -> mapToResponse(a, true)).collect(Collectors.toList());
     }
@@ -146,7 +149,7 @@ public class AnswerService{
         }
 
         // Validation: Single correct answer constraint
-        if (isSingleChoice(question.getQuestionType()) && request.getIsCorrect() && !Boolean.TRUE.equals(answer.getIsCorrect())) {
+        if (isSingleChoice(question.getType()) && request.getIsCorrect() && !Boolean.TRUE.equals(answer.getIsCorrect())) {
             boolean hasOtherCorrectAnswer = question.getAnswers().stream()
                     .anyMatch(a -> a.getIsCorrect() && !a.getId().equals(answerId));
             if (hasOtherCorrectAnswer) {
@@ -160,26 +163,25 @@ public class AnswerService{
         return mapToResponse(answerRepository.save(answer), true);
     }
 
-    private boolean isSingleChoice(String type) {
-        return "single".equalsIgnoreCase(type)
-                || " duy nhất".equalsIgnoreCase(type)
-                || "SINGLE_CHOICE".equalsIgnoreCase(type)
-                    || "MULTIPLE_CHOICE".equalsIgnoreCase(type); // As seen in DataInitializer
-    }
-
-    // viết 1API mới cho phep sửa nhiều đáp án cùng lúc
-    // chắc chắn cần List để có thể truyền vào danh sách đáp án cần sửa
-
     @Transactional
     public void deleteAnswer(Long questionId, Long answerId) {
         Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"không tìm thay câu trả lời"));
-        answer.getQuestion().removeAnswer(answer);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không tìm thấy câu trả lời"));
+        // Gỡ ra khỏi danh sách của question trước khi xóa
+        answer.getQuestion().getAnswers().remove(answer);
         answerRepository.delete(answer);
     }
+
+    // ======================== HELPERS ========================
+
+    private boolean isSingleChoice(QuestionType type) {
+        if (type == null) return false;
+        return type == QuestionType.MCQ_SINGLE || type == QuestionType.TRUE_FALSE;
+    }
+
     private Question getQuestionById(Long questionId) {
         return questionRepository.findById(questionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"không có câu hỏi phù hợp "));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không có câu hỏi phù hợp"));
     }
 
     private AnswerResponse mapToResponse(Answer answer, boolean includeIsCorrect) {
@@ -187,7 +189,7 @@ public class AnswerService{
                 .id(answer.getId())
                 .questionId(answer.getQuestion().getId())
                 .content(answer.getContent())
-                .isCorrect(includeIsCorrect ? answer.getIsCorrect() : null) 
+                .isCorrect(includeIsCorrect ? answer.getIsCorrect() : null)
                 .build();
     }
 }

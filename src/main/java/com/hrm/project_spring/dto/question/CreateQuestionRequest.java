@@ -1,5 +1,6 @@
 package com.hrm.project_spring.dto.question;
 
+import com.hrm.project_spring.enums.QuestionAction;
 import com.hrm.project_spring.enums.QuestionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor

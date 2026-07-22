@@ -8,10 +8,13 @@ public class QuestionMapper {
         if (question == null) return null;
         return QuestionResponse.builder()
                 .id(question.getId())
-                .content(question.getContent())
-                .questionType(question.getQuestionType())
-                .difficulty(question.getDifficulty())
-                .createdBy(question.getCreatedBy() != null ? question.getCreatedBy().getFullName() : null)
+                // stem → content (DTO field), type.name() → questionType (String DTO)
+                .content(question.getStem())
+                .questionType(question.getType() != null ? question.getType().name() : null)
+                // bloomLevel → difficulty (dạng số → String)
+                .difficulty(question.getBloomLevel() != null ? String.valueOf(question.getBloomLevel()) : null)
+                // createdBy là Long (user id), không phải User entity
+                .createdBy(question.getCreatedBy() != null ? String.valueOf(question.getCreatedBy()) : null)
                 .createdAt(question.getCreatedAt())
                 .build();
     }

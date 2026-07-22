@@ -6,10 +6,7 @@ import com.hrm.project_spring.entity.ClassRoom;
 import com.hrm.project_spring.entity.Role;
 import com.hrm.project_spring.entity.User;
 import com.hrm.project_spring.enums.UserStatus;
-import com.hrm.project_spring.repository.ClassRoomRepository;
-import com.hrm.project_spring.repository.RefreshTokenRepository;
-import com.hrm.project_spring.repository.RoleRepository;
-import com.hrm.project_spring.repository.UserRepository;
+import com.hrm.project_spring.repository.*;
 import com.hrm.project_spring.service.EmailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,13 +36,14 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final ClassRoomRepository classRoomRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final ExamAttemptRepository examAttemptRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
     // ======================== LẤY DANH SÁCH USER ========================
     @Transactional
     public PageResponse<UserResponseDto> getAllUsers(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
         Page<User> users = userRepository.findAll(pageable);
         List<UserResponseDto> content =
                 users.getContent()
@@ -62,8 +62,55 @@ public class UserService {
     // ======================== LẤY USER THEO ID ========================
     @Transactional
     public UserResponse getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
         return mapToResponse(user);
+    }
+
+    // ======================== TÌM KIẾM / LỌC USER (UC14) ========================
+    @Transactional
+    public PageResponse<UserResponseDto> searchUsers(UserSearchRequest search, int pageNo, int pageSize) {
+        // UC14-E1: Validate keyword nếu có
+        if (search.getKeyword() != null && !search.getKeyword().isBlank()
+                && search.getKeyword().length() < 2) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Từ khóa tìm kiếm phải có ít nhất 2 ký tự");
+        }
+
+        // Chuyển LocalDate → LocalDateTime để query
+        LocalDateTime createdFrom = search.getCreatedFrom() != null
+                ? search.getCreatedFrom().atStartOfDay() : null;
+        LocalDateTime createdTo = search.getCreatedTo() != null
+                ? search.getCreatedTo().atTime(23, 59, 59) : null;
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+
+        String keyword = (search.getKeyword() == null || search.getKeyword().isBlank())
+                ? null : search.getKeyword().trim();
+
+        Page<User> page = userRepository.searchUsers(
+                keyword,
+                search.getStatus(),
+                search.getRoleId(),
+                search.getClassId(),
+                search.isIncludeDeleted(),
+                createdFrom,
+                createdTo,
+                pageable
+        );
+
+        List<UserResponseDto> content = page.getContent().stream()
+                .map(this::mapTo)
+                .collect(Collectors.toList());
+
+        return PageResponse.<UserResponseDto>builder()
+                .content(content)
+                .pageNo(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast())
+                .build();
     }
 
     // ======================== TẠO USER (UC08 - SRS) ========================
@@ -79,14 +126,11 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Tên đăng nhập đã được sử dụng");
         }
 
-        // === 2. Validate role tồn tại ===
+        // === 2. Validate role tồn tại (UC08 Minor: chỉ lấy role active) ===
         List<Role> roles = roleRepository.findAllById(request.getRoleIds());
 
         if (roles.size() != request.getRoleIds().size()) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Có role không hợp lệ."
-            );
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Có role không hợp lệ.");
         }
 
         // === 3. Nếu role = STUDENT → classId bắt buộc ===
@@ -95,18 +139,12 @@ public class UserService {
         Set<ClassRoom> classRooms = new HashSet<>();
         if (isStudent) {
             if (request.getClassIds() == null || request.getClassIds().isEmpty()) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "ClassId bắt buộc khi role là Student."
-                );
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "ClassId bắt buộc khi role là Student.");
             }
             List<ClassRoom> classrooms = classRoomRepository.findAllById(request.getClassIds());
-
             if (classrooms.size() != request.getClassIds().size()) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "Có lớp học không hợp lệ."
-                );
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Có lớp học không hợp lệ.");
             }
             classRooms.addAll(classrooms);
         }
@@ -125,11 +163,7 @@ public class UserService {
 
         // === 5. Validate birthDate (1920 đến currentYear - 5) ===
         if (request.getBirthDate() != null) {
-            int currentYear = LocalDate.now().getYear();
-            int birthYear = request.getBirthDate().getYear();
-            if (birthYear < 1920 || birthYear > (currentYear - 5)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ngày sinh không hợp lệ.");
-            }
+            validateBirthDate(request.getBirthDate());
         }
 
         // === 6. Tự sinh mật khẩu ngẫu nhiên 12 ký tự, hash bcrypt ===
@@ -177,23 +211,19 @@ public class UserService {
         String returnedPassword = null;
 
         if (skipActivation) {
-            // Flow A2: Active ngay, trả password 1 lần cho Admin copy
             activationMessage = "Đã tạo user với trạng thái Active. Mật khẩu được hiển thị 1 lần duy nhất.";
             returnedPassword = rawPassword;
             log.info("UC08-A2: User [{}] tạo Active ngay, password hiển thị 1 lần.", savedUser.getUsername());
         } else {
-            // Flow chính: Gửi email kích hoạt
             try {
                 emailService.sendActivationEmail(savedUser.getEmail(), savedUser.getFullName(), activationToken);
                 activationMessage = "Đã tạo user. Email kích hoạt đã được gửi.";
             } catch (Exception e) {
-                // E3: SMTP thất bại → user vẫn lưu (status=Pending), Admin có thể gửi lại
                 log.error("UC08-E3: Gửi email kích hoạt thất bại cho user [{}]: {}", savedUser.getUsername(), e.getMessage());
                 activationMessage = "Đã tạo user nhưng gửi email kích hoạt thất bại. Vui lòng sử dụng nút 'Gửi lại email kích hoạt'.";
             }
         }
 
-        // === 13. Build response ===
         return mapToCreateResponse(savedUser, returnedPassword, activationMessage);
     }
 
@@ -203,10 +233,13 @@ public class UserService {
     @Transactional
     public void activateUser(String token) {
         User user = userRepository.findByActivationToken(token)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token kích hoạt không hợp lệ hoặc không tồn tại."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Token kích hoạt không hợp lệ hoặc không tồn tại."));
 
-        if (user.getActivationTokenExpiry() == null || user.getActivationTokenExpiry().isBefore(LocalDateTime.now())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token kích hoạt đã hết hạn. Vui lòng liên hệ Admin để gửi lại.");
+        if (user.getActivationTokenExpiry() == null
+                || user.getActivationTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Token kích hoạt đã hết hạn. Vui lòng liên hệ Admin để gửi lại.");
         }
 
         if (user.getStatus() != UserStatus.PENDING) {
@@ -228,10 +261,10 @@ public class UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
 
         if (user.getStatus() != UserStatus.PENDING) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Chỉ có thể gửi lại email kích hoạt cho user có trạng thái Pending.");
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Chỉ có thể gửi lại email kích hoạt cho user có trạng thái Pending.");
         }
 
-        // Sinh token mới, reset TTL
         String newToken = generateActivationToken();
         user.setActivationToken(newToken);
         user.setActivationTokenExpiry(LocalDateTime.now().plusDays(7));
@@ -239,99 +272,174 @@ public class UserService {
         emailService.sendActivationEmail(user.getEmail(), user.getFullName(), newToken);
     }
 
-    // ======================== CẬP NHẬT USER (Admin CRUD) ========================
+    // ======================== CẬP NHẬT USER (UC09) ========================
+
     @Transactional
     public UserResponse updateUser(Long id, UpdateUserRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "User không tồn tại"
-                ));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+
         if (user.getStatus() == UserStatus.DELETED) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Không thể cập nhật tài khoản đã bị xóa"
-            );
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Không thể cập nhật tài khoản đã bị xóa");
         }
-        // 1. Kiểm tra username
-        if (userRepository.existsByUsernameAndIdNot(
-                request.getUsername(),
-                id
-        )) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Username đã được sử dụng"
-            );
-        }
-        // 2. Kiểm tra email
-        if (userRepository.existsByEmailAndIdNot(
-                request.getEmail(),
-                id
-        )) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Email đã được sử dụng"
-            );
-        }
-        // 3. Kiểm tra studentCode
+
+        // UC09-BR-019: KHÔNG cho phép đổi email và username
+        // (username/email bị loại bỏ khỏi UpdateUserRequest)
+
+        // Validate studentCode unique (trừ chính user đó)
         if (request.getStudentCode() != null
                 && !request.getStudentCode().isBlank()
-                && userRepository.existsByStudentCodeAndIdNot(
-                request.getStudentCode(),
-                id
-        )) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Mã sinh viên đã tồn tại"
-            );
+                && userRepository.existsByStudentCodeAndIdNot(request.getStudentCode(), id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Mã sinh viên đã tồn tại");
         }
-        // 4. Kiểm tra employeeCode
+
+        // Validate employeeCode unique (trừ chính user đó)
         if (request.getEmployeeCode() != null
                 && !request.getEmployeeCode().isBlank()
-                && userRepository.existsByEmployeeCodeAndIdNot(
-                request.getEmployeeCode(),
-                id
-        )) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Mã nhân viên đã tồn tại"
-            );
+                && userRepository.existsByEmployeeCodeAndIdNot(request.getEmployeeCode(), id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Mã nhân viên đã tồn tại");
         }
 
-        // 5. Validate ngày sinh
+        // Validate ngày sinh
         validateBirthDate(request.getBirthDate());
 
-        // 7. Cập nhật thông tin
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
+        // Cập nhật thông tin (KHÔNG set username/email)
         user.setFullName(request.getFullName());
         user.setPhone(request.getPhone());
         user.setBirthDate(request.getBirthDate());
         user.setGender(request.getGender());
         user.setStudentCode(request.getStudentCode());
         user.setEmployeeCode(request.getEmployeeCode());
-        // Lưu trước để đảm bảo user tồn tại
+
+        // UC09: Cập nhật lớp cho Student nếu có classIds
+        if (request.getClassIds() != null && !request.getClassIds().isEmpty()) {
+            List<ClassRoom> newClassRooms = classRoomRepository.findAllById(request.getClassIds());
+            if (newClassRooms.size() != request.getClassIds().size()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Có lớp học không hợp lệ.");
+            }
+            // Gỡ user khỏi tất cả lớp cũ rồi gán vào lớp mới
+            if (user.getClassRooms() != null) {
+                for (ClassRoom oldClass : user.getClassRooms()) {
+                    oldClass.getStudents().remove(user);
+                    classRoomRepository.save(oldClass);
+                }
+            }
+            for (ClassRoom newClass : newClassRooms) {
+                newClass.getStudents().add(user);
+                classRoomRepository.save(newClass);
+            }
+        }
+
         User updatedUser = userRepository.save(user);
         return mapToResponse(updatedUser);
     }
-    // ======================== XÓA USER – SOFT DELETE  ========================
+
+    // ======================== XÓA USER – SOFT DELETE (UC11) ========================
 
     @Transactional
-    public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+    public void deleteUser(Long id, DeleteUserRequest request, String currentUsername) {
+        // UC11-E5: Admin không tự xóa mình
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Không xác thực được admin"));
+        if (currentUser.getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Không thể xóa tài khoản của chính mình");
+        }
 
-        // Soft delete: đổi status thay vì xóa
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+
+        if (user.getStatus() == UserStatus.DELETED) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Tài khoản đã bị xóa trước đó");
+        }
+
+        // UC11-E2: confirmName phải khớp username
+        if (!user.getUsername().equals(request.getConfirmName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Tên xác nhận không khớp với tên đăng nhập của user cần xóa");
+        }
+
+        // UC11-E1: Không có lượt thi đang diễn ra
+        if (examAttemptRepository.existsByUserIdAndSubmitTimeIsNull(id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Không thể xóa user đang có bài thi chưa nộp");
+        }
+
+        // UC11-BR-024: Thêm hậu tố _deleted_{timestamp} vào email/username
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        user.setUsername(user.getUsername() + "_deleted_" + timestamp);
+        user.setEmail(user.getEmail() + "_deleted_" + timestamp);
+
+        // UC11: Set deletedAt và status
         user.setStatus(UserStatus.DELETED);
+        user.setDeletedAt(LocalDateTime.now());
+
         userRepository.save(user);
 
         // Thu hồi tất cả phiên đăng nhập
         refreshTokenRepository.deleteAllByUser(user);
+
+        log.info("UC11: Admin [{}] xóa user [{}] với lý do: {}", currentUsername, id, request.getReason());
+
+        // Gửi email thông báo cho user
+        try {
+            emailService.sendAccountDeletedEmail(user.getEmail(), user.getFullName(), request.getReason());
+        } catch (Exception e) {
+            log.warn("UC11: Gửi email thông báo xóa tài khoản thất bại cho [{}]: {}", id, e.getMessage());
+        }
     }
 
-    // ======================== KHÓA/MỞ KHÓA USER ========================
+    /**
+     * UC11-A1: Restore user trong 30 ngày sau khi soft-delete.
+     */
     @Transactional
-    public UserResponse lockUser(Long id, LockedRequest request) {
-        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+    public UserResponse restoreUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+
+        if (user.getStatus() != UserStatus.DELETED) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User chưa bị xóa");
+        }
+
+        // Kiểm tra 30 ngày
+        if (user.getDeletedAt() == null
+                || user.getDeletedAt().isBefore(LocalDateTime.now().minusDays(30))) {
+            throw new ResponseStatusException(HttpStatus.GONE,
+                    "Không thể khôi phục: đã quá 30 ngày kể từ khi xóa");
+        }
+
+        // Gỡ hậu tố _deleted_timestamp khỏi username/email
+        String username = user.getUsername();
+        String email = user.getEmail();
+        int usernameDelIdx = username.lastIndexOf("_deleted_");
+        int emailDelIdx = email.lastIndexOf("_deleted_");
+        if (usernameDelIdx > 0) user.setUsername(username.substring(0, usernameDelIdx));
+        if (emailDelIdx > 0) user.setEmail(email.substring(0, emailDelIdx));
+
+        user.setStatus(UserStatus.PENDING);
+        user.setDeletedAt(null);
+        user.setRequirePasswordChange(true);
+        User restored = userRepository.save(user);
+
+        log.info("UC11-A1: Khôi phục user [{}]", id);
+        return mapToResponse(restored);
+    }
+
+    // ======================== KHÓA/MỞ KHÓA USER (UC10) ========================
+
+    @Transactional
+    public UserResponse lockUser(Long id, LockedRequest request, String currentUsername) {
+        // UC10-E1: Admin không tự khóa mình
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Không xác thực được admin"));
+        if (currentUser.getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Không thể khóa tài khoản của chính mình");
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+
         if (user.getStatus() == UserStatus.DELETED) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Không thể khóa tài khoản đã bị xóa");
         }
@@ -339,38 +447,71 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Tài khoản đã bị khóa");
         }
 
-        user.setStatus(UserStatus.LOCKED);
-        user.setLockedUntil(request.getLockUntil());
-        User saveUser = userRepository.save(user);
+        // UC10: Validate lockUntil nếu có
+        if (request.getLockUntil() != null) {
+            LocalDateTime minLockUntil = LocalDateTime.now().plusHours(1);
+            LocalDateTime maxLockUntil = LocalDateTime.now().plusYears(5);
+            if (request.getLockUntil().isBefore(minLockUntil)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Thời hạn khóa phải sau thời điểm hiện tại ít nhất 1 giờ");
+            }
+            if (request.getLockUntil().isAfter(maxLockUntil)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Thời hạn khóa không được quá 5 năm");
+            }
+        }
 
-        return mapToResponse(saveUser);
+        // UC10-BR-021: Lưu lý do khóa
+        user.setStatus(UserStatus.LOCKED);
+        user.setLockReason(request.getReason());
+        user.setLockedUntil(request.getLockUntil());
+        User savedUser = userRepository.save(user);
+
+        // UC10: Thu hồi toàn bộ refresh token
+        refreshTokenRepository.deleteAllByUser(user);
+
+        log.info("UC10: Admin [{}] khóa user [{}] với lý do: {}", currentUsername, id, request.getReason());
+
+        // Gửi email thông báo cho user bị khóa
+        try {
+            emailService.sendAccountLockedEmail(user.getEmail(), user.getFullName(), request.getReason(), request.getLockUntil());
+        } catch (Exception e) {
+            log.warn("UC10: Gửi email thông báo khóa thất bại cho user [{}]: {}", id, e.getMessage());
+        }
+
+        return mapToResponse(savedUser);
     }
 
     @Transactional
     public UserResponse unlockUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
         if (user.getStatus() == UserStatus.DELETED) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Không thể mở khóa tài khoản đã bị xóa");
         }
         if (user.getStatus() != UserStatus.LOCKED) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Tài khoản hiện không bị khóa");
         }
+
         user.setStatus(UserStatus.ACTIVE);
         user.setFailedLoginCount(0);
         user.setLockedUntil(null);
+        user.setLockReason(null);
+
+        // UC10-A1: Yêu cầu đổi mật khẩu lần đăng nhập tiếp
+        user.setRequirePasswordChange(true);
+
         User unlockedUser = userRepository.save(user);
         return mapToResponse(unlockedUser);
     }
 
-
-    // ======================== ASSIGN/REVOKE ROLE (UC06) ========================
-
+    // ======================== ASSIGN/REVOKE ROLE ========================
 
     @Transactional
     public UserResponse assignRoles(Long userId, List<Long> roleIds) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
 
-        // Không gán role cho user LOCKED/DELETED
         if (user.getStatus() == UserStatus.LOCKED || user.getStatus() == UserStatus.DELETED) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Tài khoản không hoạt động, không thể gán role");
         }
@@ -379,13 +520,12 @@ public class UserService {
         if (newRoles.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không tìm thấy role nào hợp lệ");
         }
-        user.getRoles().addAll(newRoles);  // Thêm, không ghi đè
+        user.getRoles().addAll(newRoles);
         return mapToResponse(userRepository.save(user));
     }
 
-
     @Transactional
-    public UserResponse revokeRole(Long userId,List <Long> roleId) {
+    public UserResponse revokeRole(Long userId, List<Long> roleId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
 
@@ -395,11 +535,11 @@ public class UserService {
                 .toList();
 
         if (roleToRemove.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"user không có role cần thu hồi ");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User không có role cần thu hồi");
         }
 
         if (user.getRoles().size() - roleToRemove.size() < 1) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"Không thể thu hồi role cuối cùng");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Không thể thu hồi role cuối cùng");
         }
         user.getRoles().removeAll(roleToRemove);
         return mapToResponse(userRepository.save(user));
@@ -453,7 +593,6 @@ public class UserService {
                 .build();
     }
 
-
     private UserResponseDto mapTo(User user) {
         String roleName = null;
         if (user.getRoles() != null && !user.getRoles().isEmpty()) {
@@ -490,18 +629,15 @@ public class UserService {
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder(length);
 
-        // Đảm bảo có ít nhất 1 ký tự mỗi loại
         sb.append(upper.charAt(random.nextInt(upper.length())));
         sb.append(lower.charAt(random.nextInt(lower.length())));
         sb.append(digits.charAt(random.nextInt(digits.length())));
         sb.append(special.charAt(random.nextInt(special.length())));
 
-        // Điền phần còn lại ngẫu nhiên
         for (int i = 4; i < length; i++) {
             sb.append(allChars.charAt(random.nextInt(allChars.length())));
         }
 
-        // Xáo trộn để ký tự bắt buộc không luôn ở đầu
         char[] chars = sb.toString().toCharArray();
         for (int i = chars.length - 1; i > 0; i--) {
             int j = random.nextInt(i + 1);
@@ -553,19 +689,11 @@ public class UserService {
     }
 
     private void validateBirthDate(LocalDate birthDate) {
-        if (birthDate == null) {
-            return;
-        }
-
+        if (birthDate == null) return;
         int currentYear = LocalDate.now().getYear();
         int birthYear = birthDate.getYear();
-
         if (birthYear < 1920 || birthYear > currentYear - 5) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Ngày sinh không hợp lệ"
-            );
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ngày sinh không hợp lệ");
         }
     }
-
 }

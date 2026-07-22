@@ -30,14 +30,25 @@ public class ClassRoom {
     private String academicYear;
 
     private String description;
+
+    /**
+     * UC15: Id giáo viên chủ nhiệm — tùy chọn.
+     * Tham chiếu đến User có role TEACHER.
+     */
+    @Column(name = "teacher_id")
+    private Long teacherId;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
     @ManyToMany
     @JoinTable(
         name = "classroom_students",
         joinColumns = @JoinColumn(name = "classroom_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @Builder.Default
     private Set<User> students = new HashSet<>();
 }
+

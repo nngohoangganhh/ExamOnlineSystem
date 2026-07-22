@@ -27,4 +27,12 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
 
     // Đếm số kỳ thi đang OPEN (dùng cho admin dashboard)
     long countByStatus(String status);
+
+    /**
+     * UC15-A1: Kiểm tra classroom có được gán vào kỳ thi nào không (qua student trong lớp).
+     * Dùng để chặn đổi mã lớp khi đã có exam.
+     * Ở đây kiểm tra qua exam_students join classrooms.
+     */
+    @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Exam e JOIN e.students s JOIN s.classRooms c WHERE c.id = :classId")
+    boolean existsByStudentId(@Param("classId") Long classId);
 }

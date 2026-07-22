@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,13 +21,11 @@ public class Subject {
     private String name;
     @Column(name = "code")
     private String code;
-    @Column(name = "desciption")
+    @Column(name = "description")
     private String description;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="subject_id")
-    private Subject subject;
-
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    private List<Chapter> chapters;
 }

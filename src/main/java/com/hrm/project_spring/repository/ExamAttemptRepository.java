@@ -50,5 +50,10 @@ public interface ExamAttemptRepository extends JpaRepository<ExamAttempt, Long> 
     // Tính điểm trung bình của 1 user (student dashboard)
     @Query("SELECT AVG(a.score) FROM ExamAttempt a WHERE a.user.id = :userId AND a.submitTime IS NOT NULL")
     Double findAverageScoreByUserId(@Param("userId") Long userId);
-}
 
+    /**
+     * UC11: Kiểm tra user có đang thi dở (startTime != null, submitTime == null) không.
+     * Nếu có → không cho phép xóa user.
+     */
+    boolean existsByUserIdAndSubmitTimeIsNull(Long userId);
+}

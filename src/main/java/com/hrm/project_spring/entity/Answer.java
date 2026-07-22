@@ -27,13 +27,15 @@ public class Answer {
     private String content;
 
     @Column(name = "is_correct", nullable = false)
+    @Builder.Default
     private Boolean isCorrect = false;
 
     @Column(name = "score_weight", precision = 5, scale = 2)
     private BigDecimal scoreWeight = BigDecimal.ONE;
 
     @Column(name = "order_num", nullable = false)
-    private Integer orderNum;
+    @Builder.Default
+    private Integer orderNum = 0;
 
 
 }

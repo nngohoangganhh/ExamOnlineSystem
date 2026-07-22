@@ -24,6 +24,8 @@ public class Chapter {
     private Integer orderNum;
     @Column(name = "description")
     private String description;
-    @OneToMany(mappedBy="subject")
-    private List<Chapter> chapters;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
 }
