@@ -79,4 +79,21 @@ public class EmailService {
         log.info("Nếu bạn cho rằng đây là nhầm lẫn, vui lòng liên hệ Admin trong vòng 30 ngày để khôi phục.");
         log.info("==========================================================");
     }
+
+    /**
+     * UC03: Gửi email xác nhận mật khẩu đã được đặt lại thành công.
+     *
+     * @param toEmail  Địa chỉ email người nhận
+     * @param fullName Tên người dùng
+     */
+    public void sendPasswordResetSuccessEmail(String toEmail, String fullName) {
+        log.info("==========================================================");
+        log.info("ĐANG GỬI EMAIL XÁC NHẬN ĐẶT LẠI MẬT KHẨU...");
+        log.info("Đến: {}", toEmail);
+        log.info("Chủ đề: Mật khẩu Exam-Sys của bạn đã được thay đổi");
+        log.info("Xin chào {},", fullName);
+        log.info("Mật khẩu tài khoản của bạn vừa được đặt lại thành công.");
+        log.info("Nếu bạn không thực hiện hành động này, hãy liên hệ Admin ngay lập tức.");
+        log.info("==========================================================");
+    }
 }

@@ -58,7 +58,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-                // 6. Kiểm tra tính hợp lệ của token
+            // 6. Kiểm tra token có trong blacklist không (UC02 — đăng xuất)
+                if (jwtService.isBlacklisted(jwt)) {
+                    log.warn("Token đã bị blacklist (user đã đăng xuất): {}", username);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
+                // 7. Kiểm tra tính hợp lệ của token
                 if (jwtService.isAccessTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()

@@ -86,10 +86,16 @@ public class UserService {
     @Transactional
     public PageResponse<UserResponseDto> searchUsers(UserSearchRequest search, int pageNo, int pageSize) {
         // UC14-E1: Validate keyword nếu có
-        if (search.getKeyword() != null && !search.getKeyword().isBlank()
-                && search.getKeyword().length() < 2) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Từ khóa tìm kiếm phải có ít nhất 2 ký tự");
+        if (search.getKeyword() != null && !search.getKeyword().isBlank()) {
+            int len = search.getKeyword().length();
+            if (len < 2) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Từ khóa tìm kiếm phải có ít nhất 2 ký tự");
+            }
+            if (len > 100) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Từ khóa tìm kiếm không được vượt quá 100 ký tự");
+            }
         }
 
         // Chuyển LocalDate → LocalDateTime để query
@@ -455,6 +461,16 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
 
+        // UC10-E2: Không cho phép khóa Admin khác có role ADMIN (bảo vệ admin-vs-admin)
+        boolean targetIsAdmin = user.getRoles().stream()
+                .anyMatch(r -> "ADMIN".equalsIgnoreCase(r.getCode()));
+        boolean currentIsAdmin = currentUser.getRoles().stream()
+                .anyMatch(r -> "ADMIN".equalsIgnoreCase(r.getCode()));
+        if (targetIsAdmin && currentIsAdmin && !currentUser.getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Không đủ quyền để khóa tài khoản Admin khác");
+        }
+
         if (user.getStatus() == UserStatus.DELETED) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Không thể khóa tài khoản đã bị xóa");
         }
@@ -578,7 +594,9 @@ public class UserService {
                     .stream()
                     .filter(r -> r.getPermissions() != null)
                     .flatMap(r -> r.getPermissions().stream())
-                    .map(p -> p.getAction() + ":" + p.getFeature().getCode())
+                    .map(p -> p.getFeature() != null
+                            ? p.getAction() + ":" + p.getFeature().getCode()
+                            : p.getCode())
                     .distinct()
                     .collect(Collectors.toList());
         }

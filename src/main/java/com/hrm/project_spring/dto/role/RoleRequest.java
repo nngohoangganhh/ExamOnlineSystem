@@ -1,6 +1,8 @@
 package com.hrm.project_spring.dto.role;
 
+import com.hrm.project_spring.enums.RoleStatus;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -25,5 +27,10 @@ public class RoleRequest {
     @Size(max = 255, message = "Mô tả tối đa 255 ký tự")
     private String description;
 
+    // UC05: Trạng thái role — mặc định ACTIVE
+    private RoleStatus status = RoleStatus.ACTIVE;
+
+    // UC05 Validation: phải có ít nhất 1 permission khi tạo/sửa role
+    @NotEmpty(message = "Phải chọn ít nhất 1 permission")
     private Set<Long> permissionIds;    // ID các permissions được gán
 }

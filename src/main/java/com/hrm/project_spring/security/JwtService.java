@@ -1,21 +1,29 @@
 package com.hrm.project_spring.security;
 
+import com.hrm.project_spring.entity.TokenBlacklist;
+import com.hrm.project_spring.repository.TokenBlacklistRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
+
+    private final TokenBlacklistRepository tokenBlacklistRepository;
 
     private static final String TOKEN_TYPE_CLAIM = "type";
     private static final String ACCESS_TOKEN_TYPE = "access";
@@ -75,7 +83,6 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
@@ -114,4 +121,39 @@ public class JwtService {
 
         return Keys.hmacShaKeyFor(keyBytes);
     }
-}
+
+    /**
+     * UC02: Đưa access token vào blacklist sau khi logout.
+     * Token bị vô hiệu hóa cho đến khi hết hạn tự nhiên.
+     *
+     * @param token access token cần blacklist
+     */
+    public void blacklistToken(String token) {
+        if (token == null || token.isBlank()) return;
+        try {
+            Date expiration = extractExpiration(token);
+            LocalDateTime expiresAt = expiration.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            // Chỉ lưu nếu chưa hết hạn (không cần blacklist token đã expired)
+            if (expiresAt.isAfter(LocalDateTime.now())) {
+                tokenBlacklistRepository.save(TokenBlacklist.builder()
+                        .token(token)
+                        .expiresAt(expiresAt)
+                        .createdAt(LocalDateTime.now())
+                        .build());
+            }
+        } catch (Exception ignored) {
+            // Nếu token không parse được thì không cần blacklist
+        }
+    }
+
+    /**
+     * Kiểm tra access token có trong blacklist không.
+     * Dùng trong JwtAuthenticationFilter.
+     */
+    public boolean isBlacklisted(String token) {
+        if (token == null || token.isBlank()) return false;
+        return tokenBlacklistRepository.existsByToken(token);
+    }
+}

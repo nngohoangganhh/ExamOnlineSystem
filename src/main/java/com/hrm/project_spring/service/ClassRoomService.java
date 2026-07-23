@@ -187,7 +187,7 @@ public class ClassRoomService {
     private ClassRoomResponse mapToResponse(ClassRoom classRoom) {
         User teacher = null;
     if (classRoom.getTeacherId() != null) {
-        teacher = userRepository.findById(classRoom.getTeacherId()).orElseThrow(null);
+        teacher = userRepository.findById(classRoom.getTeacherId()).orElse(null);
     }
         return ClassRoomResponse.builder()
                 .id(classRoom.getId())

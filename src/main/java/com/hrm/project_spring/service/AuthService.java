@@ -3,9 +3,11 @@ package com.hrm.project_spring.service;
 import com.hrm.project_spring.dto.auth.*;
 import com.hrm.project_spring.dto.user.UpdateProfileRequest;
 import com.hrm.project_spring.dto.user.UserResponse;
+import com.hrm.project_spring.entity.PasswordHistory;
 import com.hrm.project_spring.entity.RefreshToken;
 import com.hrm.project_spring.entity.User;
 import com.hrm.project_spring.enums.UserStatus;
+import com.hrm.project_spring.repository.PasswordHistoryRepository;
 import com.hrm.project_spring.repository.RefreshTokenRepository;
 import com.hrm.project_spring.repository.UserRepository;
 import com.hrm.project_spring.security.CustomUserDetails;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 
 @Service
@@ -27,6 +30,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final PasswordHistoryRepository passwordHistoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final JwtService jwtService;
@@ -56,19 +60,19 @@ public class AuthService {
         if (user.getStatus() == UserStatus.INACTIVE) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
-                    "Tài khoản không hoạt động."
+                    "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên."
             );
         }
 
         if (user.getStatus() == UserStatus.LOCKED) {
-            // Nếu lockedUntil đã qua → tự động mở khóa
-            if (user.getLockedUntil() != null && user.getLockedUntil().isAfter(LocalDateTime.now())) {
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN,
-                        "Tài khoản tạm khóa do nhập sai nhiều lần. Vui lòng thử lại sau."
-                );
+            // Nếu lockedUntil null (admin khóa vĩnh viễn) hoặc chưa hết hạn → từ chối
+            if (user.getLockedUntil() == null || user.getLockedUntil().isAfter(LocalDateTime.now())) {
+                String lockMsg = user.getLockedUntil() != null
+                        ? "Tài khoản tạm khóa do nhập sai nhiều lần. Vui lòng thử lại sau."
+                        : "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.";
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, lockMsg);
             }
-            // Hết thời gian khóa → mở lại
+            // Hết thời gian khóa tạm → tự động mở lại
             user.setStatus(UserStatus.ACTIVE);
             user.setLockedUntil(null);
             user.setFailedLoginCount(0);
@@ -236,7 +240,14 @@ public class AuthService {
 
     //  ĐĂNG XUẤT
     @Transactional
-    public AuthResponse logout() {
+    public AuthResponse logout(HttpServletRequest httpRequest) {
+
+        // UC02: Blacklist access token hiện tại để vô hiệu hóa ngay cả trước khi hết hạn
+        String authHeader = httpRequest.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String accessToken = authHeader.substring(7).trim();
+            jwtService.blacklistToken(accessToken);
+        }
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -274,8 +285,14 @@ public class AuthService {
         // → Bảo mật: response luôn giống nhau dù email có hay không
         userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
 
-            // Tạo token ngẫu nhiên, đặt TTL 30 phút (BR-006 sửa từ 15 phút)
-            String token = java.util.UUID.randomUUID().toString();
+            // Tạo token 32 byte hex (64 ký tự) — BR-006, đúng format SRS
+            SecureRandom secureRandom = new SecureRandom();
+            byte[] bytes = new byte[32];
+            secureRandom.nextBytes(bytes);
+            StringBuilder sb = new StringBuilder(64);
+            for (byte b : bytes) sb.append(String.format("%02x", b));
+            String token = sb.toString();
+
             user.setResetPasswordToken(token);
             user.setResetPasswordExpiry(LocalDateTime.now().plusMinutes(30));
             userRepository.save(user);
@@ -315,8 +332,12 @@ public class AuthService {
             );
         }
 
+        // BR-008: Kiểm tra không tái sử dụng 3 mật khẩu gần nhất
+        checkPasswordHistory(user, request.getNewPassword());
+
         // Cập nhật mật khẩu mới
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        String newHash = passwordEncoder.encode(request.getNewPassword());
+        user.setPassword(newHash);
         user.setPasswordChangedAt(LocalDateTime.now());
         user.setRequirePasswordChange(false);
 
@@ -326,9 +347,17 @@ public class AuthService {
 
         userRepository.save(user);
 
+        // BR-008: Lưu mật khẩu mới vào lịch sử
+        savePasswordHistory(user, newHash);
+
         // Thu hồi TOÀN BỘ phiên đăng nhập sau khi reset (BR-007)
         // → Bảo mật: nếu tài khoản bị xâm phạm, kẻ tấn công bị kick ra khỏi tất cả thiết bị
         refreshTokenRepository.deleteAllByUser(user);
+
+        // Gửi email xác nhận mật khẩu đã thay đổi
+        try {
+            emailService.sendPasswordResetSuccessEmail(user.getEmail(), user.getFullName());
+        } catch (Exception ignored) {}
     }
 
     //  ĐỔI MẬT KHẨU (UC04)
@@ -359,6 +388,9 @@ public class AuthService {
             );
         }
 
+        // BR-008: Kiểm tra không tái sử dụng 3 mật khẩu gần nhất
+        checkPasswordHistory(user, request.getNewPassword());
+
         // Xác nhận mật khẩu phải khớp
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
             throw new ResponseStatusException(
@@ -368,16 +400,35 @@ public class AuthService {
         }
 
         // Cập nhật mật khẩu mới và đánh dấu thời gian đổi (BR-009)
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        String newHash = passwordEncoder.encode(request.getNewPassword());
+        user.setPassword(newHash);
         user.setPasswordChangedAt(LocalDateTime.now());
         user.setRequirePasswordChange(false);
         userRepository.save(user);
 
-        // Thu hồi tất cả phiên KHÁC trừ phiên hiện tại (UC04 Postcondition)
-        // Lấy RefreshToken hiện tại từ header Authorization hoặc body
-        // → Ở đây dùng cách đơn giản: xóa toàn bộ (user phải login lại sau khi đổi mật khẩu)
-        // Nếu muốn giữ phiên hiện tại, cần truyền thêm currentRefreshTokenId từ request
-        refreshTokenRepository.deleteAllByUser(user);
+        // BR-008: Lưu mật khẩu mới vào lịch sử
+        savePasswordHistory(user, newHash);
+
+        // Thu hồi các phiên KHÁC, giữ nguyên phiên hiện tại (UC04 Postcondition)
+        // Lấy refreshToken hiện tại từ header để tìm và giữ lại
+        String authHeader = httpRequest.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String accessToken = authHeader.substring(7).trim();
+            try {
+                // Tìm refresh token tương ứng với access token hiện tại (cùng user, mới nhất)
+                refreshTokenRepository
+                        .findTopByUserAndRevokedFalseOrderByCreatedAtDesc(user)
+                        .ifPresentOrElse(
+                                currentToken -> refreshTokenRepository.revokeAllByUserExceptCurrent(user, currentToken.getId()),
+                                () -> refreshTokenRepository.deleteAllByUser(user)
+                        );
+            } catch (Exception e) {
+                // Nếu không xác định được token hiện tại → xóa tất cả an toàn hơn
+                refreshTokenRepository.deleteAllByUser(user);
+            }
+        } else {
+            refreshTokenRepository.deleteAllByUser(user);
+        }
     }
 
     // PROFILE
@@ -409,5 +460,31 @@ public class AuthService {
         userRepository.save(user);
 
         return getProfile();
+    }
+
+    // ======================== PRIVATE HELPERS ========================
+
+    /**
+     * BR-008: Kiểm tra mật khẩu mới không khớp với 3 mật khẩu gần nhất.
+     */
+    private void checkPasswordHistory(User user, String rawNewPassword) {
+        var history = passwordHistoryRepository.findTop3ByUserOrderByCreatedAtDesc(user);
+        boolean reused = history.stream()
+                .anyMatch(ph -> passwordEncoder.matches(rawNewPassword, ph.getPasswordHash()));
+        if (reused) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Mật khẩu mới không được trùng với 3 mật khẩu gần nhất");
+        }
+    }
+
+    /**
+     * BR-008: Lưu hash mật khẩu mới vào lịch sử.
+     */
+    private void savePasswordHistory(User user, String encodedPassword) {
+        passwordHistoryRepository.save(PasswordHistory.builder()
+                .user(user)
+                .passwordHash(encodedPassword)
+                .createdAt(LocalDateTime.now())
+                .build());
     }
 }

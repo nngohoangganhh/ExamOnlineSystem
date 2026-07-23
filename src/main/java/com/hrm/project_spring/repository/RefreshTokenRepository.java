@@ -24,6 +24,9 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     // Lấy token cũ nhất còn sống (dùng khi quá 3 thiết bị → revoke cái cũ nhất)
     Optional<RefreshToken> findTopByUserAndRevokedFalseOrderByCreatedAtAsc(User user);
 
+    // Lấy token mới nhất còn sống (dùng khi đổi mật khẩu → giữ phiên hiện tại)
+    Optional<RefreshToken> findTopByUserAndRevokedFalseOrderByCreatedAtDesc(User user);
+
     // Xóa toàn bộ token của user (dùng cho: logout, forgotPassword, resetPassword)
     @Modifying
     @Transactional
