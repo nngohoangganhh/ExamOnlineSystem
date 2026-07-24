@@ -38,3 +38,7 @@ logging:
   level:
     root: INFO
     org.springframework.security: INFO
+
+springdoc:
+  swagger-ui:
+    operationsSorter: method

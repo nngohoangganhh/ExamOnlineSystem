@@ -14,11 +14,11 @@ import java.util.Optional;
 public interface ExamRepository extends JpaRepository<Exam, Long> {
 
     @Query("""
-        SELECT e FROM Exam e
-        LEFT JOIN FETCH e.students
-        LEFT JOIN FETCH e.createdBy
-        WHERE e.id = :id
-    """)
+                SELECT e FROM Exam e
+                LEFT JOIN FETCH e.students
+                LEFT JOIN FETCH e.createdBy
+                WHERE e.id = :id
+            """)
     Optional<Exam> findByIdWithStudents(@Param("id") Long id);
 
     // Lấy danh sách kỳ thi mà học sinh được gán (dùng cho /api/my-exams)

@@ -7,10 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-/**
- * UC07: Bản ghi audit log cho mọi hành động quan trọng trong hệ thống.
- * Immutable sau khi tạo — không có setter để bảo vệ tính toàn vẹn (BR-016).
- */
+
 @Entity
 @Table(name = "audit_logs", indexes = {
         @Index(name = "idx_audit_user_id", columnList = "user_id"),

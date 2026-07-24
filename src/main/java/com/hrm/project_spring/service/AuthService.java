@@ -1,8 +1,8 @@
 package com.hrm.project_spring.service;
 
 import com.hrm.project_spring.dto.auth.*;
-import com.hrm.project_spring.dto.user.UpdateProfileRequest;
-import com.hrm.project_spring.dto.user.UserResponse;
+import com.hrm.project_spring.dto.user.request.UpdateProfileRequest;
+import com.hrm.project_spring.dto.user.response.UserResponse;
 import com.hrm.project_spring.entity.PasswordHistory;
 import com.hrm.project_spring.entity.RefreshToken;
 import com.hrm.project_spring.entity.User;

@@ -1,4 +1,4 @@
-package com.hrm.project_spring.dto.user;
+package com.hrm.project_spring.dto.user.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

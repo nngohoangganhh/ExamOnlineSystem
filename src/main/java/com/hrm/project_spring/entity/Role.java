@@ -1,7 +1,6 @@
 package com.hrm.project_spring.entity;
 
 import com.hrm.project_spring.enums.RoleStatus;
-import com.hrm.project_spring.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,9 +31,9 @@ public class Role {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "role_permissions",
-        joinColumns = @JoinColumn(name = "role_id"),
-        inverseJoinColumns = @JoinColumn(name = "permission_id")
+            name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissions = new HashSet<>();
 

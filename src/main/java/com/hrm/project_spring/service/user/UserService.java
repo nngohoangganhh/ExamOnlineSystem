@@ -2,7 +2,10 @@ package com.hrm.project_spring.service.user;
 
 import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.student.StudentAllResponse;
-import com.hrm.project_spring.dto.user.*;
+import com.hrm.project_spring.dto.user.request.*;
+import com.hrm.project_spring.dto.user.response.CreateUserResponse;
+import com.hrm.project_spring.dto.user.response.UserResponse;
+import com.hrm.project_spring.dto.user.response.UserResponseDto;
 import com.hrm.project_spring.entity.ClassRoom;
 import com.hrm.project_spring.entity.Role;
 import com.hrm.project_spring.entity.User;
@@ -70,45 +73,75 @@ public class UserService {
         return mapToResponse(user);
     }
 
+
     @Transactional
-    public List<StudentAllResponse> getAllStudent() {
-        return userRepository.findAllStudents().stream()
+    public PageResponse<StudentAllResponse> getAllStudent(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+        Page<User> page = userRepository.findAllStudents(pageable);
+
+        List<StudentAllResponse> content = page.getContent().stream()
                 .map(user -> StudentAllResponse.builder()
                         .id(user.getId())
                         .email(user.getEmail())
                         .username(user.getUsername())
                         .fullName(user.getFullName())
+                        .gender(user.getGender())
+                        .dataOfBirth(user.getBirthDate())
                         .build())
                 .toList();
+
+        return PageResponse.<StudentAllResponse>builder()
+                .content(content)
+                .pageNo(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .build();
     }
 
     // ======================== TÌM KIẾM / LỌC USER (UC14) ========================
     @Transactional
     public PageResponse<UserResponseDto> searchUsers(UserSearchRequest search, int pageNo, int pageSize) {
         // UC14-E1: Validate keyword nếu có
+        System.out.println("1");
         if (search.getKeyword() != null && !search.getKeyword().isBlank()) {
             int len = search.getKeyword().length();
+            System.out.println("2");
             if (len < 2) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Từ khóa tìm kiếm phải có ít nhất 2 ký tự");
             }
+            System.out.println("3");
             if (len > 100) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Từ khóa tìm kiếm không được vượt quá 100 ký tự");
             }
         }
-
+        System.out.println("4");
         // Chuyển LocalDate → LocalDateTime để query
         LocalDateTime createdFrom = search.getCreatedFrom() != null
                 ? search.getCreatedFrom().atStartOfDay() : null;
+        System.out.println("5");
         LocalDateTime createdTo = search.getCreatedTo() != null
                 ? search.getCreatedTo().atTime(23, 59, 59) : null;
-
+        System.out.println("6");
+        // Validate khoảng ngày hợp lệ, tránh trả về rỗng một cách khó hiểu
+        if (createdFrom != null && createdTo != null && createdFrom.isAfter(createdTo)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "createdFrom phải trước hoặc bằng createdTo");
+        }
+        System.out.println("7");
+        // Chặn pageSize quá lớn / pageNo âm để tránh load quá nhiều dữ liệu cùng lúc
+        if (pageNo < 0) pageNo = 0;
+        System.out.println(9);
+        if (pageSize <= 0 || pageSize > 100) pageSize = 20;
+        System.out.println(10);
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
-
+        System.out.println("11");
+        // Escape ký tự đặc biệt của LIKE (%, _, \) để không bị hiểu nhầm là wildcard
         String keyword = (search.getKeyword() == null || search.getKeyword().isBlank())
-                ? null : search.getKeyword().trim();
-
+                ? null : escapeLike(search.getKeyword().trim());
+        System.out.println("12");
         Page<User> page = userRepository.searchUsers(
                 keyword,
                 search.getStatus(),
@@ -119,11 +152,17 @@ public class UserService {
                 createdTo,
                 pageable
         );
-
+        System.out.println("13");
+        // roles là FetchType.LAZY -> load theo batch 1 query duy nhất cho cả trang,
+        // tránh N+1 khi mapTo() gọi user.getRoles() cho từng user.
+        List<Long> userIds = page.getContent().stream().map(User::getId).toList();
+        java.util.Map<Long, User> withRoles = userRepository.findWithRolesByIdIn(userIds).stream()
+                .collect(Collectors.toMap(User::getId, u -> u));
+        System.out.println("14");
         List<UserResponseDto> content = page.getContent().stream()
-                .map(this::mapTo)
+                .map(u -> mapTo(withRoles.getOrDefault(u.getId(), u)))
                 .collect(Collectors.toList());
-
+        System.out.println("15");
         return PageResponse.<UserResponseDto>builder()
                 .content(content)
                 .pageNo(page.getNumber())
@@ -132,6 +171,18 @@ public class UserService {
                 .totalPages(page.getTotalPages())
                 .last(page.isLast())
                 .build();
+    }
+
+    /**
+     * Escape ký tự đặc biệt của SQL LIKE (%, _, \) để tìm kiếm đúng theo ký tự
+     * literal người dùng nhập, tránh bị hiểu nhầm thành wildcard.
+     * Cần dùng kèm ESCAPE '\\' trong JPQL (xem UserRepository#searchUsers).
+     */
+    private String escapeLike(String input) {
+        if (input == null) return null;
+        return input.replace("\\", "\\\\")
+                .replace("%", "\\%")
+                .replace("_", "\\_");
     }
 
     // ======================== TẠO USER (UC08 - SRS) ========================
@@ -146,6 +197,12 @@ public class UserService {
         if (userRepository.existsByUsernameIncludingDeleted(request.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Tên đăng nhập đã được sử dụng");
         }
+        if (request.getStudentCode() != null && !request.getStudentCode().isBlank()) {
+            if (userRepository.existsByStudentCodeIncludingDeleted(request.getStudentCode())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Mã số không hợp lệ hoặc đã tồn tại.");
+            }
+        }
+
 
         // === 2. Validate role tồn tại (UC08 Minor: chỉ lấy role active) ===
         List<Role> roles = roleRepository.findAllById(request.getRoleIds());
@@ -164,23 +221,29 @@ public class UserService {
                         "ClassId bắt buộc khi role là Student.");
             }
             List<ClassRoom> classrooms = classRoomRepository.findAllById(request.getClassIds());
+
             if (classrooms.size() != request.getClassIds().size()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Có lớp học không hợp lệ.");
             }
             classRooms.addAll(classrooms);
         }
 
-        // === 4. Validate studentCode / employeeCode unique ===
-        if (request.getStudentCode() != null && !request.getStudentCode().isBlank()) {
-            if (userRepository.existsByStudentCode(request.getStudentCode())) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Mã số không hợp lệ hoặc đã tồn tại.");
+
+
+
+            if (request.getStudentCode() != null && !request.getStudentCode().isBlank()) {
+                if (userRepository.existsByStudentCode(request.getStudentCode())) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Mã số không hợp lệ hoặc đã tồn tại.");
+                }
             }
-        }
-        if (request.getEmployeeCode() != null && !request.getEmployeeCode().isBlank()) {
-            if (userRepository.existsByEmployeeCode(request.getEmployeeCode())) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Mã số không hợp lệ hoặc đã tồn tại.");
+
+
+            if (request.getEmployeeCode() != null && !request.getEmployeeCode().isBlank()) {
+                if (userRepository.existsByEmployeeCode(request.getEmployeeCode())) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Mã số không hợp lệ hoặc đã tồn tại.");
+                }
             }
-        }
+
 
         // === 5. Validate birthDate (1920 đến currentYear - 5) ===
         if (request.getBirthDate() != null) {
@@ -332,6 +395,15 @@ public class UserService {
         user.setStudentCode(request.getStudentCode());
         user.setEmployeeCode(request.getEmployeeCode());
 
+        boolean isStudent = user.getRoles().stream()
+                .anyMatch(r -> "STUDENT".equalsIgnoreCase(r.getCode()));
+
+        if (isStudent && (request.getClassIds() == null || request.getClassIds().isEmpty())
+                && (user.getClassRooms() == null || user.getClassRooms().isEmpty())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "ClassId bắt buộc khi role là Student.");
+        }
+
         // UC09: Cập nhật lớp cho Student nếu có classIds
         if (request.getClassIds() != null && !request.getClassIds().isEmpty()) {
             List<ClassRoom> newClassRooms = classRoomRepository.findAllById(request.getClassIds());
@@ -388,8 +460,8 @@ public class UserService {
 
         // UC11-BR-024: Thêm hậu tố _deleted_{timestamp} vào email/username
         String timestamp = String.valueOf(System.currentTimeMillis());
-        user.setUsername(user.getUsername() + "_deleted_" + timestamp);
-        user.setEmail(user.getEmail() + "_deleted_" + timestamp);
+        user.setUsername(buildDeletedValue(user.getUsername(), timestamp, 100)); // 100 = độ dài cột thực tế
+        user.setEmail(buildDeletedValue(user.getEmail(), timestamp, 150));
 
         // UC11: Set deletedAt và status
         user.setStatus(UserStatus.DELETED);
@@ -408,6 +480,15 @@ public class UserService {
         } catch (Exception e) {
             log.warn("UC11: Gửi email thông báo xóa tài khoản thất bại cho [{}]: {}", id, e.getMessage());
         }
+    }
+
+    private String buildDeletedValue(String original, String timestamp, int maxLength) {
+        String suffix = "_deleted_" + timestamp;
+        if (original.length() + suffix.length() > maxLength) {
+            int allowed = maxLength - suffix.length();
+            original = original.substring(0, Math.max(allowed, 0));
+        }
+        return original + suffix;
     }
 
     /**
@@ -437,7 +518,7 @@ public class UserService {
         if (usernameDelIdx > 0) user.setUsername(username.substring(0, usernameDelIdx));
         if (emailDelIdx > 0) user.setEmail(email.substring(0, emailDelIdx));
 
-        user.setStatus(UserStatus.PENDING);
+        user.setStatus(UserStatus.ACTIVE);
         user.setDeletedAt(null);
         user.setRequirePasswordChange(true);
         User restored = userRepository.save(user);
@@ -466,7 +547,7 @@ public class UserService {
                 .anyMatch(r -> "ADMIN".equalsIgnoreCase(r.getCode()));
         boolean currentIsAdmin = currentUser.getRoles().stream()
                 .anyMatch(r -> "ADMIN".equalsIgnoreCase(r.getCode()));
-        if (targetIsAdmin && currentIsAdmin && !currentUser.getId().equals(id)) {
+        if (targetIsAdmin && !currentIsAdmin ) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                     "Không đủ quyền để khóa tài khoản Admin khác");
         }
@@ -547,11 +628,11 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Tài khoản không hoạt động, không thể gán role");
         }
 
-        Set<Role> newRoles = new HashSet<>(roleRepository.findAllById(roleIds));
-        if (newRoles.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không tìm thấy role nào hợp lệ");
+        List<Role> foundRoles = roleRepository.findAllById(roleIds);
+        if (foundRoles.size() != roleIds.size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Có role không hợp lệ");
         }
-        user.getRoles().addAll(newRoles);
+        user.getRoles().addAll(new HashSet<>(foundRoles));
         return mapToResponse(userRepository.save(user));
     }
 
@@ -559,6 +640,9 @@ public class UserService {
     public UserResponse revokeRole(Long userId, List<Long> roleId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+        if  (user.getStatus() == UserStatus.LOCKED || user.getStatus() == UserStatus.DELETED) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"Tài khoản không hoat động ");
+        }
 
         List<Role> roleToRemove = user.getRoles()
                 .stream()
@@ -627,14 +711,12 @@ public class UserService {
     }
 
     private UserResponseDto mapTo(User user) {
-        String roleName = null;
-        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
-            roleName = user.getRoles().iterator().next().getCode();
-        }
-        String classCode = null;
-        if (user.getClassRooms() != null && !user.getClassRooms().isEmpty()) {
-            classCode = user.getClassRooms().stream().map(ClassRoom::getCode).findFirst().orElse(null);
-        }
+        List<String> roleNames = user.getRoles() != null
+                ? user.getRoles().stream().map(Role::getCode).collect(Collectors.toList())
+                : Collections.emptyList();
+        List<String> classCodes = user.getClassRooms() != null
+                ? user.getClassRooms().stream().map(ClassRoom::getCode).collect(Collectors.toList())
+                : Collections.emptyList();
 
         return UserResponseDto.builder()
                 .id(user.getId())
@@ -642,8 +724,8 @@ public class UserService {
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .status(user.getStatus())
-                .classCodes(classCode)
-                .roleNames(roleName)
+                .classCodes(classCodes)
+                .roleNames(roleNames)
                 .build();
     }
 

@@ -36,7 +36,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     // → Các thiết bị khác bị kick ra, thiết bị đang đổi mật khẩu vẫn giữ phiên
     @Modifying
     @Transactional
-    @Query("UPDATE RefreshToken rt SET rt.revoked = true " +
-           "WHERE rt.user = :user AND rt.id != :currentId")
+    @Query("UPDATE RefreshToken rt SET rt.revoked = true " + "WHERE rt.user = :user AND rt.id != :currentId")
     void revokeAllByUserExceptCurrent(@Param("user") User user, @Param("currentId") Long currentId);
 }

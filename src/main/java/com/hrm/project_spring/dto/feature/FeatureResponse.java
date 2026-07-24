@@ -1,7 +1,10 @@
 package com.hrm.project_spring.dto.feature;
 
 import com.hrm.project_spring.dto.permission.PermissionResponse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 

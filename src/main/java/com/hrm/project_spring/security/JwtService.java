@@ -23,12 +23,10 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private final TokenBlacklistRepository tokenBlacklistRepository;
-
     private static final String TOKEN_TYPE_CLAIM = "type";
     private static final String ACCESS_TOKEN_TYPE = "access";
     private static final String REFRESH_TOKEN_TYPE = "refresh";
-
+    private final TokenBlacklistRepository tokenBlacklistRepository;
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -156,4 +154,4 @@ public class JwtService {
         if (token == null || token.isBlank()) return false;
         return tokenBlacklistRepository.existsByToken(token);
     }
-}
+}

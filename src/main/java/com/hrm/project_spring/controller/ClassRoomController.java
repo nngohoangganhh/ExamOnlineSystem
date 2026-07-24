@@ -3,6 +3,7 @@ package com.hrm.project_spring.controller;
 import com.hrm.project_spring.dto.classroom.AssignStudentsToClassRequest;
 import com.hrm.project_spring.dto.classroom.ClassRoomRequest;
 import com.hrm.project_spring.dto.classroom.ClassRoomResponse;
+import com.hrm.project_spring.dto.classroom.ClassroomDetailResponse;
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.service.ClassRoomService;
@@ -37,8 +38,8 @@ public class ClassRoomController {
 
     @PreAuthorize("hasAuthority('CLASS:READ')")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ClassRoomResponse>> getClassRoom(@PathVariable Long id ){
-        return ResponseEntity.ok(ApiResponse.<ClassRoomResponse>builder()
+    public ResponseEntity<ApiResponse<ClassroomDetailResponse>> getClassRoom(@PathVariable Long id ){
+        return ResponseEntity.ok(ApiResponse.<ClassroomDetailResponse>builder()
                 .success(true)
                 .code(200)
                 .message("Lấy chi tiết lớp học thành công")

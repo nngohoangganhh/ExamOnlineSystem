@@ -1,4 +1,4 @@
-package com.hrm.project_spring.dto.user;
+package com.hrm.project_spring.dto.user.request;
 
 import com.hrm.project_spring.enums.Gender;
 import jakarta.validation.constraints.*;

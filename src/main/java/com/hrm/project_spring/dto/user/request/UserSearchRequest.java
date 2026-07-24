@@ -1,4 +1,4 @@
-package com.hrm.project_spring.dto.user;
+package com.hrm.project_spring.dto.user.request;
 
 import com.hrm.project_spring.enums.UserStatus;
 import jakarta.validation.constraints.Size;
@@ -19,21 +19,33 @@ public class UserSearchRequest {
     @Size(min = 2, max = 100, message = "Từ khóa tìm kiếm phải từ 2 đến 100 ký tự")
     private String keyword;
 
-    /** Lọc theo role id. */
+    /**
+     * Lọc theo role id.
+     */
     private Long roleId;
 
-    /** Lọc theo classroom id. */
+    /**
+     * Lọc theo classroom id.
+     */
     private Long classId;
 
-    /** Lọc theo trạng thái tài khoản. */
+    /**
+     * Lọc theo trạng thái tài khoản.
+     */
     private UserStatus status;
 
-    /** Từ ngày tạo (inclusive). */
+    /**
+     * Từ ngày tạo (inclusive).
+     */
     private LocalDate createdFrom;
 
-    /** Đến ngày tạo (inclusive). */
+    /**
+     * Đến ngày tạo (inclusive).
+     */
     private LocalDate createdTo;
 
-    /** Có bao gồm user đã soft-delete không, mặc định false. */
+    /**
+     * Có bao gồm user đã soft-delete không, mặc định false.
+     */
     private boolean includeDeleted = false;
 }

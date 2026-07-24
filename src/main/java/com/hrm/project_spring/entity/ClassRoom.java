@@ -44,9 +44,9 @@ public class ClassRoom {
 
     @ManyToMany
     @JoinTable(
-        name = "classroom_students",
-        joinColumns = @JoinColumn(name = "classroom_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
+            name = "classroom_students",
+            joinColumns = @JoinColumn(name = "classroom_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @Builder.Default
     private Set<User> students = new HashSet<>();

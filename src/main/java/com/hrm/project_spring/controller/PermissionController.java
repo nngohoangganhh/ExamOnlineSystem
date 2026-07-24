@@ -49,7 +49,7 @@ public class PermissionController {
     public ResponseEntity<ApiResponse<PermissionResponse>> createPermission(@RequestBody @Valid PermissionRequest request) {
         return ResponseEntity.ok(ApiResponse.<PermissionResponse>builder()
                 .success(true)
-                .code (201)
+                .code(201)
                 .message("Tạo permission thành công")
                 .data(permissionService.createPermission(request))
                 .build());
@@ -87,7 +87,7 @@ public class PermissionController {
     public ResponseEntity<ApiResponse<Void>> assignPermissionsToRole(
             @PathVariable Long roleId,
             @RequestBody Set<Long> permissionIds) {
-      permissionService.assignPermissionsToRole(roleId,permissionIds);
+        permissionService.assignPermissionsToRole(roleId, permissionIds);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
                 .code(200)
