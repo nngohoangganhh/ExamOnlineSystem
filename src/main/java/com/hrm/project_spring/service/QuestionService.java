@@ -312,4 +312,37 @@ public class QuestionService {
         }
         questionRepository.deleteById(id);
     }
+
+    // 6. Bulk cập nhật Subject và Chapter cho nhiều Question
+    @Transactional
+    public int updateQuestionClassification(QuestionClassificationRequest request) {
+        Subject subject = subjectRepository.findById(request.getSubjectId())
+                .orElseThrow(() -> new com.hrm.project_spring.exception.ResourceNotFoundException("Môn học không tồn tại với ID: " + request.getSubjectId()));
+
+        Chapter chapter = chapterRepository.findById(request.getChapterId())
+                .orElseThrow(() -> new com.hrm.project_spring.exception.ResourceNotFoundException("Chương không tồn tại với ID: " + request.getChapterId()));
+
+        if (!chapter.getSubject().getId().equals(subject.getId())) {
+            throw new BadRequestException("Chương không thuộc môn học đã chọn.");
+        }
+
+        if (request.getQuestionIds() == null || request.getQuestionIds().isEmpty()) {
+            return 0;
+        }
+
+        List<Question> questions = questionRepository.findAllById(request.getQuestionIds());
+
+        if (questions.size() != request.getQuestionIds().size()) {
+            throw new com.hrm.project_spring.exception.ResourceNotFoundException("Một hoặc nhiều câu hỏi không tồn tại.");
+        }
+
+        for (Question question : questions) {
+            question.setSubject(subject);
+            question.setChapter(chapter);
+            question.setUpdatedAt(LocalDateTime.now());
+        }
+
+        questionRepository.saveAll(questions);
+        return questions.size();
+    }
 }

@@ -3,6 +3,7 @@ package com.hrm.project_spring.controller;
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.question.CreateQuestionRequest;
+import com.hrm.project_spring.dto.question.QuestionClassificationRequest;
 import com.hrm.project_spring.dto.question.QuestionDetailResponse;
 import com.hrm.project_spring.dto.question.QuestionRequest;
 import com.hrm.project_spring.dto.question.QuestionResponse;
@@ -77,6 +78,19 @@ public class QuestionController {
                 .code(200)
                 .message("Xóa câu hỏi thành công")
                 .data(null)
+                .build());
+    }
+
+    @PreAuthorize("hasAuthority('QUESTION:UPDATE')")
+    @PatchMapping("/api/v1/questions/classification")
+    public ResponseEntity<ApiResponse<Integer>> updateQuestionClassification(
+            @Valid @RequestBody QuestionClassificationRequest request) {
+        int updatedCount = questionService.updateQuestionClassification(request);
+        return ResponseEntity.ok(ApiResponse.<Integer>builder()
+                .success(true)
+                .code(200)
+                .message("Cập nhật môn học và chương cho các câu hỏi thành công")
+                .data(updatedCount)
                 .build());
     }
 }
