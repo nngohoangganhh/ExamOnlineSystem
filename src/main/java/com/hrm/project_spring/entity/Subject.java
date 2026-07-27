@@ -1,5 +1,6 @@
 package com.hrm.project_spring.entity;
 
+import com.hrm.project_spring.dto.subject.SubjectResponse;
 import jakarta.persistence.*;
 
 import lombok.*;

@@ -42,8 +42,7 @@ public class CreateQuestionRequest {
     @DecimalMax(value = "100.00", message = "Điểm phải từ 0.01 đến 100.")
     private BigDecimal score;
 
-    @Valid
-    @Size(min = 2, max = 8, message = "Số phương án từ 2 đến 8.")
+
     private List<QuestionOptionRequest> options;
 
     @Size(max = 10, message = "Tối đa 10 tag.")

@@ -1,5 +1,7 @@
 package com.hrm.project_spring.dto.question;
 
+import com.hrm.project_spring.dto.chapter.ChapterSummaryResponse;
+import com.hrm.project_spring.dto.subject.SubjectSummaryResponse;
 import com.hrm.project_spring.enums.QuestionStatus;
 import com.hrm.project_spring.enums.QuestionType;
 import lombok.AllArgsConstructor;
@@ -29,9 +31,9 @@ public class QuestionDetailResponse {
 
     private QuestionStatus status;
 
-//    private SubjectResponse subject;
+    private SubjectSummaryResponse subject;
 
-//    private ChapterResponse chapter;
+    private ChapterSummaryResponse chapter;
 
     private List<QuestionOptionResponse> options;
 

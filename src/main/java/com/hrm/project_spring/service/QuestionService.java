@@ -8,10 +8,7 @@ import com.hrm.project_spring.enums.QuestionStatus;
 import com.hrm.project_spring.enums.QuestionType;
 import com.hrm.project_spring.exception.BadRequestException;
 import com.hrm.project_spring.mapper.QuestionMapper;
-import com.hrm.project_spring.repository.ChapterRepository;
-import com.hrm.project_spring.repository.QuestionRepository;
-import com.hrm.project_spring.repository.SubjectRepository;
-import com.hrm.project_spring.repository.UserRepository;
+import com.hrm.project_spring.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
@@ -22,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +31,7 @@ public class QuestionService {
     private final UserRepository userRepository;
     private final ChapterRepository chapterRepository;
     private final SubjectRepository subjectRepository;
+    private final TestRepository testRepository;
 
     //  1. Lấy tất cả câu hỏi (phân trang)
     @Transactional
@@ -62,56 +61,45 @@ public class QuestionService {
 
     @Transactional
     public QuestionResponse create(CreateQuestionRequest request) {
-
         // ==========================
         // 1. Validate nghiệp vụ
         // ==========================
-
         // Validate stem sau khi bỏ HTML
         String plainText = Jsoup.parse(request.getStem()).text().trim();
-        if (plainText.length() < 10) {
+        if (plainText.length() < 10 ) {
             throw new BadRequestException("Nội dung câu hỏi quá ngắn.");
         }
-
-        // Validate Subject
         Subject subject = subjectRepository.findById(request.getSubjectId())
                 .orElseThrow(() -> new BadRequestException("Môn học không tồn tại."));
-
         // Validate Chapter
         Chapter chapter = chapterRepository.findById(request.getChapterId())
                 .orElseThrow(() -> new BadRequestException("Chương không tồn tại."));
-
         // Chapter phải thuộc Subject
         if (!chapter.getSubject().getId().equals(subject.getId())) {
             throw new BadRequestException("Chương không thuộc môn học đã chọn.");
         }
-
         // Validate theo loại câu hỏi
         //câu hỏi 1 đáp án đúng
         if (request.getType() == QuestionType.MCQ_SINGLE) {
-
-            if (request.getOptions() == null
-                    || request.getOptions().size() < 2
-                    || request.getOptions().size() > 8) {
+            if (request.getOptions() == null || request.getOptions().isEmpty()) {
+                throw new BadRequestException("Phương án không hợp lệ ");
+            }
+            if (request.getOptions().size() < 2 || request.getOptions().size() > 8) {
                 throw new BadRequestException("Số phương án từ 2 đến 8.");
             }
-
             long correctCount = request.getOptions()
                     .stream()
                     .filter(QuestionOptionRequest::getIsCorrect)
                     .count();
-
             if (correctCount == 0) {
                 throw new BadRequestException("Phải chọn 1 đáp án đúng.");
             }
-
             if (correctCount > 1) {
                 throw new BadRequestException("Loại MCQ-Single chỉ cho phép 1 đáp án đúng.");
             }
         }
         // câu hỏi nhiều đáp án đúng
         if (request.getType() == QuestionType.MCQ_MULTIPLE) {
-
             long correctCount = request.getOptions()
                     .stream()
                     .filter(QuestionOptionRequest::getIsCorrect)
@@ -130,13 +118,13 @@ public class QuestionService {
                         "Câu hỏi tự luận không có phương án trả lời"
                 );
             }
-
             if (request.getReferenceAnswer() == null) {
                 throw new BadRequestException(
                         "Tự luận cần có đáp án tham khảo"
                 );
             }
         }
+
         // câu hỏi đúng sai
         if (request.getType() == QuestionType.TRUE_FALSE) {
             if (request.getOptions() == null
@@ -222,48 +210,150 @@ public class QuestionService {
 
     // 4. Cập nhật câu hỏi
     @Transactional
-    public QuestionResponse update(Long id, QuestionRequest request) {
+    public QuestionResponse update(Long id,UpdateQuestionRequest request) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy câu hỏi"));
-
-        if (request.getContent() != null) {
-            question.setStem(request.getContent());
+        String plainText = Jsoup.parse(request.getStem()).text().trim();
+        if (plainText.length() < 10 ) {
+            throw new BadRequestException("Nội dung câu hỏi quá ngắn.");
         }
+        Subject subject = subjectRepository.findById(request.getSubjectId())
+                .orElseThrow(() -> new BadRequestException("Môn học không tồn tại."));
+        // Validate Chapter
+        Chapter chapter = chapterRepository.findById(request.getChapterId())
+                .orElseThrow(() -> new BadRequestException("Chương không tồn tại."));
+        // Chapter phải thuộc Subject
+        if (!chapter.getSubject().getId().equals(subject.getId())) {
+            throw new BadRequestException("Chương không thuộc môn học đã chọn.");
+        }
+        // câu hỏi 1 đáp án đúng
+        if (request.getType() == QuestionType.MCQ_SINGLE) {
+            if (request.getOptions() == null || request.getOptions().isEmpty()) {
+                throw new BadRequestException("Phương án không hợp lệ ");
+            }
+            if (request.getOptions().size() < 2 || request.getOptions().size() > 8) {
+                throw new BadRequestException("Số phương án từ 2 đến 8.");
+            }
 
-        if (request.getQuestionType() != null) {
-            try {
-                question.setType(QuestionType.valueOf(request.getQuestionType().toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "Loại câu hỏi không hợp lệ: " + request.getQuestionType());
+            long correctCount = request.getOptions()
+                    .stream()
+                    .filter(QuestionOptionRequest::getIsCorrect)
+                    .count();
+
+            if (correctCount == 0) {
+                throw new BadRequestException("Phải chọn 1 đáp án đúng.");
+            }
+
+            if (correctCount > 1) {
+                throw new BadRequestException("Loại MCQ-Single chỉ cho phép 1 đáp án đúng.");
             }
         }
-        if (request.getDifficulty() != null && !request.getDifficulty().isBlank()) {
-            try {
-                question.setBloomLevel(Integer.parseInt(request.getDifficulty()));
-            } catch (NumberFormatException e) {
-                question.setBloomLevel(switch (request.getDifficulty().toLowerCase()) {
-                    case "easy" -> 1;
-                    case "medium" -> 2;
-                    case "hard" -> 3;
-                    default -> 1;
-                });
+
+        // câu hỏi nhiều đáp án đúng
+        if (request.getType() == QuestionType.MCQ_MULTIPLE) {
+            long correctCount = request.getOptions()
+                    .stream()
+                    .filter(QuestionOptionRequest::getIsCorrect)
+                    .count();
+
+            if (correctCount == 0) {
+                throw new BadRequestException("MCQ-Multiple phải có ít nhất 1 đáp án đúng.");
             }
         }
+        // tự luận ngắn
+        if (request.getType() == QuestionType.ESSAY) {
 
-        question.setUpdatedAt(LocalDateTime.now());
-        Question updated = questionRepository.save(question);
-        return QuestionMapper.toResponse(updated);
+            if (request.getOptions() != null
+                    && !request.getOptions().isEmpty()) {
+                throw new BadRequestException(
+                        "Câu hỏi tự luận không có phương án trả lời"
+                );
+            }
+            if (request.getReferenceAnswer() == null) {
+                throw new BadRequestException(
+                        "Tự luận cần có đáp án tham khảo"
+                );
+            }
+        }
+        // câu hỏi đúng sai
+        if (request.getType() == QuestionType.TRUE_FALSE) {
+            if (request.getOptions() == null
+                    || request.getOptions().size() != 2) {
+                throw new BadRequestException(
+                        "Câu hỏi Đúng/Sai phải có 2 phương án."
+                );
+            }
+            long correctCount = request.getOptions()
+                    .stream()
+                    .filter(QuestionOptionRequest::getIsCorrect)
+                    .count();
+            if (correctCount != 1) {
+                throw new BadRequestException(
+                        "Câu hỏi Đúng/Sai phải có đúng 1 đáp án đúng."
+                );
+            }
+            List<String> values = request.getOptions()
+                    .stream()
+                    .map(o -> o.getContent().trim().toLowerCase())
+                    .toList();
+            boolean valid =
+                    values.contains("đúng")
+                            && values.contains("sai");
+            if (!valid) {
+                throw new BadRequestException(
+                        "Phương án của câu hỏi Đúng/Sai phải là Đúng và Sai."
+                );
+            }
+        }
+        question.setStem(request.getStem());
+        question.setType(request.getType());
+        question.setBloomLevel(request.getBloomLevel());
+        question.setScore(request.getScore());
+        question.setExplanation(request.getExplanation());
+        question.setReferenceAnswer(request.getReferenceAnswer());
+        question.setRubric(request.getRubric());
+
+        question.getQuestionOptions().clear();
+        List<QuestionOption> questionOptions = new ArrayList<>();
+        for (QuestionOptionRequest optionRequest : request.getOptions()) {
+            QuestionOption questionOption = QuestionOption.builder()
+                    .content(optionRequest.getContent())
+                    .isCorrect(optionRequest.getIsCorrect())
+                    .scoreWeight(optionRequest.getScore())
+                    .question(question)
+                    .build();
+            questionOptions.add(questionOption);
+        }
+        question.setQuestionOptions(questionOptions);
+        Question saved = questionRepository.save(question);
+        return QuestionMapper.toResponse(saved);
+
     }
+
+
+
+
+
 
     // 5. Xóa câu hỏi
     @Transactional
     public void delete(Long id) {
-        if (!questionRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy câu hỏi");
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Không tìm thấy câu hỏi"
+                ));
+
+        // Kiểm tra câu hỏi đã được dùng trong bài thi chưa
+        if (testRepository.existsByQuestions_Id(id)) {
+            throw new BadRequestException(
+                    "Câu hỏi đã được sử dụng trong bài thi, không thể xóa. Vui lòng lưu trữ (Archive) thay thế."
+            );
         }
-        questionRepository.deleteById(id);
+
+        questionRepository.delete(question);
     }
+
 
     // 6. Bulk cập nhật Subject và Chapter cho nhiều Question
     @Transactional

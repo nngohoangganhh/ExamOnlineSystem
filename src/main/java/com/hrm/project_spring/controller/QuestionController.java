@@ -2,11 +2,7 @@ package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
-import com.hrm.project_spring.dto.question.CreateQuestionRequest;
-import com.hrm.project_spring.dto.question.QuestionClassificationRequest;
-import com.hrm.project_spring.dto.question.QuestionDetailResponse;
-import com.hrm.project_spring.dto.question.QuestionRequest;
-import com.hrm.project_spring.dto.question.QuestionResponse;
+import com.hrm.project_spring.dto.question.*;
 import com.hrm.project_spring.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +55,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<QuestionResponse>> update(
             @PathVariable Long id,
-            @RequestBody QuestionRequest request) {
+            @RequestBody UpdateQuestionRequest request) {
         return ResponseEntity.ok(ApiResponse.<QuestionResponse>builder()
                 .success(true)
                 .code(200)
@@ -81,7 +77,7 @@ public class QuestionController {
     }
 
     @PreAuthorize("hasAuthority('QUESTION:UPDATE')")
-    @PatchMapping("/api/v1/questions/classification")
+    @PatchMapping("/classification")
     public ResponseEntity<ApiResponse<Integer>> updateQuestionClassification(
             @Valid @RequestBody QuestionClassificationRequest request) {
         int updatedCount = questionService.updateQuestionClassification(request);

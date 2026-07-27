@@ -39,6 +39,6 @@ logging:
     root: INFO
     org.springframework.security: INFO
 
-springdoc:
+spring-doc:
   swagger-ui:
     operationsSorter: method
