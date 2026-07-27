@@ -1,10 +1,8 @@
 package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.common.ApiResponse;
-import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.role.RoleRequest;
 import com.hrm.project_spring.dto.role.RoleResponse;
-import com.hrm.project_spring.service.PermissionService;
 import com.hrm.project_spring.service.RoleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +27,7 @@ public class RoleController {
                         .success(true)
                         .code(200)
                         .message("Lấy danh sách role thành công")
-                        .data(roleService.getAllRoles(pageNo,pageSize))
+                        .data(roleService.getAllRoles(pageNo, pageSize))
                         .build()
         );
     }
@@ -80,7 +78,6 @@ public class RoleController {
                 .data(null)
                 .build());
     }
-
 
 
 }

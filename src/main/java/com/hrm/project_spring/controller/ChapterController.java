@@ -15,12 +15,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class ChapterController {
 
     private final ChapterService chapterService;
 
     @PreAuthorize("hasAuthority('CHAPTER:CREATE')")
-    @PostMapping("/api/v1/chapters")
+    @PostMapping("/chapters")
     public ResponseEntity<ApiResponse<ChapterResponse>> createChapter(@Valid @RequestBody ChapterRequest request) {
         return ResponseEntity.ok(ApiResponse.<ChapterResponse>builder()
                 .success(true)
@@ -31,7 +32,7 @@ public class ChapterController {
     }
 
     @PreAuthorize("hasAuthority('CHAPTER:READ')")
-    @GetMapping("/api/v1/chapters")
+    @GetMapping("/chapters")
     public ResponseEntity<ApiResponse<PageResponse<ChapterResponse>>> getAllChapters(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
@@ -44,7 +45,7 @@ public class ChapterController {
     }
 
     @PreAuthorize("hasAuthority('CHAPTER:READ')")
-    @GetMapping("/api/v1/chapters/{id}")
+    @GetMapping("chapters/{id}")
     public ResponseEntity<ApiResponse<ChapterResponse>> getChapterById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<ChapterResponse>builder()
                 .success(true)
@@ -55,7 +56,7 @@ public class ChapterController {
     }
 
     @PreAuthorize("hasAuthority('CHAPTER:READ')")
-    @GetMapping("/api/v1/subjects/{subjectId}/chapters")
+    @GetMapping("/subjects/{subjectId}/chapters")
     public ResponseEntity<ApiResponse<List<ChapterResponse>>> getChaptersBySubjectId(@PathVariable Long subjectId) {
         return ResponseEntity.ok(ApiResponse.<List<ChapterResponse>>builder()
                 .success(true)
@@ -66,7 +67,7 @@ public class ChapterController {
     }
 
     @PreAuthorize("hasAuthority('CHAPTER:UPDATE')")
-    @PutMapping("/api/v1/chapters/{id}")
+    @PutMapping("chapters/{id}")
     public ResponseEntity<ApiResponse<ChapterResponse>> updateChapter(
             @PathVariable Long id,
             @Valid @RequestBody ChapterRequest request) {
@@ -79,7 +80,7 @@ public class ChapterController {
     }
 
     @PreAuthorize("hasAuthority('CHAPTER:DELETE')")
-    @DeleteMapping("/api/v1/chapters/{id}")
+    @DeleteMapping("chapters/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteChapter(@PathVariable Long id) {
         chapterService.deleteChapter(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()

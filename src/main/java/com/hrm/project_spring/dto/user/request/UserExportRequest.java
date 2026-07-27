@@ -1,4 +1,4 @@
-package com.hrm.project_spring.dto.user;
+package com.hrm.project_spring.dto.user.request;
 
 import com.hrm.project_spring.enums.ExportFormat;
 import com.hrm.project_spring.enums.UserStatus;

@@ -1,4 +1,4 @@
-package com.hrm.project_spring.dto.user;
+package com.hrm.project_spring.dto.user.request;
 
 import com.hrm.project_spring.enums.Gender;
 import jakarta.validation.constraints.*;
@@ -16,6 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class CreateUserRequest {
 
     @NotBlank(message = "Họ tên không được trống")

@@ -2,19 +2,24 @@ package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
-import com.hrm.project_spring.dto.user.*;
+import com.hrm.project_spring.dto.user.request.*;
+import com.hrm.project_spring.dto.user.response.CreateUserResponse;
+import com.hrm.project_spring.dto.user.response.ImportUserResponse;
+import com.hrm.project_spring.dto.user.response.UserResponse;
+import com.hrm.project_spring.dto.user.response.UserResponseDto;
 import com.hrm.project_spring.enums.UserStatus;
+import com.hrm.project_spring.service.user.UserImportService;
 import com.hrm.project_spring.service.user.UserExportService;
 import com.hrm.project_spring.service.user.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,6 +30,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserExportService userExportService;
+    private final UserImportService userImportService;
 
     // ======================== USER CRUD (Admin) ========================
 
@@ -49,13 +55,25 @@ public class UserController {
      */
     @PreAuthorize("hasAuthority('USER:READ')")
     @GetMapping("/search")
+
     public ResponseEntity<ApiResponse<PageResponse<UserResponseDto>>> searchUsers(
+
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long roleId,
             @RequestParam(required = false) Long classId,
             @RequestParam(required = false) UserStatus status,
-            @RequestParam(required = false) String createdFrom,
-            @RequestParam(required = false) String createdTo,
+            // Trước đây nhận String rồi tự gọi LocalDate.parse(...) thủ công:
+            // nếu client nhập giá trị không phải ngày hợp lệ (vd "123"),
+            // DateTimeParseException bị ném ra KHÔNG có handler riêng trong
+            // GlobalExceptionHandler -> rơi xuống handler Exception.class chung
+            // -> trả về 500 thay vì 400.
+            // Để Spring tự bind trực tiếp sang LocalDate: nếu parse lỗi, Spring
+            // ném MethodArgumentTypeMismatchException, đã có handler xử lý sẵn
+            // trong GlobalExceptionHandler -> trả về đúng 400 kèm message rõ ràng.
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) java.time.LocalDate createdFrom,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) java.time.LocalDate createdTo,
             @RequestParam(defaultValue = "false") boolean includeDeleted,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "20") int pageSize) {
@@ -66,13 +84,8 @@ public class UserController {
         search.setClassId(classId);
         search.setStatus(status);
         search.setIncludeDeleted(includeDeleted);
-
-        if (createdFrom != null) {
-            search.setCreatedFrom(java.time.LocalDate.parse(createdFrom));
-        }
-        if (createdTo != null) {
-            search.setCreatedTo(java.time.LocalDate.parse(createdTo));
-        }
+        search.setCreatedFrom(createdFrom);
+        search.setCreatedTo(createdTo);
 
         return ResponseEntity.ok(
                 ApiResponse.<PageResponse<UserResponseDto>>builder()
@@ -267,48 +280,115 @@ public class UserController {
     }
     @PreAuthorize("hasAuthority('USER:READ')")
     @GetMapping("/students")
-    public ResponseEntity<ApiResponse<Object>> getAllStudent(){
+    public ResponseEntity<ApiResponse<Object>> getAllStudent(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+
         return ResponseEntity.ok(ApiResponse
                 .builder()
                 .success(true)
                 .code(200)
                 .message("Lấy danh sách student thành công")
-                .data(userService.getAllStudent())
+                .data(userService.getAllStudent(pageNo, pageSize))
                 .build());
     }
     // ======================== EXPORT (UC13) ========================
-
     /**
-     * UC13: Export danh sách user ra xlsx với filter.
+     * UC12: Import users từ file Excel/CSV
      */
-    @PreAuthorize("hasAuthority('EXPORT:USER')")
-    @GetMapping(value = "/export", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    public ResponseEntity<byte[]> exportUsersXlsx(
-            @RequestParam(required = false) UserStatus status,
-            @RequestParam(required = false) Long roleId,
-            @RequestParam(defaultValue = "false") boolean includeDeleted) {
-        byte[] fileData = userExportService.exportUsersXlsx(status, roleId, includeDeleted);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"users.xlsx\"")
-                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                .contentLength(fileData.length)
-                .body(fileData);
+    @PreAuthorize("hasAuthority('USER:CREATE')")
+    @PostMapping("/import")
+    public ResponseEntity<ApiResponse<ImportUserResponse>> importUsers(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "sendActivationEmail", defaultValue = "true")
+            boolean sendActivationEmail,
+            @RequestParam(value = "dryRun", defaultValue = "false")
+            boolean dryRun,
+            @RequestParam(value = "defaultRole", defaultValue = "STUDENT")
+            String defaultRole) {
+
+        // --- Validate file ---
+        if (file.isEmpty()) {
+            throw new RuntimeException("File không được để trống");
+        }
+
+        // Validate định dạng
+        String filename = file.getOriginalFilename();
+        if (filename == null ||
+                !(filename.endsWith(".xlsx") || filename.endsWith(".xls")
+                        || filename.endsWith(".csv"))) {
+            throw new RuntimeException("Chỉ hỗ trợ .xlsx, .xls, .csv");
+        }
+
+        // Validate kích thước (5MB = 5 * 1024 * 1024)
+        if (file.getSize() > 5 * 1024 * 1024) {
+            throw new RuntimeException(
+                    "File vượt quá giới hạn 5MB. Vui lòng chia nhỏ");
+        }
+
+        // Validate defaultRole
+        if (!List.of("STUDENT", "TEACHER", "ADMIN")
+                .contains(defaultRole.toUpperCase())) {
+            throw new RuntimeException("Role mặc định không hợp lệ");
+        }
+
+        // --- Gọi service ---
+        ImportUserResponse result = userImportService.importUsers(
+                file, dryRun, sendActivationEmail, defaultRole);
+
+        return ResponseEntity.ok(
+                ApiResponse.<ImportUserResponse>builder()
+                        .success(true)
+                        .code(200)
+                        .message(dryRun
+                                ? "Dry-run hoàn tất. Không có user nào được tạo."
+                                : "Import hoàn tất")
+                        .data(result)
+                        .build()
+        );
     }
 
     /**
-     * UC13: Export danh sách user ra CSV với filter.
+     * UC13: Export danh sách user ra Excel/CSV
      */
-    @PreAuthorize("hasAuthority('EXPORT:USER')")
-    @GetMapping(value = "/export/csv", produces = "text/csv")
-    public ResponseEntity<byte[]> exportUsersCsv(
-            @RequestParam(required = false) UserStatus status,
-            @RequestParam(required = false) Long roleId,
-            @RequestParam(defaultValue = "false") boolean includeDeleted) {
-        byte[] fileData = userExportService.exportUsersCsv(status, roleId, includeDeleted);
+    @PreAuthorize("hasAuthority('USER:READ')")
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportUsers(
+            @RequestParam(value = "format", defaultValue = "xlsx") String format,
+            @RequestParam(value = "includeDeleted", defaultValue = "false")
+            boolean includeDeleted,
+            @RequestParam(value = "fields", required = false) List<String> fields,
+            @RequestParam(value = "role", required = false) String role,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+        // Validate format
+        if (!format.equals("xlsx") && !format.equals("csv")) {
+            throw new RuntimeException("Định dạng không hợp lệ. Chỉ hỗ trợ xlsx, csv");
+        }
+        // Build request DTO
+        ExportUserRequest request = new ExportUserRequest();
+        request.setFormat(format);
+        request.setIncludeDeleted(includeDeleted);
+        request.setFields(fields);
+        request.setRole(role);
+        request.setStatus(status);
+        request.setKeyword(keyword);
+        byte[] fileContent = userExportService.exportUsers(request);
+        // Xác định Content-Type và tên file
+        String contentType;
+        String filename;
+        if ("csv".equals(format)) {
+            contentType = "text/csv";
+            filename = "users_export.csv";
+        } else {
+            contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            filename = "users_export.xlsx";
+        }
+        // TODO: Ghi audit log (BR-027)
+        // auditLogService.log("user:export", adminId, filters, users.size());
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"users.csv\"")
-                .contentType(MediaType.parseMediaType("text/csv; charset=UTF-8"))
-                .contentLength(fileData.length)
-                .body(fileData);
+                .header("Content-Disposition", "attachment; filename=" + filename)
+                .header("Content-Type", contentType)
+                .body(fileContent);
     }
 }

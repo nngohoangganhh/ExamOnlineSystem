@@ -60,54 +60,6 @@ public class QuestionService {
         return QuestionMapper.toMapperResponse(question);
     }
 
-    // 3. Tạo câu hỏi mới
-//    @Transactional
-//    public QuestionResponse create(QuestionRequest request) {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        Long currentUserId = userRepository.findByUsername(username)
-//                .map(u -> u.getId())
-//                //.map(User::getId())
-//                .orElse(null);
-//
-//        // Mapping: QuestionRequest.questionType (String) → QuestionType enum
-//        QuestionType type = null;
-//        if (request.getQuestionType() != null) {
-//            try {
-//                type = QuestionType.valueOf(request.getQuestionType().toUpperCase());
-//            } catch (IllegalArgumentException e) {
-//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//                        "Loại câu hỏi không hợp lệ: " + request.getQuestionType());
-//            }
-//        }
-//
-//        // Mapping: QuestionRequest.difficulty (String) → bloomLevel (Integer)
-//        Integer bloomLevel = null;
-//        if (request.getDifficulty() != null && !request.getDifficulty().isBlank()) {
-//            try {
-//                bloomLevel = Integer.parseInt(request.getDifficulty());
-//            } catch (NumberFormatException e) {
-//                // Nếu difficulty là text (easy/medium/hard), map sang bloomLevel 1/2/3
-//                bloomLevel = switch (request.getDifficulty().toLowerCase()) {
-//                    case "easy" -> 1;
-//                    case "medium" -> 2;
-//                    case "hard" -> 3;
-//                    default -> 1;
-//                };
-//            }
-//        }
-//
-//        Question question = Question.builder()
-//                .stem(request.getContent())
-//                .type(type)
-//                .bloomLevel(bloomLevel != null ? bloomLevel : 1)
-//                .status(QuestionStatus.DRAFT)
-//                .createdAt(LocalDateTime.now())
-//                .createdBy(currentUserId)
-//                .build();
-//
-//        Question saved = questionRepository.save(question);
-//        return QuestionMapper.toResponse(saved);
-//    }
     @Transactional
     public QuestionResponse create(CreateQuestionRequest request) {
 

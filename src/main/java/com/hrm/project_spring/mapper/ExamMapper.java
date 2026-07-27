@@ -2,7 +2,7 @@ package com.hrm.project_spring.mapper;
 
 import com.hrm.project_spring.dto.exam.ExamDetailResponse;
 import com.hrm.project_spring.dto.exam.ExamListResponse;
-import com.hrm.project_spring.dto.user.UserResponseDto;
+import com.hrm.project_spring.dto.user.response.UserResponseDto;
 import com.hrm.project_spring.entity.Exam;
 import com.hrm.project_spring.entity.User;
 

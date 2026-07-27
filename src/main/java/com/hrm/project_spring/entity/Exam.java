@@ -27,9 +27,9 @@ public class Exam {
 
     @ManyToMany
     @JoinTable(
-    name = "exam_students",
-    joinColumns = @JoinColumn(name = "exam_id"),
-    inverseJoinColumns = @JoinColumn(name = "user_id"))
+            name = "exam_students",
+            joinColumns = @JoinColumn(name = "exam_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> students = new HashSet<>();
 
     private String name;

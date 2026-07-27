@@ -4,6 +4,7 @@ import com.hrm.project_spring.enums.Gender;
 import com.hrm.project_spring.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -125,6 +126,7 @@ public class User {
     }
 
     @ManyToMany(mappedBy = "students", fetch = FetchType.LAZY)
+    @BatchSize(size = 20)
     private Set<ClassRoom> classRooms = new HashSet<>();
 
 

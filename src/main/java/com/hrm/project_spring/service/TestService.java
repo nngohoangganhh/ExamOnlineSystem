@@ -36,6 +36,7 @@ public class TestService {
     private final ExamRepository examRepository;
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
+
     @Transactional
     public PageResponse<TestResponse> getAllTest(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
@@ -64,15 +65,15 @@ public class TestService {
     @Transactional
     public TestResponse createTest(TestRequest request) {
 
-         if (request.getTitle() == null || request.getTitle().isBlank()) {
+        if (request.getTitle() == null || request.getTitle().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title không được để trống");
         }
-          if (request.getTotalScore() == null || request.getTotalScore() <= 0 || request.getTotalScore() > 10) {
+        if (request.getTotalScore() == null || request.getTotalScore() <= 0 || request.getTotalScore() > 10) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, " Tổng điểm của bài thi sẽ không được quá 10 điểm");
-         }
-          if (request.getDurationMinutes() == null || request.getDurationMinutes() <= 0 || request.getDurationMinutes() >180) {
-             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "  thời gian làm bài của bài thi sẽ không được quá 180 phút");
-         }
+        }
+        if (request.getDurationMinutes() == null || request.getDurationMinutes() <= 0 || request.getDurationMinutes() > 180) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "  thời gian làm bài của bài thi sẽ không được quá 180 phút");
+        }
         Exam exam = null;
         if (request.getExamId() != null) {
             exam = examRepository.findById(request.getExamId())
@@ -103,9 +104,9 @@ public class TestService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Test not found"));
 
         if (request.getExamId() != null) {
-             Exam exam = examRepository.findById(request.getExamId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
-             test.setExam(exam);
+            Exam exam = examRepository.findById(request.getExamId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
+            test.setExam(exam);
         }
         test.setTitle(request.getTitle());
         test.setDurationMinutes(request.getDurationMinutes());
@@ -113,11 +114,13 @@ public class TestService {
         Test updatedTest = testRepository.save(test);
         return mapToResponse(updatedTest);
     }
+
     public void deleteTest(Long id) {
         Test test = testRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Test not found"));
         testRepository.delete(test);
     }
+
     @Transactional
     public TestResponse assignQuestions(Long testId, AssignQuestionsRequest request) {
         if (testId == null) {
@@ -137,24 +140,25 @@ public class TestService {
         Test saved = testRepository.save(test);
         return mapToResponse(saved);
     }
+
     public TestResponse mapToResponse(Test test) {
         // Map questions + answers (không expose isCorrect)
         List<TestResponse.QuestionDto> questionDtos = test.getQuestions() == null ? List.of() :
-            test.getQuestions().stream().map(q -> {
-                List<TestResponse.AnswerDto> answerDtos = q.getQuestionOptions() == null ? List.of() :
-                    q.getQuestionOptions().stream().map(a ->
-                        TestResponse.AnswerDto.builder()
-                            .id(a.getId())
-                            .content(a.getContent())
-                            .build()
-                    ).toList();
-                return TestResponse.QuestionDto.builder()
-                    .id(q.getId())
-                    .content(q.getStem())
-                    .difficulty(q.getReferenceAnswer())
-                    .answers(answerDtos)
-                    .build();
-            }).toList();
+                test.getQuestions().stream().map(q -> {
+                    List<TestResponse.AnswerDto> answerDtos = q.getQuestionOptions() == null ? List.of() :
+                            q.getQuestionOptions().stream().map(a ->
+                                    TestResponse.AnswerDto.builder()
+                                    .id(a.getId())
+                                    .content(a.getContent())
+                                    .build()
+                            ).toList();
+                    return TestResponse.QuestionDto.builder()
+                           .id(q.getId())
+                           .content(q.getStem())
+                           .difficulty(q.getReferenceAnswer())
+                           .answers(answerDtos)
+                           .build();
+                }).toList();
 
         return TestResponse.builder()
                 .id(test.getId())

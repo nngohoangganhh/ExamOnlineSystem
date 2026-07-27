@@ -85,26 +85,26 @@ public class DashboardService {
                     List<MyExamResponse.MyTestSummary> testSummaries = exam.getTests() == null
                             ? List.of()
                             : exam.getTests().stream()
-                            .map(test -> {
-                                boolean submitted = attemptRepository
-                                        .existsByUserIdAndTestIdAndSubmitTimeIsNotNull(user.getId(), test.getId());
-                                Long lastAttemptId = attemptRepository
-                                        // Dùng findFirst để tránh NonUniqueResultException
-                                        // khi student thi lại nhiều lần cùng 1 test
-                                        .findFirstByUserIdAndTestIdOrderByIdDesc(user.getId(), test.getId())
-                                        .map(a -> a.getId())
-                                        .orElse(null);
+                              .map(test -> {
+                                  boolean submitted = attemptRepository
+                                          .existsByUserIdAndTestIdAndSubmitTimeIsNotNull(user.getId(), test.getId());
+                                  Long lastAttemptId = attemptRepository
+                                          // Dùng findFirst để tránh NonUniqueResultException
+                                          // khi student thi lại nhiều lần cùng 1 test
+                                          .findFirstByUserIdAndTestIdOrderByIdDesc(user.getId(), test.getId())
+                                          .map(a -> a.getId())
+                                          .orElse(null);
 
-                                return MyExamResponse.MyTestSummary.builder()
-                                        .testId(test.getId())
-                                        .testTitle(test.getTitle())
-                                        .durationMinutes(test.getDurationMinutes())
-                                        .totalScore(test.getTotalScore())
-                                        .alreadySubmitted(submitted)
-                                        .lastAttemptId(lastAttemptId)
-                                        .build();
-                            })
-                            .collect(Collectors.toList());
+                                  return MyExamResponse.MyTestSummary.builder()
+                                         .testId(test.getId())
+                                         .testTitle(test.getTitle())
+                                         .durationMinutes(test.getDurationMinutes())
+                                         .totalScore(test.getTotalScore())
+                                         .alreadySubmitted(submitted)
+                                         .lastAttemptId(lastAttemptId)
+                                         .build();
+                              })
+                              .collect(Collectors.toList());
 
                     return MyExamResponse.builder()
                             .examId(exam.getId())

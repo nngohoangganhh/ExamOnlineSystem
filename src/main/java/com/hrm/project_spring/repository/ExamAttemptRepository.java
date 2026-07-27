@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -37,9 +36,7 @@ public interface ExamAttemptRepository extends JpaRepository<ExamAttempt, Long> 
 
     // Tất cả attempts của 1 user + 1 exam
     @Query("SELECT a FROM ExamAttempt a WHERE a.user.id = :userId AND a.test.exam.id = :examId")
-    Page<ExamAttempt> findByUserIdAndExamId(@Param("userId") Long userId,
-                                             @Param("examId") Long examId,
-                                             Pageable pageable);
+    Page<ExamAttempt> findByUserIdAndExamId(@Param("userId") Long userId, @Param("examId") Long examId, Pageable pageable);
 
     // Đếm số lần thi đã nộp của 1 user (student dashboard)
     long countByUserIdAndSubmitTimeIsNotNull(Long userId);

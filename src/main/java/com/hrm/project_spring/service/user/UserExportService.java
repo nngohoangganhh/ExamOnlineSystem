@@ -1,183 +1,213 @@
 package com.hrm.project_spring.service.user;
 
-import com.hrm.project_spring.entity.ClassRoom;
-import com.hrm.project_spring.entity.Role;
+import com.hrm.project_spring.dto.user.request.ExportUserRequest;
 import com.hrm.project_spring.entity.User;
-import com.hrm.project_spring.enums.UserStatus;
 import com.hrm.project_spring.repository.UserRepository;
+import com.hrm.project_spring.service.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * UC13: Export danh sách user ra Excel hoặc CSV.
- * Hỗ trợ filter theo status, roleId, includeDeleted.
- * Giới hạn 50.000 dòng để tránh OOM.
- */
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserExportService {
-
-    private static final int MAX_EXPORT_ROWS = 50_000;
 
     private final UserRepository userRepository;
 
+    // Tất cả trường hợp lệ có thể xuất
+    private static final List<String> ALL_FIELDS = List.of(
+            "id", "username", "email", "fullName", "role", "status", "createdAt"
+    );
+
+    private static final int MAX_EXPORT_ROWS = 50_000;
+
     /**
-     * Export sang xlsx.
-     *
-     * @param status         Lọc theo trạng thái (null = tất cả)
-     * @param roleId         Lọc theo role id (null = tất cả)
-     * @param includeDeleted Có bao gồm user đã soft-delete không
+     * Export danh sách user ra byte[] (nội dung file)
      */
-    @Transactional(readOnly = true)
-    public byte[] exportUsersXlsx(UserStatus status, Long roleId, boolean includeDeleted) {
-        List<User> users = getFilteredUsers(status, roleId, includeDeleted);
+    public byte[] exportUsers(ExportUserRequest request) {
+        // 1. Validate fields
+        List<String> fields = (request.getFields() != null
+                && !request.getFields().isEmpty())
+                ? request.getFields()
+                : ALL_FIELDS; // mặc định xuất hết
 
-        try (Workbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        // Kiểm tra field hợp lệ
+        List<String> invalidFields = fields.stream()
+                .filter(f -> !ALL_FIELDS.contains(f))
+                .toList();
+        if (!invalidFields.isEmpty()) {
+            throw new RuntimeException(
+                    "Trường không hợp lệ: " + String.join(", ", invalidFields));
+        }
 
-            // Style cho header
-            CellStyle headerStyle = workbook.createCellStyle();
-            Font headerFont = workbook.createFont();
-            headerFont.setBold(true);
-            headerStyle.setFont(headerFont);
-            headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        // 2. Build query specification (filter động)
+        Specification<User> spec = Specification.where(null);
 
+        if (!request.isIncludeDeleted()) {
+            spec = spec.and(UserSpecification.notDeleted());
+        }
+        if (request.getRole() != null && !request.getRole().isEmpty()) {
+            spec = spec.and(UserSpecification.hasRole(request.getRole()));
+        }
+        if (request.getStatus() != null && !request.getStatus().isEmpty()) {
+            spec = spec.and(UserSpecification.hasStatus(request.getStatus()));
+        }
+        if (request.getKeyword() != null && !request.getKeyword().isEmpty()) {
+            spec = spec.and(UserSpecification.containsKeyword(request.getKeyword()));
+        }
+
+        // 2b. Validate format sớm, tránh NPE khi request không truyền format
+        String format = request.getFormat();
+        if (format == null || format.isBlank()) {
+            throw new RuntimeException("Định dạng xuất file không được để trống");
+        }
+        format = format.toLowerCase();
+        if (!format.equals("xlsx") && !format.equals("csv")) {
+            throw new RuntimeException("Định dạng không hợp lệ: " + format);
+        }
+
+        // 3. Đếm trước để chặn sớm nếu vượt giới hạn, tránh load toàn bộ
+        //    dữ liệu vào memory chỉ để rồi throw
+        long total = userRepository.count(spec);
+        if (total > MAX_EXPORT_ROWS) {
+            throw new RuntimeException(
+                    "Vượt giới hạn " + MAX_EXPORT_ROWS
+                            + " dòng, vui lòng thu hẹp filter");
+        }
+
+        // 3b. Query DB (BUG cũ: findAll((Sort) spec) là cast sai kiểu, luôn
+        //     ném ClassCastException lúc runtime vì spec là Specification<User>,
+        //     không phải Sort. Cần gọi overload findAll(Specification) từ
+        //     JpaSpecificationExecutor<User> mà UserRepository phải extends thêm.)
+        List<User> users = userRepository.findAll((Sort) spec);
+
+        // 4. Tạo file theo format
+        String finalFormat = format;
+        try {
+            return switch (finalFormat) {
+                case "xlsx" -> generateExcel(users, fields);
+                case "csv"  -> generateCsv(users, fields);
+                default -> throw new RuntimeException("Định dạng không hợp lệ");
+            };
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Hệ thống tạm quá tải, vui lòng thử lại sau");
+        }
+    }
+
+    /**
+     * Tạo file Excel từ danh sách user
+     */
+    private byte[] generateExcel(List<User> users, List<String> fields)
+            throws Exception {
+        try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Users");
-            createHeader(sheet, headerStyle);
-            writeUserData(sheet, users);
-            autoSizeColumns(sheet, HEADERS.length);
 
-            workbook.write(outputStream);
-            log.info("UC13: Export {} users (status={}, roleId={}, includeDeleted={})",
-                    users.size(), status, roleId, includeDeleted);
-            return outputStream.toByteArray();
+            // Header row
+            Row headerRow = sheet.createRow(0);
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            font.setBold(true);
+            headerStyle.setFont(font);
 
-        } catch (IOException e) {
-            throw new RuntimeException("Không thể tạo file Excel danh sách user", e);
+            for (int i = 0; i < fields.size(); i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(fields.get(i));
+                cell.setCellStyle(headerStyle);
+            }
+
+            // Data rows
+            for (int r = 0; r < users.size(); r++) {
+                Row row = sheet.createRow(r + 1);
+                User user = users.get(r);
+                for (int c = 0; c < fields.size(); c++) {
+                    Cell cell = row.createCell(c);
+                    cell.setCellValue(getFieldValue(user, fields.get(c)));
+                }
+            }
+
+            // Auto-size
+            for (int i = 0; i < fields.size(); i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            workbook.write(out);
+            return out.toByteArray();
         }
     }
 
     /**
-     * Export sang CSV.
+     * Tạo file CSV từ danh sách user
      */
-    @Transactional(readOnly = true)
-    public byte[] exportUsersCsv(UserStatus status, Long roleId, boolean includeDeleted) {
-        List<User> users = getFilteredUsers(status, roleId, includeDeleted);
-
+    private byte[] generateCsv(List<User> users, List<String> fields) {
         StringBuilder sb = new StringBuilder();
+
         // Header
-        sb.append(String.join(",", HEADERS)).append("\n");
-        // Rows
+        sb.append(String.join(",", fields)).append("\n");
+
+        // Data
         for (User user : users) {
-            sb.append(toCsvRow(user)).append("\n");
+            List<String> values = fields.stream()
+                    .map(f -> escapeCsv(getFieldValue(user, f)))
+                    .toList();
+            sb.append(String.join(",", values)).append("\n");
         }
-        log.info("UC13: Export CSV {} users", users.size());
-        return sb.toString().getBytes(StandardCharsets.UTF_8);
+
+        return sb.toString().getBytes();
     }
 
-    // ======================== PRIVATE HELPERS ========================
-
-    private static final String[] HEADERS = {
-            "ID", "USERNAME", "FULL_NAME", "EMAIL", "PHONE", "BIRTH_DATE",
-            "GENDER", "STUDENT_CODE", "EMPLOYEE_CODE", "STATUS",
-            "ROLES", "CLASS_CODES", "CREATED_AT"
-    };
-
-    private List<User> getFilteredUsers(UserStatus status, Long roleId, boolean includeDeleted) {
-        List<User> users = userRepository.findAllForExport(status, roleId, includeDeleted);
-
-        // UC13: Giới hạn 50.000 dòng
-        if (users.size() > MAX_EXPORT_ROWS) {
-            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
-                    "Kết quả vượt quá " + MAX_EXPORT_ROWS + " dòng. Hãy áp dụng bộ lọc để thu hẹp phạm vi.");
-        }
-        return users;
+    /**
+     * Lấy giá trị field từ User entity theo tên field
+     */
+    private String getFieldValue(User user, String field) {
+        return switch (field) {
+            case "id"        -> String.valueOf(user.getId());
+            case "username"  -> user.getUsername() != null ? user.getUsername() : "";
+            case "email"     -> user.getEmail() != null ? user.getEmail() : "";
+            case "fullName"  -> user.getFullName() != null ? user.getFullName() : "";
+            case "role"      -> {
+                if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+                    yield user.getRoles().stream()
+                            .map(r -> r.getCode())
+                            .collect(Collectors.joining(", "));
+                }
+                yield "";
+            }
+            case "status"    -> user.getStatus() != null
+                    ? user.getStatus().name() : "";
+            case "createdAt" -> user.getCreatedAt() != null
+                    ? user.getCreatedAt().toString() : "";
+            default          -> "";
+        };
     }
 
-    private void createHeader(Sheet sheet, CellStyle style) {
-        Row headerRow = sheet.createRow(0);
-        for (int i = 0; i < HEADERS.length; i++) {
-            Cell cell = headerRow.createCell(i);
-            cell.setCellValue(HEADERS[i]);
-            cell.setCellStyle(style);
-        }
-    }
-
-    private void writeUserData(Sheet sheet, List<User> users) {
-        int rowIndex = 1;
-        for (User user : users) {
-            Row row = sheet.createRow(rowIndex++);
-            row.createCell(0).setCellValue(user.getId() != null ? user.getId() : 0L);
-            row.createCell(1).setCellValue(safe(user.getUsername()));
-            row.createCell(2).setCellValue(safe(user.getFullName()));
-            row.createCell(3).setCellValue(safe(user.getEmail()));
-            row.createCell(4).setCellValue(safe(user.getPhone()));
-            row.createCell(5).setCellValue(user.getBirthDate() != null ? user.getBirthDate().toString() : "");
-            row.createCell(6).setCellValue(user.getGender() != null ? user.getGender().name() : "");
-            row.createCell(7).setCellValue(safe(user.getStudentCode()));
-            row.createCell(8).setCellValue(safe(user.getEmployeeCode()));
-            row.createCell(9).setCellValue(user.getStatus() != null ? user.getStatus().name() : "");
-            row.createCell(10).setCellValue(getRoleNames(user));
-            row.createCell(11).setCellValue(getClassCodes(user));
-            row.createCell(12).setCellValue(user.getCreatedAt() != null ? user.getCreatedAt().toString() : "");
-        }
-    }
-
-    private String toCsvRow(User user) {
-        return String.join(",",
-                csvEscape(user.getId() != null ? String.valueOf(user.getId()) : ""),
-                csvEscape(user.getUsername()),
-                csvEscape(user.getFullName()),
-                csvEscape(user.getEmail()),
-                csvEscape(user.getPhone()),
-                csvEscape(user.getBirthDate() != null ? user.getBirthDate().toString() : ""),
-                csvEscape(user.getGender() != null ? user.getGender().name() : ""),
-                csvEscape(user.getStudentCode()),
-                csvEscape(user.getEmployeeCode()),
-                csvEscape(user.getStatus() != null ? user.getStatus().name() : ""),
-                csvEscape(getRoleNames(user)),
-                csvEscape(getClassCodes(user)),
-                csvEscape(user.getCreatedAt() != null ? user.getCreatedAt().toString() : "")
-        );
-    }
-
-    private String getRoleNames(User user) {
-        if (user.getRoles() == null || user.getRoles().isEmpty()) return "";
-        return user.getRoles().stream().map(Role::getCode).collect(Collectors.joining("|"));
-    }
-
-    private String getClassCodes(User user) {
-        if (user.getClassRooms() == null || user.getClassRooms().isEmpty()) return "";
-        return user.getClassRooms().stream().map(ClassRoom::getCode).collect(Collectors.joining("|"));
-    }
-
-    private void autoSizeColumns(Sheet sheet, int totalColumns) {
-        for (int i = 0; i < totalColumns; i++) {
-            sheet.autoSizeColumn(i);
-        }
-    }
-
-    private String safe(String value) {
-        return value == null ? "" : value;
-    }
-
-    private String csvEscape(String value) {
+    /**
+     * Escape giá trị CSV (xử lý dấu phẩy, xuống dòng, ngoặc kép)
+     */
+    private String escapeCsv(String value) {
         if (value == null) return "";
-        // Escape dấu phẩy, nháy kép và xuống dòng
+
+        // Chống CSV/Formula Injection: nếu value bắt đầu bằng =, +, -, @
+        // thì khi mở bằng Excel/LibreOffice nó có thể bị hiểu thành công thức
+        // và thực thi (ví dụ: =HYPERLINK(...), =cmd|...). Thêm tiền tố "'"
+        // để ép hiển thị dạng text thuần, vô hiệu hóa việc thực thi công thức.
+        if (value.startsWith("=") || value.startsWith("+")
+                || value.startsWith("-") || value.startsWith("@")) {
+            value = "'" + value;
+        }
+
         if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
             return "\"" + value.replace("\"", "\"\"") + "\"";
         }

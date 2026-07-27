@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * UC07: Dịch vụ ghi và truy vấn Audit Log.
  * - log() chạy trong transaction RIÊNG (Propagation.REQUIRES_NEW)
- *   để đảm bảo audit log được ghi kể cả khi transaction chính rollback.
+ * để đảm bảo audit log được ghi kể cả khi transaction chính rollback.
  * - BR-015: Lưu tối thiểu 12 tháng (không xóa tự động).
  * - BR-016: Immutable — entity không có setter, chỉ tạo mới.
  */
@@ -35,11 +35,11 @@ public class AuditLogService {
     /**
      * Ghi audit log — an toàn, không ném exception.
      *
-     * @param userId    ID user thực hiện (null = anonymous/system)
-     * @param username  Username tại thời điểm thực hiện
-     * @param action    Loại hành động
-     * @param request   HttpServletRequest để lấy IP và User-Agent
-     * @param details   JSON string mô tả chi tiết (diff, targetId, reason…)
+     * @param userId   ID user thực hiện (null = anonymous/system)
+     * @param username Username tại thời điểm thực hiện
+     * @param action   Loại hành động
+     * @param request  HttpServletRequest để lấy IP và User-Agent
+     * @param details  JSON string mô tả chi tiết (diff, targetId, reason…)
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void log(Long userId, String username, AuditAction action,

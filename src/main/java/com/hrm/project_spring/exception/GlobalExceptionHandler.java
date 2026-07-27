@@ -10,12 +10,14 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.springframework.validation.BindException;
 import java.util.HashMap;
 import java.util.Map;
 
-// BUG #1: import java.util.Objects bị nhầm lẫn.
+// (Đã fix) BUG #1: import java.util.Objects bị nhầm lẫn.
 // Objects là utility class (Objects.requireNonNull...), không phải kiểu dữ liệu.
 // Dùng ApiResponse<Object> (chữ O hoa, không có 's') mới đúng.
 
@@ -37,11 +39,12 @@ public class GlobalExceptionHandler {
     // BUG #2 (ĐÃ SỬA): message cũ là "Malformed JSON role" – chữ "role" là typo thừa
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<String>> handleMalformedJson(HttpMessageNotReadableException ex) {
+        ex.getMostSpecificCause();
         ApiResponse<String> response = new ApiResponse<>(
                 false,
                 400,
                 "JSON không đúng định dạng",
-                ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage()
+                ex.getMostSpecificCause().getMessage()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
@@ -115,6 +118,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    // Ném ra khi bind @ModelAttribute (vd query params của UserSearchRequest)
+    // thất bại lúc convert kiểu, ví dụ nhập "123" vào field LocalDate createdFrom/createdTo.
+    // LƯU Ý: đây là org.springframework.validation.BindException, KHÁC HOÀN TOÀN với
+    // java.net.BindException (lỗi network port). Nếu import nhầm java.net.BindException,
+    // handler này sẽ không bao giờ match, và lỗi sẽ rơi xuống handleGenericException()
+    // bên dưới → trả về 500 thay vì 400 đúng ra phải có.
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleBindException(BindException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(),
+                        error.getDefaultMessage() != null
+                                ? error.getDefaultMessage()
+                                : "Giá trị không hợp lệ: " + error.getRejectedValue())
+        );
+        ApiResponse<Map<String, String>> response = new ApiResponse<>(
+                false, 400, "Dữ liệu tham số không hợp lệ", errors);
+        return ResponseEntity.badRequest().body(response);
+    }
+
     // QUAN TRỌNG: phải khai báo TRƯỚC handler Exception.class
     // vì AccessDeniedException extends RuntimeException extends Exception
     // → nếu Exception.class đặt trước, Spring sẽ match handler đó thay vì cái này
@@ -143,4 +166,16 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String message = String.format(
+                "Tham số '%s' có giá trị không hợp lệ: '%s'. Yêu cầu kiểu %s (ví dụ ngày: yyyy-MM-dd)",
+                ex.getName(), ex.getValue(),
+                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "?"
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("status", 400, "message", message));
+    }
+
 }

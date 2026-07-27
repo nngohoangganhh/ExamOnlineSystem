@@ -1,6 +1,6 @@
 package com.hrm.project_spring.dto.exam;
 
-import com.hrm.project_spring.dto.user.UserResponse;
+import com.hrm.project_spring.dto.user.response.UserResponse;
 import lombok.Data;
 
 import java.util.List;

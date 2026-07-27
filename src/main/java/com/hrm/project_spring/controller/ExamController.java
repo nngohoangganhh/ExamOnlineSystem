@@ -41,9 +41,10 @@ public class ExamController {
                         .build()
         );
     }
+
     @PreAuthorize("hasAuthority('EXAM:READ')")
     @GetMapping("/{id}")
-    public ResponseEntity <ApiResponse<ExamDetailResponse>> getExamById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ExamDetailResponse>> getExamById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 ApiResponse.<ExamDetailResponse>builder()
                         .success(true)
@@ -57,7 +58,7 @@ public class ExamController {
     @PreAuthorize("hasAuthority('EXAM:CREATE')")
     @PostMapping
     public ResponseEntity<ApiResponse<ExamDetailResponse>> create(@RequestBody @Valid ExamRequest request) {
-           return ResponseEntity.ok(
+        return ResponseEntity.ok(
                 ApiResponse.<ExamDetailResponse>builder()
                         .success(true)
                         .code(200)
@@ -77,7 +78,7 @@ public class ExamController {
                         .success(true)
                         .code(200)
                         .message("tìm kỳ thi theo id thành công")
-                        .data(examService.update(id,request))
+                        .data(examService.update(id, request))
                         .build()
         );
     }
@@ -100,9 +101,9 @@ public class ExamController {
     @GetMapping("/{examId}/students")
     public ResponseEntity<ApiResponse<List<StudentResponse>>> getStudentsByExamId(@PathVariable Long examId) {
         return ResponseEntity.ok(
-                 ApiResponse.<List<StudentResponse>>builder()
+                ApiResponse.<List<StudentResponse>>builder()
                         .success(true)
-                         .code(200)
+                        .code(200)
                         .message("lấy danh sách học sinh theo id kỳ thi thành công")
                         // Fix: Wrap Set<StudentResponse> into List to avoid ClassCastException
                         .data(new ArrayList<>(examService.getStudentsByExamId(examId)))

@@ -42,10 +42,10 @@ public class EmailService {
     /**
      * UC10: Gửi email thông báo tài khoản bị khóa.
      *
-     * @param toEmail    Địa chỉ email người nhận
-     * @param fullName   Tên người dùng
-     * @param reason     Lý do khóa
-     * @param lockUntil  Thời hạn khóa (null = vô thời hạn)
+     * @param toEmail   Địa chỉ email người nhận
+     * @param fullName  Tên người dùng
+     * @param reason    Lý do khóa
+     * @param lockUntil Thời hạn khóa (null = vô thời hạn)
      */
     public void sendAccountLockedEmail(String toEmail, String fullName, String reason, LocalDateTime lockUntil) {
         log.info("==========================================================");

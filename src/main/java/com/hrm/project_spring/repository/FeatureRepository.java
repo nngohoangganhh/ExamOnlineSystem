@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface FeatureRepository extends JpaRepository<Feature, Long> {
     Optional<Feature> findByCode(String code);
+
     boolean existsByCode(String code);
 }

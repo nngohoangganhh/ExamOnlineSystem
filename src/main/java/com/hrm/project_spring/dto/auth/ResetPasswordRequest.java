@@ -14,8 +14,8 @@ public class ResetPasswordRequest {
     @NotBlank(message = "Mật khẩu mới không được để trống")
     @Size(min = 8, max = 64, message = "Mật khẩu mới phải từ 8 đến 64 ký tự")
     @Pattern(
-        regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()\\-_=+]).+$",
-        message = "Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt"
+            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()\\-_=+]).+$",
+            message = "Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt"
     )
     private String newPassword;
 

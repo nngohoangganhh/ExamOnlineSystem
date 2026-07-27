@@ -13,9 +13,9 @@ public interface StudentAnswerRepository extends JpaRepository<StudentAnswer, Lo
 
     // Load toàn bộ câu trả lời của 1 result (fetch eager để tránh N+1)
     @Query("SELECT sa FROM StudentAnswer sa " +
-           "JOIN FETCH sa.question q " +
-           "LEFT JOIN FETCH sa.selectedAnswer " +
-           "WHERE sa.attempt.id = :attemptId")
+            "JOIN FETCH sa.question q " +
+            "LEFT JOIN FETCH sa.selectedAnswer " +
+            "WHERE sa.attempt.id = :attemptId")
     List<StudentAnswer> findByAttemptIdWithDetails(@Param("attemptId") Long attemptId);
 }
 

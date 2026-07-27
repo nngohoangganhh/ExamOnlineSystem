@@ -101,8 +101,6 @@ public class PermissionService {
         role.getPermissions().addAll(new HashSet<>(permissions));
         roleRepository.save(role);
     }
-
-
     //2
     @Transactional
     public void removePermissionsFromRole(Long roleId, Set<Long> permissionIds) {
@@ -111,7 +109,6 @@ public class PermissionService {
         role.getPermissions().removeIf(p -> permissionIds.contains(p.getId()));
         roleRepository.save(role);
     }
-
     public PermissionResponse mapToResponse(Permission permission) {
         String featureName = null;
         String featureCode = null;

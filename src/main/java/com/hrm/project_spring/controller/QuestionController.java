@@ -7,7 +7,6 @@ import com.hrm.project_spring.dto.question.QuestionClassificationRequest;
 import com.hrm.project_spring.dto.question.QuestionDetailResponse;
 import com.hrm.project_spring.dto.question.QuestionRequest;
 import com.hrm.project_spring.dto.question.QuestionResponse;
-import com.hrm.project_spring.entity.QuestionOption;
 import com.hrm.project_spring.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

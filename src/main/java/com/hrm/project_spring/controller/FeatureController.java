@@ -72,7 +72,7 @@ public class FeatureController {
         featureService.deleteFeature(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .code (200)
+                .code(200)
                 .message("Xóa feature thành công")
                 .data(null)
                 .build());
