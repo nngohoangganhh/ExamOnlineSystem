@@ -22,7 +22,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class QuestionService {
     private final ChapterRepository chapterRepository;
     private final SubjectRepository subjectRepository;
     private final TestRepository testRepository;
+    private final TagRepository tagRepository;
 
     //  1. Lấy tất cả câu hỏi (phân trang)
     @Transactional
@@ -197,9 +200,26 @@ public class QuestionService {
             }
         }
         question.setQuestionOptions(options);
+
+        Set<Tag> tags = new HashSet<>();
+        if (request.getTags() != null) {
+            for (String tag : request.getTags()) {
+                Tag existingTag = tagRepository.findByName(tag);
+                if (existingTag == null) {
+                    existingTag = Tag.builder()
+                            .name(tag)
+                            .build();
+                    existingTag = tagRepository.save(existingTag);
+                }
+                tags.add(existingTag);
+            }
+        }
+        question.setTags(tags);
+
         // ==========================
         // 5. Save
         // ==========================
+
         Question saved = questionRepository.save(question);
         // ==========================
         // 6. Response
@@ -213,7 +233,9 @@ public class QuestionService {
     public QuestionResponse update(Long id,UpdateQuestionRequest request) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy câu hỏi"));
+
         String plainText = Jsoup.parse(request.getStem()).text().trim();
+
         if (plainText.length() < 10 ) {
             throw new BadRequestException("Nội dung câu hỏi quá ngắn.");
         }
@@ -326,14 +348,25 @@ public class QuestionService {
         }
         question.setQuestionOptions(questionOptions);
         Question saved = questionRepository.save(question);
+
+        question.getTags().clear();
+        Set<Tag> tags = new HashSet<>();
+        if (request.getTags() != null) {
+            for (String tag : request.getTags()) {
+                Tag existingTag = tagRepository.findByName(tag);
+                if (existingTag == null) {
+                    existingTag = Tag.builder()
+                            .name(tag)
+                            .build();
+                    existingTag = tagRepository.save(existingTag);
+                }
+                tags.add(existingTag);
+            }
+        }
+        question.setTags(tags);
         return QuestionMapper.toResponse(saved);
 
     }
-
-
-
-
-
 
     // 5. Xóa câu hỏi
     @Transactional

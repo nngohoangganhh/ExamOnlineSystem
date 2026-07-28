@@ -42,14 +42,10 @@ public class CreateQuestionRequest {
     @DecimalMax(value = "100.00", message = "Điểm phải từ 0.01 đến 100.")
     private BigDecimal score;
 
-
     private List<QuestionOptionRequest> options;
 
     @Size(max = 10, message = "Tối đa 10 tag.")
-    private List<
-            @Size(min = 1, max = 30, message = "Mỗi tag từ 1 đến 30 ký tự.")
-                    String
-            > tags;
+    private List<@Size(min = 1, max = 30, message = "Mỗi tag từ 1 đến 30 ký tự.") String> tags;
 
     @Size(max = 3000, message = "Giải thích tối đa 3000 ký tự.")
     private String explanation;

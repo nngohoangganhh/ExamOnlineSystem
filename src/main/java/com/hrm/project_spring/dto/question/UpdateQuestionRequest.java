@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -45,6 +46,8 @@ public class UpdateQuestionRequest {
 
     @Valid
     private List<QuestionOptionRequest> options;
+    @Valid
+    private Set<@Size(min = 1, max = 30) String> tags;
 
     @NotNull
     private QuestionAction action;
