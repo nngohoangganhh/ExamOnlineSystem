@@ -86,7 +86,8 @@ public class UserService {
                         .username(user.getUsername())
                         .fullName(user.getFullName())
                         .gender(user.getGender())
-                        .dataOfBirth(user.getBirthDate())
+                        .dateOfBirth(user.getBirthDate())
+
                         .build())
                 .toList();
 

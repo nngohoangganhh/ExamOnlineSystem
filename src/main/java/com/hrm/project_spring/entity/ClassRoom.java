@@ -1,5 +1,6 @@
 package com.hrm.project_spring.entity;
 
+import com.hrm.project_spring.enums.ClassStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,6 +39,7 @@ public class ClassRoom {
     @Column(name = "teacher_id")
     private Long teacherId;
 
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -50,5 +52,10 @@ public class ClassRoom {
     )
     @Builder.Default
     private Set<User> students = new HashSet<>();
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "class_status")
+    private ClassStatus classStatus;
 }
 

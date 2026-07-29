@@ -1,5 +1,6 @@
 package com.hrm.project_spring.dto.classroom;
 
+import com.hrm.project_spring.enums.ClassStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,4 +17,5 @@ public class ClassRoomResponse {
     private LocalDateTime createdAt;
     private String teacherName;
     private int studentCount;
+    private ClassStatus status;
 }

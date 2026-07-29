@@ -1,8 +1,11 @@
 package com.hrm.project_spring.dto.classroom;
 
 import com.hrm.project_spring.dto.student.StudentAllResponse;
-import com.hrm.project_spring.dto.student.StudentResponse;
-import lombok.*;
+import com.hrm.project_spring.enums.ClassStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +22,8 @@ public class ClassroomDetailResponse {
     private String description;
     private String academicYear;
     private LocalDateTime createdAt;
-    private String teacherName;
+    private ClassStatus classStatus;
+    private TeacherSummaryResponse teacherSummary;
     private int studentCount;
     private List<StudentAllResponse> students;
 }

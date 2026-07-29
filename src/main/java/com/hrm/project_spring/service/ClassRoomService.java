@@ -1,9 +1,6 @@
 package com.hrm.project_spring.service;
 
-import com.hrm.project_spring.dto.classroom.AssignStudentsToClassRequest;
-import com.hrm.project_spring.dto.classroom.ClassRoomRequest;
-import com.hrm.project_spring.dto.classroom.ClassRoomResponse;
-import com.hrm.project_spring.dto.classroom.ClassroomDetailResponse;
+import com.hrm.project_spring.dto.classroom.*;
 import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.student.StudentAllResponse;
 import com.hrm.project_spring.entity.ClassRoom;
@@ -20,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,6 +54,7 @@ public class ClassRoomService {
                 .academicYear(request.getAcademicYear())
                 .description(request.getDescription())
                 .teacherId(teacherId)
+                .classStatus(request.getClassStatus())
                 .build();
 
         classRoom = classRoomRepository.save(classRoom);
@@ -96,7 +95,7 @@ public class ClassRoomService {
         classRoom.setAcademicYear(request.getAcademicYear());
         classRoom.setDescription(request.getDescription());
         classRoom.setTeacherId(teacherId);
-
+        classRoom.setClassStatus(request.getClassStatus());
         classRoom = classRoomRepository.save(classRoom);
         return mapToResponse(classRoom);
     }
@@ -134,32 +133,13 @@ public class ClassRoomService {
 
     @Transactional
     public ClassroomDetailResponse getClassRoom(Long id) {
-        ClassRoom classRoom = classRoomRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy lớp học"));
-        ClassroomDetailResponse response = new ClassroomDetailResponse();
-        response.setId(classRoom.getId());
-        response.setName(classRoom.getName());
-        response.setCode(classRoom.getCode());
-        response.setDescription(classRoom.getDescription());
-        response.setAcademicYear(classRoom.getAcademicYear());
-        response.setTeacherName(classRoom.getName());
-        response.setStudentCount(classRoom.getStudents().size());
-        response.setCreatedAt(classRoom.getCreatedAt());
-        List<StudentAllResponse> studentAllResponses = classRoom.getStudents()
-                .stream().map(student -> {
-                    StudentAllResponse dto = new StudentAllResponse();
-                    dto.setId(student.getId());
-                    dto.setEmail(student.getEmail());
-                    dto.setUsername(student.getUsername());
-                    dto.setFullName(student.getFullName());
-                    dto.setGender(student.getGender());
-                    dto.setDataOfBirth(student.getBirthDate());
-                    return dto;
-                }).toList();
-        response.setStudents(studentAllResponses);
-        return response;
 
+        ClassRoom classRoom = classRoomRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy lớp học"));
+
+        return toResponse(classRoom);
     }
+
 
     @Transactional
     public ClassRoomResponse assignStudents(Long id, AssignStudentsToClassRequest request) {
@@ -176,6 +156,7 @@ public class ClassRoomService {
         classRoom = classRoomRepository.save(classRoom);
         return mapToResponse(classRoom);
     }
+
     @Transactional
     public ClassRoomResponse removeStudents(Long id, AssignStudentsToClassRequest request) {
         ClassRoom classRoom = classRoomRepository.findById(id)
@@ -202,7 +183,44 @@ public class ClassRoomService {
                 .createdAt(classRoom.getCreatedAt())
                 .studentCount(classRoom.getStudents() != null ? classRoom.getStudents().size() : 0)
                 .teacherName(teacher != null ? teacher.getFullName() : null)
+                .status(classRoom.getClassStatus())
                 .build();
     }
+
+    private ClassroomDetailResponse toResponse(ClassRoom classRoom) {
+        User teacher = null;
+        if (classRoom.getTeacherId() != null) {
+            teacher = userRepository.findById(classRoom.getTeacherId()).orElse(null);
+
+        }
+        return ClassroomDetailResponse.builder()
+                .id(classRoom.getId())
+                .code(classRoom.getCode())
+                .name(classRoom.getName())
+                .description(classRoom.getDescription())
+                .academicYear(classRoom.getAcademicYear())
+                .classStatus(classRoom.getClassStatus())
+                .createdAt(classRoom.getCreatedAt())
+                .teacherSummary(teacher != null ? TeacherSummaryResponse.builder().id(teacher.getId()).name(teacher.getFullName()).build() :  null )
+                .studentCount(classRoom.getStudents() != null ? classRoom.getStudents().size() : 0)
+                .students(
+                        classRoom.getStudents() != null ? classRoom.getStudents().stream()
+                                                          .sorted(Comparator.comparing(User::getId))
+                                                          .map(this::toStudentResponse)
+                                                          .toList() : List.of())
+                .build();
+
+    }
+    private StudentAllResponse toStudentResponse(User user) {
+        return StudentAllResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .gender(user.getGender())
+                .dateOfBirth(user.getBirthDate())
+                .build();
+    }
+
 
 }

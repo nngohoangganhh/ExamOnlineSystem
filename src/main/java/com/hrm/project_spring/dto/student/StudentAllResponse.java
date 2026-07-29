@@ -1,5 +1,7 @@
 package com.hrm.project_spring.dto.student;
 
+import com.hrm.project_spring.entity.ClassRoom;
+import com.hrm.project_spring.enums.ClassStatus;
 import com.hrm.project_spring.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +20,7 @@ public class StudentAllResponse {
     private String email;
     private String fullName;
     private Gender gender;
-    private LocalDate dataOfBirth;
+    private LocalDate dateOfBirth;
+
 
 }

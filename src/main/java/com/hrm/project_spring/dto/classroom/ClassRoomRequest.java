@@ -1,5 +1,6 @@
 package com.hrm.project_spring.dto.classroom;
 
+import com.hrm.project_spring.enums.ClassStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -31,5 +32,9 @@ public class ClassRoomRequest {
      * Phải là user tồn tại và có role TEACHER.
      */
     private Long teacherId;
+
+
+    private ClassStatus classStatus;
+
 }
 
