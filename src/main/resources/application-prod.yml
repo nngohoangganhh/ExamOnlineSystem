@@ -28,6 +28,9 @@ server:
       max: 20
       min-spare: 2
 
+  app:
+    frontend-url: https://hethongthitracnghiem-yb6s.onrender.com
+
 logging:
   level:
     root: INFO
