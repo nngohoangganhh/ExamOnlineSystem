@@ -1,5 +1,6 @@
 package com.hrm.project_spring.service.user;
 
+import com.hrm.project_spring.dto.classroom.ClassSummaryResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.student.StudentAllResponse;
 import com.hrm.project_spring.dto.user.request.*;
@@ -424,21 +425,6 @@ public class UserService {
             }
 
         }
-        if (isStudent) {
-            if (userRepository.existsByStudentCodeIncludingDeleted(request.getStudentCode())) {
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT,
-                        "Mã sinh viên đã tồn tại."
-                );
-            }
-        } else {
-            if (userRepository.existsByEmployeeCodeIncludingDeleted(request.getEmployeeCode())) {
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT,
-                        "Mã nhân viên đã tồn tại."
-                );
-            }
-        }
         // UC09: Cập nhật lớp cho Student nếu có classIds
         if (request.getClassIds() != null && !request.getClassIds().isEmpty()) {
             List<ClassRoom> newClassRooms = classRoomRepository.findAllById(request.getClassIds());
@@ -700,7 +686,6 @@ public class UserService {
     private UserResponse mapToResponse(User user) {
         List<String> roleCode = null;
         List<String> permissionCode = null;
-        List<String> classCode = null;
 
         if (user.getRoles() != null) {
             roleCode = user.getRoles()
@@ -719,12 +704,7 @@ public class UserService {
                     .distinct()
                     .collect(Collectors.toList());
         }
-        if (user.getClassRooms() != null) {
-            classCode = user.getClassRooms()
-                    .stream()
-                    .map(ClassRoom::getCode)
-                    .collect(Collectors.toList());
-        }
+
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -741,13 +721,12 @@ public class UserService {
                 .createdAt(user.getCreatedAt())
                 .roles(roleCode)
                 .permissions(permissionCode)
-                .classCodes(classCode)
+                .classSummary(user.getClassRooms() == null || user.getClassRooms().isEmpty() ? null : ClassSummaryResponse.from(user.getClassRooms().iterator().next()))
                 .build();
     }
 
     private UserResponseDto mapTo(User user) {
-        List<String> roleNames = user.getRoles() != null
-                ? user.getRoles().stream().map(Role::getCode).collect(Collectors.toList())
+        List<String> roleNames = user.getRoles() != null ? user.getRoles().stream().map(Role::getCode).collect(Collectors.toList())
                 : Collections.emptyList();
         List<String> classCodes = user.getClassRooms() != null
                 ? user.getClassRooms().stream().map(ClassRoom::getCode).collect(Collectors.toList())

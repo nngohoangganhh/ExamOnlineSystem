@@ -1,5 +1,6 @@
 package com.hrm.project_spring.dto.user.response;
 
+import com.hrm.project_spring.dto.classroom.ClassSummaryResponse;
 import com.hrm.project_spring.enums.Gender;
 import com.hrm.project_spring.enums.UserStatus;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,6 @@ public class UserResponse {
     private LocalDateTime createdAt;
     private List<String> roles;
     private List<String> permissions;
-    private List<String> classCodes;
+    private ClassSummaryResponse classSummary;
 
 }
