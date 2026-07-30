@@ -178,9 +178,7 @@ public class QuestionService {
                 .explanation(request.getExplanation())
                 .referenceAnswer(request.getReferenceAnswer())
                 .rubric(request.getRubric())
-                .status(request.getAction() == QuestionAction.SUBMIT
-                        ? QuestionStatus.PENDING
-                        : QuestionStatus.DRAFT)
+                .status(request.getAction() == QuestionAction.SUBMIT ? QuestionStatus.PENDING : QuestionStatus.DRAFT)
                 .createdBy(currentUser.getId())
                 .createdAt(LocalDateTime.now())
                 .build();

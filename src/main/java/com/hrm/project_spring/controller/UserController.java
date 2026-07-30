@@ -129,9 +129,7 @@ public class UserController {
         );
     }
 
-    /**
-     * Kích hoạt tài khoản qua activation token (từ link email).
-     */
+
     @GetMapping("/activate")
     public ResponseEntity<ApiResponse<Void>> activateUser(@RequestParam String token) {
         userService.activateUser(token);
