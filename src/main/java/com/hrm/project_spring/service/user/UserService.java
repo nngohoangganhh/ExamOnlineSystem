@@ -721,7 +721,13 @@ public class UserService {
                 .createdAt(user.getCreatedAt())
                 .roles(roleCode)
                 .permissions(permissionCode)
-                .classSummary(user.getClassRooms() == null || user.getClassRooms().isEmpty() ? null : ClassSummaryResponse.from(user.getClassRooms().iterator().next()))
+                .classSummary(
+                        user.getClassRooms() == null || user.getClassRooms().isEmpty()
+                                ? Collections.emptyList()
+                                : user.getClassRooms().stream()
+                                  .map(ClassSummaryResponse::from)
+                                  .collect(Collectors.toList())
+                )
                 .build();
     }
 

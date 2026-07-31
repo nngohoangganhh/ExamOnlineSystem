@@ -32,6 +32,6 @@ public class UserResponse {
     private LocalDateTime createdAt;
     private List<String> roles;
     private List<String> permissions;
-    private ClassSummaryResponse classSummary;
+    private List<ClassSummaryResponse> classSummary;
 
 }
