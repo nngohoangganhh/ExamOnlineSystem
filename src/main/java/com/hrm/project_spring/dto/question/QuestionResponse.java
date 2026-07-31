@@ -23,6 +23,6 @@ public class QuestionResponse {
     private QuestionStatus status;
     private String subjectName;
     private String chapterName;
-    private String createdBy;
+    private String createdByName;
     private LocalDateTime createdAt;
 }

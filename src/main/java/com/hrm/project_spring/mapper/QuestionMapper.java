@@ -20,7 +20,9 @@ public class QuestionMapper {
                 .bloomLevel(question.getBloomLevel())
                 .chapterName(question.getChapter() != null ? question.getChapter().getName() : null)
                 .subjectName(question.getSubject() != null ? question.getSubject().getName() : null)
+                .createdByName(question.getCreatedBy().getUsername())
                 .createdAt(question.getCreatedAt())
+
                 .build();
     }
 
