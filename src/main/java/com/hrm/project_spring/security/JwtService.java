@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -109,9 +110,13 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = secretKey.getBytes();
+        // BUG FIX: getBytes() sử dụng charset mặc định của nền tảng (khác nhau giữa OS)
+        // Phải dùng StandardCharsets.UTF_8 để đảm bảo nhất quán.
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
 
         if (keyBytes.length < 32) {
+            // Padding đến 32 byte để thoả mãn HS256 minimum key size.
+            // Cảnh báo: secret quá ngắn sẽ giảm entropy. Nên cấu hình secret ≥ 32 ký tự.
             byte[] padded = new byte[32];
             System.arraycopy(keyBytes, 0, padded, 0, keyBytes.length);
             return Keys.hmacShaKeyFor(padded);

@@ -1,9 +1,11 @@
 package com.hrm.project_spring.dto.exam;
 
 import com.hrm.project_spring.dto.user.response.UserResponseDto;
+import com.hrm.project_spring.enums.ExamStatus;
 import lombok.*;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,11 +15,9 @@ public class ExamDetailResponse {
     private Long id;
     private String name;
     private String description;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private String status;
-    private LocalTime createdAt;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private ExamStatus status;
+    private LocalDateTime createdAt;
     private UserResponseDto createdBy;
-  //  private List<UserResponseDto> students;
-
 }

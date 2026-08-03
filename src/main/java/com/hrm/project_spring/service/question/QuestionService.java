@@ -1,25 +1,27 @@
-package com.hrm.project_spring.service;
+package com.hrm.project_spring.service.question;
 
 import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.question.*;
 import com.hrm.project_spring.entity.*;
+import com.hrm.project_spring.enums.AuditAction;
 import com.hrm.project_spring.enums.QuestionAction;
 import com.hrm.project_spring.enums.QuestionStatus;
 import com.hrm.project_spring.enums.QuestionType;
 import com.hrm.project_spring.exception.BadRequestException;
 import com.hrm.project_spring.mapper.QuestionMapper;
 import com.hrm.project_spring.repository.*;
+import com.hrm.project_spring.service.AuditLogService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,11 +37,15 @@ public class QuestionService {
     private final SubjectRepository subjectRepository;
     private final TestRepository testRepository;
     private final TagRepository tagRepository;
+    private final AuditLogService auditLogService;
+    private final TestQuestionRepository testQuestionRepository;
 
-    //  1. Lấy tất cả câu hỏi (phân trang)
+    //  1. Lấy tất cả câu hỏi (phân trang) — chỉ câu hỏi chưa bị xóa
     @Transactional
     public PageResponse<QuestionResponse> getAllQuestion(int pageNo, int pageSize) {
-        Page<Question> page = questionRepository.findAll(PageRequest.of(pageNo, pageSize));
+        Specification<Question> spec = QuestionSpecification.of(
+                null, null, null, null, null, null, null);
+        Page<Question> page = questionRepository.findAll(spec, PageRequest.of(pageNo, pageSize));
         List<QuestionResponse> data = page.getContent()
                 .stream()
                 .map(QuestionMapper::toResponse)
@@ -48,6 +54,26 @@ public class QuestionService {
                 .content(data)
                 .pageNo(page.getNumber())
                 .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast())
+                .build();
+    }
+
+    // UC24: Tìm kiếm câu hỏi theo nhiều tiêu chí
+    @Transactional
+    public PageResponse<QuestionResponse> search(Long subjectId, Long chapterId,
+                                                  Integer bloomLevel, QuestionStatus status,
+                                                  String keyword, String tag,
+                                                  int pageNo, int pageSize) {
+        Specification<Question> spec = QuestionSpecification.of(
+                subjectId, chapterId, bloomLevel, status, keyword, tag, null);
+        Page<Question> page = questionRepository.findAll(spec, PageRequest.of(pageNo, pageSize));
+        List<QuestionResponse> data = page.getContent().stream()
+                .map(QuestionMapper::toResponse).toList();
+        return PageResponse.<QuestionResponse>builder()
+                .content(data)
+                .pageNo(page.getNumber()).pageSize(page.getSize())
                 .totalElements(page.getTotalElements())
                 .totalPages(page.getTotalPages())
                 .last(page.isLast())
@@ -168,6 +194,11 @@ public class QuestionService {
         // ==========================
         // 3. Tạo Question
         // ==========================
+        // UC16: status PENDING → PENDING_REVIEW (SRS v1.0)
+        QuestionStatus initialStatus = (request.getAction() == QuestionAction.SUBMIT)
+                ? QuestionStatus.PENDING_REVIEW
+                : QuestionStatus.DRAFT;
+
         Question question = Question.builder()
                 .stem(request.getStem())
                 .type(request.getType())
@@ -178,9 +209,8 @@ public class QuestionService {
                 .explanation(request.getExplanation())
                 .referenceAnswer(request.getReferenceAnswer())
                 .rubric(request.getRubric())
-                .status(request.getAction() == QuestionAction.SUBMIT ? QuestionStatus.PENDING : QuestionStatus.DRAFT)
+                .status(initialStatus)
                 .createdBy(currentUser)
-                .createdAt(LocalDateTime.now())
                 .build();
         // ==========================
         // 4. Thêm Question Option
@@ -199,15 +229,15 @@ public class QuestionService {
         }
         question.setQuestionOptions(options);
 
+        // UC16: normalize tags ^[a-z0-9-]+$
         Set<Tag> tags = new HashSet<>();
         if (request.getTags() != null) {
-            for (String tag : request.getTags()) {
-                Tag existingTag = tagRepository.findByName(tag);
+            for (String tagName : request.getTags()) {
+                String normalized = tagName.trim().toLowerCase().replaceAll("[^a-z0-9-]", "");
+                if (normalized.isBlank()) continue;
+                Tag existingTag = tagRepository.findByName(normalized);
                 if (existingTag == null) {
-                    existingTag = Tag.builder()
-                            .name(tag)
-                            .build();
-                    existingTag = tagRepository.save(existingTag);
+                    existingTag = tagRepository.save(Tag.builder().name(normalized).build());
                 }
                 tags.add(existingTag);
             }
@@ -217,8 +247,12 @@ public class QuestionService {
         // ==========================
         // 5. Save
         // ==========================
-
         Question saved = questionRepository.save(question);
+
+        // UC16: Audit log
+        auditLogService.log(currentUser.getId(), username, AuditAction.QUESTION_CREATE,
+                "{\"questionId\":\"" + saved.getId() + "\"}");
+
         // ==========================
         // 6. Response
         // ==========================
@@ -226,11 +260,31 @@ public class QuestionService {
     }
 
 
-    // 4. Cập nhật câu hỏi
+    // 4. Cập nhật câu hỏi — UC17
     @Transactional
-    public QuestionResponse update(Long id,UpdateQuestionRequest request) {
-        Question question = questionRepository.findById(id)
+    public QuestionResponse update(Long id, UpdateQuestionRequest request) {
+        Question question = questionRepository.findActiveById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy câu hỏi"));
+
+        // UC17 E1: Chỉ owner hoặc ADMIN mới được sửa
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new BadRequestException("Không tìm thấy người dùng."));
+        boolean isOwner = question.getCreatedBy() != null
+                && question.getCreatedBy().getId().equals(currentUser.getId());
+        boolean isAdmin = currentUser.getRoles().stream()
+                .anyMatch(r -> r.getCode().equals("ADMIN"));
+        if (!isOwner && !isAdmin) {
+            throw new BadRequestException("UC17 E1: Bạn không có quyền chỉnh sửa câu hỏi này.");
+        }
+
+        // UC17: Không sửa câu hỏi đang APPROVED và đã có trong bài thi sắp diễn ra
+        if (question.getStatus() == QuestionStatus.APPROVED
+                && question.getUsageCount() != null && question.getUsageCount() > 0) {
+            throw new BadRequestException(
+                    "UC17 E2: Câu hỏi đang được dùng trong bài thi, không thể chỉnh sửa trực tiếp. " +
+                    "Vui lòng tạo bản sao hoặc liên hệ quản trị viên.");
+        }
 
         String plainText = Jsoup.parse(request.getStem()).text().trim();
 
@@ -362,27 +416,70 @@ public class QuestionService {
             }
         }
         question.setTags(tags);
-        return QuestionMapper.toResponse(saved);
 
+        // Audit log UC17
+        auditLogService.log(currentUser.getId(), currentUsername, AuditAction.QUESTION_UPDATE,
+                "{\"questionId\":" + id + "}");
+
+        return QuestionMapper.toResponse(saved);
     }
 
-    // 5. Xóa câu hỏi
+    // 5. Xóa câu hỏi — UC18: soft delete, nếu usage_count>0 thì chuyển ARCHIVED
     @Transactional
     public void delete(Long id) {
-        Question question = questionRepository.findById(id)
+        Question question = questionRepository.findActiveById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Không tìm thấy câu hỏi"
-                ));
+                        HttpStatus.NOT_FOUND, "Không tìm thấy câu hỏi"));
 
-        // Kiểm tra câu hỏi đã được dùng trong bài thi chưa
-        if (testRepository.existsByQuestions_Id(id)) {
-            throw new BadRequestException(
-                    "Câu hỏi đã được sử dụng trong bài thi, không thể xóa. Vui lòng lưu trữ (Archive) thay thế."
-            );
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadRequestException("Không tìm thấy người dùng."));
+
+        boolean isOwner = question.getCreatedBy() != null
+                && question.getCreatedBy().getId().equals(currentUser.getId());
+        boolean isAdmin = currentUser.getRoles().stream()
+                .anyMatch(r -> r.getCode().equals("ADMIN"));
+        if (!isOwner && !isAdmin) {
+            throw new BadRequestException("Bạn không có quyền xóa câu hỏi này.");
         }
 
-        questionRepository.delete(question);
+        // BR-033: Nếu câu hỏi đang được dùng → chuyển ARCHIVED thay vì xóa vật lý
+        if (question.getUsageCount() != null && question.getUsageCount() > 0) {
+            question.setStatus(QuestionStatus.ARCHIVED);
+            question.setDeletedAt(LocalDateTime.now());
+            questionRepository.save(question);
+            auditLogService.log(currentUser.getId(), username, AuditAction.QUESTION_ARCHIVE,
+                    "{\"questionId\":" + id + ",\"reason\":\"has_usage\"}");
+            return;
+        }
+
+        // Soft delete: không dùng → xóa mềm
+        questionRepository.softDelete(id, LocalDateTime.now());
+        auditLogService.log(currentUser.getId(), username, AuditAction.QUESTION_DELETE,
+                "{\"questionId\":" + id + "}");
+    }
+
+    // UC18 Archive riêng biệt (endpoint PATCH /{id}/archive)
+    @Transactional
+    public void archive(Long id) {
+        Question question = questionRepository.findActiveById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Không tìm thấy câu hỏi"));
+
+        if (question.getStatus() == QuestionStatus.ARCHIVED) {
+            throw new BadRequestException("Câu hỏi đã ở trạng thái ARCHIVED.");
+        }
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadRequestException("Không tìm thấy người dùng."));
+
+        question.setStatus(QuestionStatus.ARCHIVED);
+        question.setDeletedAt(LocalDateTime.now());
+        questionRepository.save(question);
+
+        auditLogService.log(currentUser.getId(), username, AuditAction.QUESTION_ARCHIVE,
+                "{\"questionId\":" + id + "}");
     }
 
 

@@ -106,7 +106,7 @@ public class ExamController {
                         .code(200)
                         .message("lấy danh sách học sinh theo id kỳ thi thành công")
                         // Fix: Wrap Set<StudentResponse> into List to avoid ClassCastException
-                        .data(new ArrayList<>(examService.getStudentsByExamId(examId)))
+                        .data(new ArrayList<>(examService.getExamById(examId)))
                         .build()
         );
     }

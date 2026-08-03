@@ -1,19 +1,20 @@
 package com.hrm.project_spring.entity;
 
+import com.hrm.project_spring.enums.ExamStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * SRS v1.0 §11.13: Kỳ thi (UC25–UC26).
+ * BUG FIX: createdAt từ LocalTime → LocalDateTime.
+ * THÊM: code, semester, academicYear, startDate, endDate, owner, status enum.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,41 +22,66 @@ import java.util.Set;
 @Entity
 @Table(name = "exams")
 public class Exam {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
-    @JoinTable(
-            name = "exam_students",
-            joinColumns = @JoinColumn(name = "exam_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> students = new HashSet<>();
+    /** UC25: Mã kỳ thi (duy nhất). VD: HK1-2024-2025 */
+    @Column(unique = true, nullable = false, length = 50)
+    private String code;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "start_time")
-    private LocalDateTime startTime;
+    /** Học kỳ. VD: "HK1", "HK2". */
+    @Column(length = 20)
+    private String semester;
 
-    @Column(name = "end_time")
-    private LocalDateTime endTime;
+    /** Năm học. VD: "2024-2025". */
+    @Column(name = "academic_year", length = 20)
+    private String academicYear;
 
-    @ManyToOne
+    /** Ngày bắt đầu kỳ thi (không phải giờ). */
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    /** Ngày kết thúc kỳ thi (không phải giờ). */
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+    /** Người tạo kỳ thi. */
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private User createdBy;
 
-    private String status;
+    /** Người phụ trách kỳ thi (có thể khác người tạo). */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
-    @Column(name = "created_at")
-    private LocalTime createdAt;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private ExamStatus status = ExamStatus.DRAFT;
 
-    // Quan hệ 1 kỳ thi có nhiều đề thi
+    // BUG FIX: LocalTime → LocalDateTime
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    /** UC26: Soft delete. */
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    /** 1 kỳ thi có nhiều đề thi. */
     @OneToMany(mappedBy = "exam", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Test> tests = new ArrayList<>();
 }
-
-
-
-

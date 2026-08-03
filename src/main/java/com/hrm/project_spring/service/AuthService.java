@@ -440,7 +440,7 @@ public class AuthService {
         response.setUsername(user.getUsername());
         response.setFullName(user.getFullName());
         response.setEmail(user.getEmail());
-        response.setStatus(UserStatus.ACTIVE);
+        response.setStatus(user.getStatus()); // FIX: dùng status thực của user, không hardcode ACTIVE
         response.setRequirePasswordChange(user.getRequirePasswordChange());
         response.setLastLoginAt(user.getLastLoginAt());
         response.setCreatedAt(user.getCreatedAt());

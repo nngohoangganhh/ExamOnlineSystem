@@ -89,8 +89,6 @@ public class DashboardService {
                                   boolean submitted = attemptRepository
                                           .existsByUserIdAndTestIdAndSubmitTimeIsNotNull(user.getId(), test.getId());
                                   Long lastAttemptId = attemptRepository
-                                          // Dùng findFirst để tránh NonUniqueResultException
-                                          // khi student thi lại nhiều lần cùng 1 test
                                           .findFirstByUserIdAndTestIdOrderByIdDesc(user.getId(), test.getId())
                                           .map(a -> a.getId())
                                           .orElse(null);
@@ -99,7 +97,7 @@ public class DashboardService {
                                          .testId(test.getId())
                                          .testTitle(test.getTitle())
                                          .durationMinutes(test.getDurationMinutes())
-                                         .totalScore(test.getTotalScore())
+                                         .totalScore(test.getTotalScore() != null ? test.getTotalScore().intValue() : 0)
                                          .alreadySubmitted(submitted)
                                          .lastAttemptId(lastAttemptId)
                                          .build();
@@ -110,9 +108,9 @@ public class DashboardService {
                             .examId(exam.getId())
                             .examName(exam.getName())
                             .examDescription(exam.getDescription())
-                            .startTime(exam.getStartTime())
-                            .endTime(exam.getEndTime())
-                            .status(exam.getStatus())
+                            .startTime(exam.getStartDate() != null ? exam.getStartDate().atStartOfDay() : null)
+                            .endTime(exam.getEndDate() != null ? exam.getEndDate().atTime(23, 59, 59) : null)
+                            .status(exam.getStatus() != null ? exam.getStatus().name() : null)
                             .tests(testSummaries)
                             .build();
                 })

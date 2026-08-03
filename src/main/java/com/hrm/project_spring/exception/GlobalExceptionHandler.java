@@ -14,6 +14,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.validation.BindException;
+import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import java.util.Map;
 // Objects là utility class (Objects.requireNonNull...), không phải kiểu dữ liệu.
 // Dùng ApiResponse<Object> (chữ O hoa, không có 's') mới đúng.
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -156,8 +158,8 @@ public class GlobalExceptionHandler {
     // Phải đặt CUỐI CÙNG
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
-        // In log ở server để debug, nhưng KHÔNG trả ra client
-        // Nên dùng: log.error("Unhandled exception", ex); nếu có Logger
+        // BUG FIX: Log để debug server-side, KHÔNG lộ stacktrace ra client
+        log.error("[GlobalExceptionHandler] Unhandled exception: {}", ex.getMessage(), ex);
         ApiResponse<Object> response = new ApiResponse<>(
                 false,
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

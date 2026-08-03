@@ -88,12 +88,13 @@ public class User {
     @Column(name = "reset_password_expiry")
     private LocalDateTime resetPasswordExpiry;
     
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
     @Builder.Default
@@ -123,6 +124,11 @@ public class User {
         if (!(o instanceof User)) return false;
         User user = (User) o;
         return id != null && id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
     @ManyToMany(mappedBy = "students", fetch = FetchType.LAZY)

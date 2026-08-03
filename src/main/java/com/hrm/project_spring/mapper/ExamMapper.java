@@ -6,36 +6,32 @@ import com.hrm.project_spring.dto.user.response.UserResponseDto;
 import com.hrm.project_spring.entity.Exam;
 import com.hrm.project_spring.entity.User;
 
-import java.time.LocalDate;
-
 public class ExamMapper {
     public static ExamListResponse toListResponse(Exam exam) {
+        if (exam == null) return null;
         return ExamListResponse.builder()
                 .id(exam.getId())
                 .name(exam.getName())
-                .startTime(LocalDate.from(exam.getStartTime()))
-                .endTime(LocalDate.from(exam.getEndTime()))
-                .status(exam.getStatus())
+                .startTime(exam.getStartDate()) // map to startTime field in DTO
+                .endTime(exam.getEndDate())     // map to endTime field in DTO
+                .status(exam.getStatus() != null ? exam.getStatus().name() : null)
                 .build();
     }
 
     public static ExamDetailResponse toDetailResponse(Exam exam) {
+        if (exam == null) return null;
         return ExamDetailResponse.builder()
                 .id(exam.getId())
                 .name(exam.getName())
                 .description(exam.getDescription())
                 .status(exam.getStatus())
-                .startTime(exam.getStartTime().toLocalTime())
-                .endTime(exam.getEndTime().toLocalTime())
+                .startDate(exam.getStartDate())
+                .endDate(exam.getEndDate())
                 .createdAt(exam.getCreatedAt())
                 .createdBy(toUser(exam.getCreatedBy()))
-//                .students(
-//                        exam.getStudents().stream()
-//                                .map(ExamMapper::toUser)
-//                                .toList()
-//                )
                 .build();
     }
+
     private static UserResponseDto toUser(User user) {
         if (user == null) return null;
         return UserResponseDto.builder()
