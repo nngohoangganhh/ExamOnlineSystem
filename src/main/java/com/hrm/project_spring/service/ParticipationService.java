@@ -1,5 +1,6 @@
 package com.hrm.project_spring.service;
 
+import com.hrm.project_spring.dto.question.TestSummaryResponse;
 import com.hrm.project_spring.entity.*;
 import com.hrm.project_spring.enums.*;
 import com.hrm.project_spring.exception.BadRequestException;

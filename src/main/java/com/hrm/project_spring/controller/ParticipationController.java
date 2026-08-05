@@ -24,7 +24,7 @@ public class ParticipationController {
     private final ParticipationService participationService;
 
     // UC33: Danh sách bài thi có thể tham gia
-    @PreAuthorize("hasAuthority('EXAM:TAKE')")
+    @PreAuthorize("hasAuthority('EXAM:READ')")
     @GetMapping("/available-tests")
     public ResponseEntity<ApiResponse<List<Test>>> getAvailableTests() {
         return ResponseEntity.ok(ApiResponse.<List<Test>>builder()
@@ -35,7 +35,7 @@ public class ParticipationController {
     }
 
     // UC34: Vào thi (tạo Attempt)
-    @PreAuthorize("hasAuthority('EXAM:TAKE')")
+    @PreAuthorize("hasAuthority('EXAM:UPDATE')")
     @PostMapping("/tests/{testId}/start")
     public ResponseEntity<ApiResponse<Attempt>> startAttempt(@PathVariable Long testId,
                                                               HttpServletRequest request) {
@@ -47,7 +47,7 @@ public class ParticipationController {
     }
 
     // UC35/UC36: Lưu câu trả lời / auto-save
-    @PreAuthorize("hasAuthority('EXAM:TAKE')")
+    @PreAuthorize("hasAuthority('EXAM:UPDATE')")
     @PostMapping("/attempts/{attemptId}/answers/{questionId}")
     public ResponseEntity<ApiResponse<AttemptAnswer>> saveAnswer(
             @PathVariable Long attemptId,
@@ -62,7 +62,7 @@ public class ParticipationController {
     }
 
     // UC38: Đánh dấu xem lại
-    @PreAuthorize("hasAuthority('EXAM:TAKE')")
+    @PreAuthorize("hasAuthority('EXAM:UPDATE')")
     @PatchMapping("/attempts/{attemptId}/answers/{questionId}/mark")
     public ResponseEntity<ApiResponse<Void>> toggleMarkForReview(
             @PathVariable Long attemptId,
@@ -76,7 +76,7 @@ public class ParticipationController {
     }
 
     // UC39: Nộp bài
-    @PreAuthorize("hasAuthority('EXAM:TAKE')")
+    @PreAuthorize("hasAuthority('EXAM:UPDATE')")
     @PostMapping("/attempts/{attemptId}/submit")
     public ResponseEntity<ApiResponse<Attempt>> submit(@PathVariable Long attemptId,
                                                         HttpServletRequest request) {
@@ -88,7 +88,7 @@ public class ParticipationController {
     }
 
     // UC41: Xem lại bài thi
-    @PreAuthorize("hasAuthority('EXAM:TAKE')")
+    @PreAuthorize("hasAuthority('EXAM:READ')")
     @GetMapping("/attempts/{attemptId}/review")
     public ResponseEntity<ApiResponse<List<AttemptAnswer>>> reviewAttempt(
             @PathVariable Long attemptId) {

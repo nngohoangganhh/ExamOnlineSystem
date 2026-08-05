@@ -31,4 +31,16 @@ public interface AttemptRepository extends JpaRepository<Attempt, Long> {
     List<Attempt> findExpiredAttempts(@Param("cutoff") LocalDateTime cutoff);
 
     List<Attempt> findAllByTestOrderByUserAscAttemptNumberAsc(Test test);
+
+    long countByUserId(Long userId);
+
+    long countByUserIdAndSubmittedAtIsNotNull(Long userId);
+
+    @Query("SELECT AVG(a.finalScore) FROM Attempt a WHERE a.user.id = :userId AND a.finalScore IS NOT NULL")
+    Double findAverageScoreByUserId(@Param("userId") Long userId);
+
+    boolean existsByUserIdAndTestIdAndSubmittedAtIsNotNull(Long userId, Long testId);
+
+    Optional<Attempt> findFirstByUserIdAndTestIdOrderByIdDesc(Long userId, Long testId);
 }
+

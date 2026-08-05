@@ -6,6 +6,7 @@ import com.hrm.project_spring.dto.feature.FeatureResponse;
 import com.hrm.project_spring.dto.permission.PermissionResponse;
 import com.hrm.project_spring.entity.Feature;
 import com.hrm.project_spring.repository.FeatureRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,6 +55,7 @@ public class FeatureService {
         return mapToResponse(featureRepository.save(feature));
     }
 //4
+    @Transactional
     public FeatureResponse updateFeature(Long id, FeatureRequest request) {
         Feature feature = featureRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Feature not found"));

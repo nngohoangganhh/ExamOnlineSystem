@@ -4,7 +4,7 @@ import com.hrm.project_spring.dto.dashboard.AdminDashboardResponse;
 import com.hrm.project_spring.dto.dashboard.StudentDashboardResponse;
 import com.hrm.project_spring.dto.exam.MyExamResponse;
 import com.hrm.project_spring.entity.User;
-import com.hrm.project_spring.repository.ExamAttemptRepository;
+import com.hrm.project_spring.repository.AttemptRepository;
 import com.hrm.project_spring.repository.ExamRepository;
 import com.hrm.project_spring.repository.QuestionRepository;
 import com.hrm.project_spring.repository.UserRepository;
@@ -27,7 +27,7 @@ public class DashboardService {
     private final UserRepository userRepository;
     private final ExamRepository examRepository;
     private final QuestionRepository questionRepository;
-    private final ExamAttemptRepository attemptRepository;
+    private final AttemptRepository attemptRepository;
 
     // ======================== ADMIN DASHBOARD ========================
 
@@ -57,7 +57,7 @@ public class DashboardService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tài khoản không tồn tại"));
 
         long totalAttempts = attemptRepository.countByUserId(user.getId());
-        long submittedAttempts = attemptRepository.countByUserIdAndSubmitTimeIsNotNull(user.getId());
+        long submittedAttempts = attemptRepository.countByUserIdAndSubmittedAtIsNotNull(user.getId());
         Double averageScore = attemptRepository.findAverageScoreByUserId(user.getId());
         long totalExamsAssigned = examRepository.findByStudentId(user.getId(), PageRequest.of(0, Integer.MAX_VALUE)).getTotalElements();
 
@@ -87,7 +87,7 @@ public class DashboardService {
                             : exam.getTests().stream()
                               .map(test -> {
                                   boolean submitted = attemptRepository
-                                          .existsByUserIdAndTestIdAndSubmitTimeIsNotNull(user.getId(), test.getId());
+                                          .existsByUserIdAndTestIdAndSubmittedAtIsNotNull(user.getId(), test.getId());
                                   Long lastAttemptId = attemptRepository
                                           .findFirstByUserIdAndTestIdOrderByIdDesc(user.getId(), test.getId())
                                           .map(a -> a.getId())
@@ -117,3 +117,4 @@ public class DashboardService {
                 .collect(Collectors.toList());
     }
 }
+

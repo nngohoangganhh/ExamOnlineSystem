@@ -8,7 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * SRS v1.0 §11.13: Kỳ thi (UC25–UC26).
@@ -68,7 +70,7 @@ public class Exam {
     @Builder.Default
     private ExamStatus status = ExamStatus.DRAFT;
 
-    // BUG FIX: LocalTime → LocalDateTime
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -84,4 +86,14 @@ public class Exam {
     @OneToMany(mappedBy = "exam", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Test> tests = new ArrayList<>();
+
+    /** Danh sách thí sinh tham gia kỳ thi. */
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "exam_students",
+            joinColumns = @JoinColumn(name = "exam_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    @Builder.Default
+    private Set<User> students = new HashSet<>();
 }

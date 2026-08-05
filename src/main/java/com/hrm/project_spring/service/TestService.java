@@ -1,6 +1,7 @@
 package com.hrm.project_spring.service;
 
 import com.hrm.project_spring.dto.common.PageResponse;
+import com.hrm.project_spring.dto.question.TestSummaryResponse;
 import com.hrm.project_spring.dto.test.AssignQuestionsRequest;
 import com.hrm.project_spring.dto.test.TestRequest;
 import com.hrm.project_spring.dto.test.TestResponse;
@@ -41,14 +42,14 @@ public class TestService {
     private final TestQuestionRepository testQuestionRepository;
 
     @Transactional
-    public PageResponse<TestResponse> getAllTest(int pageNo, int pageSize) {
+    public PageResponse<TestSummaryResponse> getAllTest(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Test> page = testRepository.findAll(pageable);
-        List<TestResponse> data = page.getContent()
+        List<TestSummaryResponse> data = page.getContent()
                 .stream()
-                .map(this::mapToResponse)
+                .map(this::mapToSummary)
                 .toList();
-        return PageResponse.<TestResponse>builder()
+        return PageResponse.<TestSummaryResponse>builder()
                 .content(data)
                 .pageNo(page.getNumber())
                 .pageSize(page.getSize())
@@ -184,6 +185,17 @@ public class TestService {
                 .totalScore(test.getTotalScore() != null ? test.getTotalScore().intValue() : 0)
                 .createAt(null)
                 .questions(questionDtos)
+                .build();
+    }
+
+    private TestSummaryResponse mapToSummary(Test test) {
+        return TestSummaryResponse.builder()
+                .id(test.getId())
+                .examId(test.getExam() != null ? test.getExam().getId() : null)
+                .title(test.getTitle())
+                .durationMinutes(test.getDurationMinutes())
+                .totalScore(test.getTotalScore() != null ? test.getTotalScore().intValue() : 0)
+                .createAt(test.getCreatedAt())
                 .build();
     }
 }

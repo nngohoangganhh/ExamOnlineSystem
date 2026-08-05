@@ -1,7 +1,7 @@
-package com.hrm.project_spring.service;
+package com.hrm.project_spring.scheduler;
 
-import com.hrm.project_spring.enums.AttemptStatus;
 import com.hrm.project_spring.repository.AttemptRepository;
+import com.hrm.project_spring.service.ParticipationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
