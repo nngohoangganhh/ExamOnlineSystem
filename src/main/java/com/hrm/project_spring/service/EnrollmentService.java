@@ -1,8 +1,10 @@
 package com.hrm.project_spring.service;
 
+import com.hrm.project_spring.dto.enrollment.EnrollmentResponse;
 import com.hrm.project_spring.entity.*;
 import com.hrm.project_spring.enums.AuditAction;
 import com.hrm.project_spring.exception.BadRequestException;
+import com.hrm.project_spring.mapper.EnrollmentMapper;
 import com.hrm.project_spring.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -112,9 +114,9 @@ public class EnrollmentService {
 
     /** Lấy danh sách enrollment của một bài thi. */
     @Transactional
-    public List<Enrollment> getEnrollments(Long testId) {
+    public List<EnrollmentResponse> getEnrollments(Long testId) {
         Test test = testRepository.findById(testId)
                 .orElseThrow(() -> new BadRequestException("Bài thi không tồn tại."));
-        return enrollmentRepository.findAllByTest(test);
+        return enrollmentRepository.findAllByTest(test).stream().map(EnrollmentMapper::toResponse).toList();
     }
 }

@@ -1,20 +1,13 @@
 package com.hrm.project_spring.service;
 
 import com.hrm.project_spring.dto.common.PageResponse;
-import com.hrm.project_spring.dto.question.TestSummaryResponse;
+import com.hrm.project_spring.dto.test.TestSummaryResponse;
 import com.hrm.project_spring.dto.test.AssignQuestionsRequest;
 import com.hrm.project_spring.dto.test.TestRequest;
 import com.hrm.project_spring.dto.test.TestResponse;
-import com.hrm.project_spring.entity.Exam;
-import com.hrm.project_spring.entity.Question;
-import com.hrm.project_spring.entity.Test;
-import com.hrm.project_spring.entity.TestQuestion;
-import com.hrm.project_spring.entity.User;
-import com.hrm.project_spring.repository.ExamRepository;
-import com.hrm.project_spring.repository.QuestionRepository;
-import com.hrm.project_spring.repository.TestQuestionRepository;
-import com.hrm.project_spring.repository.TestRepository;
-import com.hrm.project_spring.repository.UserRepository;
+import com.hrm.project_spring.entity.*;
+import com.hrm.project_spring.enums.TestStatus;
+import com.hrm.project_spring.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,61 +60,61 @@ public class TestService {
 
     @Transactional
     public TestResponse createTest(TestRequest request) {
-        if (request.getTitle() == null || request.getTitle().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title không được để trống");
-        }
-        if (request.getTotalScore() == null || request.getTotalScore() <= 0 || request.getTotalScore() > 10) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tổng điểm của bài thi sẽ không được quá 10 điểm");
-        }
-        if (request.getDurationMinutes() == null || request.getDurationMinutes() <= 0 || request.getDurationMinutes() > 180) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Thời gian làm bài của bài thi sẽ không được quá 180 phút");
-        }
-        Exam exam = null;
-        if (request.getExamId() != null) {
-            exam = examRepository.findById(request.getExamId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
-        }
+        // examId bắt buộc theo UC27 (bài thi phải thuộc kỳ thi)
+        Exam exam = examRepository.findById(request.getExamId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Kỳ thi không tồn tại"));
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Chưa đăng nhập");
         }
-        String username = auth.getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
-        
+        User user = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy người dùng"));
+
         Test test = Test.builder()
                 .title(request.getTitle())
                 .durationMinutes(request.getDurationMinutes())
-                .totalScore(BigDecimal.valueOf(request.getTotalScore()))
+                .totalScore(request.getTotalScore() != null
+                        ? BigDecimal.valueOf(request.getTotalScore())
+                        : BigDecimal.ZERO)
                 .exam(exam)
                 .createdBy(user)
+                .status(TestStatus.DRAFT)
                 .build();
-        Test savedTest = testRepository.save(test);
-        return mapToResponse(savedTest);
+
+        return mapToResponse(testRepository.save(test));
     }
 
     @Transactional
     public TestResponse updateTest(Long id, TestRequest request) {
         Test test = testRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Test not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bài thi không tồn tại"));
 
-        if (request.getExamId() != null) {
+        // Cập nhật kỳ thi cha nếu có thay đổi
+        if (request.getExamId() != null && !request.getExamId().equals(
+                test.getExam() != null ? test.getExam().getId() : null)) {
             Exam exam = examRepository.findById(request.getExamId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Exam not found"));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Kỳ thi không tồn tại"));
             test.setExam(exam);
         }
+
         test.setTitle(request.getTitle());
         test.setDurationMinutes(request.getDurationMinutes());
-        test.setTotalScore(BigDecimal.valueOf(request.getTotalScore()));
-        Test updatedTest = testRepository.save(test);
-        return mapToResponse(updatedTest);
+        if (request.getTotalScore() != null) {
+            test.setTotalScore(BigDecimal.valueOf(request.getTotalScore()));
+        }
+        test.setUpdatedAt(java.time.LocalDateTime.now());
+
+        return mapToResponse(testRepository.save(test));
     }
 
     @Transactional
     public void deleteTest(Long id) {
         Test test = testRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Test not found"));
-        testRepository.delete(test);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bài thi không tồn tại"));
+        // Soft delete: đặt deletedAt thay vì xóa vật lý
+        test.setDeletedAt(java.time.LocalDateTime.now());
+        testRepository.save(test);
     }
 
     @Transactional
@@ -132,7 +124,7 @@ public class TestService {
         }
         Test test = testRepository.findById(testId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Test not found"));
-        
+
         List<Long> ids = request.getQuestionIds() != null ? request.getQuestionIds() : List.of();
         List<Question> questions = questionRepository.findAllById(ids);
         if (questions.size() != ids.size()) {
@@ -163,16 +155,20 @@ public class TestService {
         List<TestResponse.QuestionDto> questionDtos = tqs.stream().map(tq -> {
             Question q = tq.getQuestion();
             List<TestResponse.AnswerDto> answerDtos = q.getQuestionOptions() == null ? List.of() :
-                    q.getQuestionOptions().stream().map(a ->
+                    q.getQuestionOptions().stream().map(opt ->
                             TestResponse.AnswerDto.builder()
-                                    .id(a.getId())
-                                    .content(a.getContent())
-                                    .build()
+                            .id(opt.getId())
+                            .content(opt.getContent())
+                                    // isCorrect KHÔNG được expose ra ngoài
+                            .build()
                     ).toList();
             return TestResponse.QuestionDto.builder()
                     .id(q.getId())
-                    .content(q.getStem())
-                    .difficulty(q.getReferenceAnswer())
+                    .stem(q.getStem())
+                    .type(q.getType() != null ? q.getType().name() : null)
+                    .bloomLevel(q.getBloomLevel())
+                    .orderNum(tq.getOrderNum())
+                    .score(tq.getScore())
                     .answers(answerDtos)
                     .build();
         }).toList();
@@ -180,10 +176,18 @@ public class TestService {
         return TestResponse.builder()
                 .id(test.getId())
                 .examId(test.getExam() != null ? test.getExam().getId() : null)
+                .examName(test.getExam() != null ? test.getExam().getName() : null)
                 .title(test.getTitle())
                 .durationMinutes(test.getDurationMinutes())
-                .totalScore(test.getTotalScore() != null ? test.getTotalScore().intValue() : 0)
-                .createAt(null)
+                .totalScore(test.getTotalScore())
+                .passingScore(test.getPassingScore())
+                .status(test.getStatus())
+                .maxAttempts(test.getMaxAttempts())
+                .shuffleQuestions(test.getShuffleQuestions())
+                .shuffleOptions(test.getShuffleOptions())
+                .showResultImmediately(test.getShowResultImmediately())
+                .allowReviewAfterSubmit(test.getAllowReviewAfterSubmit())
+                .createdAt(test.getCreatedAt())
                 .questions(questionDtos)
                 .build();
     }
@@ -192,10 +196,12 @@ public class TestService {
         return TestSummaryResponse.builder()
                 .id(test.getId())
                 .examId(test.getExam() != null ? test.getExam().getId() : null)
+                .examName(test.getExam() != null ? test.getExam().getName() : null)
                 .title(test.getTitle())
                 .durationMinutes(test.getDurationMinutes())
-                .totalScore(test.getTotalScore() != null ? test.getTotalScore().intValue() : 0)
-                .createAt(test.getCreatedAt())
+                .totalScore(test.getTotalScore())
+                .status(test.getStatus())
+                .createdAt(test.getCreatedAt())
                 .build();
     }
 }

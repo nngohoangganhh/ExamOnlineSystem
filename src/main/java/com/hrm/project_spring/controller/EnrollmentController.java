@@ -1,6 +1,7 @@
 package com.hrm.project_spring.controller;
 
 import com.hrm.project_spring.dto.common.ApiResponse;
+import com.hrm.project_spring.dto.enrollment.EnrollmentResponse;
 import com.hrm.project_spring.entity.Enrollment;
 import com.hrm.project_spring.service.EnrollmentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,9 +65,9 @@ public class EnrollmentController {
 
     @PreAuthorize("hasAuthority('TEST:READ')")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Enrollment>>> getEnrollments(@PathVariable Long testId) {
-        List<Enrollment> enrollments = enrollmentService.getEnrollments(testId);
-        return ResponseEntity.ok(ApiResponse.<List<Enrollment>>builder()
+    public ResponseEntity<ApiResponse<List<EnrollmentResponse>>> getEnrollments(@PathVariable Long testId) {
+        List<EnrollmentResponse> enrollments = enrollmentService.getEnrollments(testId);
+        return ResponseEntity.ok(ApiResponse.<List<EnrollmentResponse>>builder()
                 .success(true)
                 .code(200)
                 .message("Lấy danh sách thí sinh bài thi thành công")

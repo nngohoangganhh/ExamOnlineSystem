@@ -1,6 +1,7 @@
 package com.hrm.project_spring.service;
 
-import com.hrm.project_spring.dto.question.TestSummaryResponse;
+import com.hrm.project_spring.dto.attempt.AttemptAnswerResponse;
+import com.hrm.project_spring.dto.test.TestSummaryResponse;
 import com.hrm.project_spring.entity.*;
 import com.hrm.project_spring.enums.*;
 import com.hrm.project_spring.exception.BadRequestException;
@@ -49,7 +50,7 @@ public class ParticipationService {
      * Trả về danh sách Test mà thí sinh có enrollment VÀ exam đang PUBLISHED.
      */
     @Transactional
-    public List<Test> getAvailableTests() {
+    public List<TestSummaryResponse> getAvailableTests() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = getUser(username);
 
@@ -60,6 +61,7 @@ public class ParticipationService {
                 .filter(test -> test.getExam() != null &&
                         test.getExam().getStatus() == ExamStatus.PUBLISHED)
                 .filter(test -> test.getStatus() == TestStatus.OPEN)
+                .map(this::toTestSummary)
                 .toList();
     }
 
@@ -223,7 +225,7 @@ public class ParticipationService {
     }
 
     private Attempt doSubmit(Long attemptId, User user, String submitReason,
-                              HttpServletRequest request) {
+                             HttpServletRequest request) {
         Attempt attempt = getActiveAttempt(attemptId, user);
 
         // Lấy tất cả câu trả lời
@@ -282,7 +284,7 @@ public class ParticipationService {
      * Kiểm tra allowReviewAfterSubmit trước khi cho xem.
      */
     @Transactional
-    public List<AttemptAnswer> reviewAttempt(Long attemptId) {
+    public List<AttemptAnswerResponse> reviewAttempt(Long attemptId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = getUser(username);
 
@@ -299,7 +301,9 @@ public class ParticipationService {
             throw new BadRequestException("Bài thi này không cho phép xem lại.");
         }
 
-        return attemptAnswerRepository.findAllByAttemptOrderByIdAsc(attempt);
+        return attemptAnswerRepository.findAllByAttemptOrderByIdAsc(attempt).stream()
+                .map(this::toAnswerResponse)
+                .toList();
     }
 
     // ─── Private helpers ──────────────────────────────────────────────────────
@@ -382,4 +386,39 @@ public class ParticipationService {
         if (forwarded != null && !forwarded.isBlank()) return forwarded.split(",")[0].trim();
         return request.getRemoteAddr();
     }
+
+    private TestSummaryResponse toTestSummary(Test test) {
+        return TestSummaryResponse.builder()
+                .id(test.getId())
+                .examId(test.getExam() != null ? test.getExam().getId() : null)
+                .examName(test.getExam() != null ? test.getExam().getName() : null)
+                .title(test.getTitle())
+                .durationMinutes(test.getDurationMinutes())
+                .totalScore(test.getTotalScore())
+                .status(test.getStatus())
+                .createdAt(test.getCreatedAt())
+                .build();
+    }
+
+    private AttemptAnswerResponse toAnswerResponse(AttemptAnswer a) {
+        Question q = a.getQuestion();
+        List<AttemptAnswerResponse.OptionView> options = q.getQuestionOptions().stream()
+                .map(o -> AttemptAnswerResponse.OptionView.builder()
+                        .id(o.getId())
+                        .content(o.getContent())
+                        .isCorrect(o.getIsCorrect())
+                        .build())
+                .toList();
+
+        return AttemptAnswerResponse.builder()
+                .questionId(q.getId())
+                .stem(q.getStem())
+                .type(q.getType())
+                .options(options)
+                .answerData(a.getAnswerData())
+                .isCorrect(a.getIsCorrect())
+                .score(a.getScore())
+                .markedForReview(a.getMarkedForReview())
+                .build();
+}
 }

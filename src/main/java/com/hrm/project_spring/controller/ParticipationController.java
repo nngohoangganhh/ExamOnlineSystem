@@ -1,6 +1,8 @@
 package com.hrm.project_spring.controller;
 
+import com.hrm.project_spring.dto.attempt.AttemptAnswerResponse;
 import com.hrm.project_spring.dto.common.ApiResponse;
+import com.hrm.project_spring.dto.test.TestSummaryResponse;
 import com.hrm.project_spring.entity.*;
 import com.hrm.project_spring.service.ParticipationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,8 +28,8 @@ public class ParticipationController {
     // UC33: Danh sách bài thi có thể tham gia
     @PreAuthorize("hasAuthority('EXAM:READ')")
     @GetMapping("/available-tests")
-    public ResponseEntity<ApiResponse<List<Test>>> getAvailableTests() {
-        return ResponseEntity.ok(ApiResponse.<List<Test>>builder()
+    public ResponseEntity<ApiResponse<List<TestSummaryResponse>>> getAvailableTests() {
+        return ResponseEntity.ok(ApiResponse.<List<TestSummaryResponse>>builder()
                 .success(true).code(200)
                 .message("Danh sách bài thi")
                 .data(participationService.getAvailableTests())
@@ -90,9 +92,9 @@ public class ParticipationController {
     // UC41: Xem lại bài thi
     @PreAuthorize("hasAuthority('EXAM:READ')")
     @GetMapping("/attempts/{attemptId}/review")
-    public ResponseEntity<ApiResponse<List<AttemptAnswer>>> reviewAttempt(
+    public ResponseEntity<ApiResponse<List<AttemptAnswerResponse>>> reviewAttempt(
             @PathVariable Long attemptId) {
-        return ResponseEntity.ok(ApiResponse.<List<AttemptAnswer>>builder()
+        return ResponseEntity.ok(ApiResponse.<List<AttemptAnswerResponse>>builder()
                 .success(true).code(200)
                 .message("Kết quả bài làm")
                 .data(participationService.reviewAttempt(attemptId))

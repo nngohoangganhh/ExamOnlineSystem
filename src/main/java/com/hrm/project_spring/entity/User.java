@@ -1,5 +1,6 @@
 package com.hrm.project_spring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hrm.project_spring.enums.Gender;
 import com.hrm.project_spring.enums.UserStatus;
 import jakarta.persistence.*;
@@ -28,6 +29,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -53,7 +55,7 @@ public class User {
     private String employeeCode;
 
     // ===== Activation token cho luồng kích hoạt email =====
-
+    @JsonIgnore
     @Column(name = "activation_token", length = 64)
     private String activationToken;
 
@@ -65,7 +67,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     @Builder.Default
-    private UserStatus status = UserStatus.ACTIVE;
+    private UserStatus status = UserStatus.PENDING;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -78,10 +80,11 @@ public class User {
     private LocalDateTime deletedAt;
 
     // ===== Lock =====
-
+    @JsonIgnore
     @Column(name = "lock_reason", length = 500)
     private String lockReason;
 
+    @JsonIgnore
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
@@ -107,6 +110,7 @@ public class User {
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 
+    @JsonIgnore
     @Column(name = "last_login_ip", length = 45)
     private String lastLoginIp;
 
