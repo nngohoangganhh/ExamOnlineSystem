@@ -1,6 +1,5 @@
 package com.hrm.project_spring.service;
 
-import com.hrm.project_spring.dto.test.TestQuestionResponse;
 import com.hrm.project_spring.entity.*;
 import com.hrm.project_spring.enums.*;
 import com.hrm.project_spring.exception.BadRequestException;
@@ -142,38 +141,12 @@ public class TestQuestionService {
                 "{\"testId\":" + testId + ",\"removedQuestion\":" + questionId + "}");
     }
 
-    /**
-     * UC29: Lấy danh sách câu hỏi của đề thi.
-     * Trả DTO thay vì entity thô để tránh lộ dữ liệu nhạy cảm (isCorrect) và LazyInitializationException.
-     */
+    /** UC29: Lấy danh sách câu hỏi của đề thi. */
     @Transactional
-    public List<TestQuestionResponse> getTestQuestions(Long testId) {
+    public List<TestQuestion> getTestQuestions(Long testId) {
         Test test = testRepository.findById(testId)
                 .orElseThrow(() -> new BadRequestException("Bài thi không tồn tại."));
-        List<TestQuestion> tqs = testQuestionRepository.findAllByTestOrderByOrderNumAsc(test);
-        return tqs.stream()
-                .map(this::mapToTestQuestionResponse)
-                .toList();
-    }
-
-    private TestQuestionResponse mapToTestQuestionResponse(TestQuestion tq) {
-        Question q = tq.getQuestion();
-        // Rút gọn stem 200 ký tự để hiển thị danh sách
-        String stemPreview = q.getStem() != null && q.getStem().length() > 200
-                ? q.getStem().substring(0, 200) + "..."
-                : q.getStem();
-        return TestQuestionResponse.builder()
-                .id(tq.getId())
-                .questionId(q.getId())
-                .orderNum(tq.getOrderNum())
-                .score(tq.getScore())
-                .stem(stemPreview)
-                .type(q.getType())
-                .questionStatus(q.getStatus())
-                .bloomLevel(q.getBloomLevel())
-                .subjectName(q.getSubject() != null ? q.getSubject().getName() : null)
-                .chapterName(q.getChapter() != null ? q.getChapter().getName() : null)
-                .build();
+        return testQuestionRepository.findAllByTestOrderByOrderNumAsc(test);
     }
 
     private void updateTotalScore(Test test) {

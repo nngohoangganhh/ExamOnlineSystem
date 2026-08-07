@@ -3,6 +3,7 @@ package com.hrm.project_spring.controller;
 import com.hrm.project_spring.dto.common.ApiResponse;
 import com.hrm.project_spring.dto.common.PageResponse;
 import com.hrm.project_spring.dto.question.*;
+import com.hrm.project_spring.dto.user.response.UserResponseDto;
 import com.hrm.project_spring.enums.QuestionStatus;
 import com.hrm.project_spring.service.question.QuestionExportService;
 import com.hrm.project_spring.service.question.QuestionImportService;
@@ -32,6 +33,22 @@ public class QuestionController {
     private final QuestionReviewService questionReviewService;
     private final QuestionImportService questionImportService;
     private final QuestionExportService questionExportService;
+
+
+//    @PreAuthorize("hasAuthority('QUESTION:READ')")
+//    @GetMapping
+//    public ResponseEntity<ApiResponse<PageResponse<QuestionResponse>>> getAllQuestion(
+//            @RequestParam(defaultValue = "0") int pageNo,
+//            @RequestParam(defaultValue = "20") int pageSize) {
+//        return ResponseEntity.ok(
+//                ApiResponse.<PageResponse<QuestionResponse>>builder()
+//                        .success(true)
+//                        .code(200)
+//                        .message("Lấy danh sách thành công")
+//                        .data(questionService.getAllQuestion(pageNo, pageSize))
+//                        .build()
+//        );
+//    }
 
     // ─── UC16, UC24: Lấy danh sách / tìm kiếm câu hỏi ───────────────────────
 

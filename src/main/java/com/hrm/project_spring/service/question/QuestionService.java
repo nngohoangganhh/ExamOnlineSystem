@@ -41,24 +41,24 @@ public class QuestionService {
     private final TestQuestionRepository testQuestionRepository;
 
     //  1. Lấy tất cả câu hỏi (phân trang) — chỉ câu hỏi chưa bị xóa
-    @Transactional
-    public PageResponse<QuestionResponse> getAllQuestion(int pageNo, int pageSize) {
-        Specification<Question> spec = QuestionSpecification.of(
-                null, null, null, null, null, null, null);
-        Page<Question> page = questionRepository.findAll(spec, PageRequest.of(pageNo, pageSize));
-        List<QuestionResponse> data = page.getContent()
-                .stream()
-                .map(QuestionMapper::toResponse)
-                .toList();
-        return PageResponse.<QuestionResponse>builder()
-                .content(data)
-                .pageNo(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .last(page.isLast())
-                .build();
-    }
+//    @Transactional
+//    public PageResponse<QuestionResponse> getAllQuestion(int pageNo, int pageSize) {
+//        Specification<Question> spec = QuestionSpecification.of(
+//                null, null, null, null, null, null, null);
+//        Page<Question> page = questionRepository.findAll(spec, PageRequest.of(pageNo, pageSize));
+//        List<QuestionResponse> data = page.getContent()
+//                .stream()
+//                .map(QuestionMapper::toResponse)
+//                .toList();
+//        return PageResponse.<QuestionResponse>builder()
+//                .content(data)
+//                .pageNo(page.getNumber())
+//                .pageSize(page.getSize())
+//                .totalElements(page.getTotalElements())
+//                .totalPages(page.getTotalPages())
+//                .last(page.isLast())
+//                .build();
+//    }
 
     // UC24: Tìm kiếm câu hỏi theo nhiều tiêu chí
     @Transactional

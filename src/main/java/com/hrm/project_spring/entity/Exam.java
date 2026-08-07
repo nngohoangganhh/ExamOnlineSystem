@@ -82,6 +82,13 @@ public class Exam {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    /**
+     * UC25: Môn học liên kết với kỳ thi (bắt buộc).
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
+
     /** 1 kỳ thi có nhiều đề thi. */
     @OneToMany(mappedBy = "exam", fetch = FetchType.LAZY)
     @Builder.Default

@@ -37,4 +37,22 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     boolean existsByStudentId(@Param("classId") Long classId);
 
     boolean existsByCode(String code);
+
+    /**
+     * UC26 E2: Kiểm tra code trùng khi update — loại trừ chính exam đang sửa.
+     */
+    boolean existsByCodeAndIdNot(String code, Long id);
+
+    /**
+     * UC26: Kiểm tra kỳ thi có attempt completed không (để chặn xóa).
+     * Duyệt qua test → attempt với submittedAt != null.
+     */
+    @Query("""
+            SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END
+            FROM Attempt a
+            WHERE a.test.exam.id = :examId
+              AND a.submittedAt IS NOT NULL
+            """)
+    boolean hasCompletedAttempts(@Param("examId") Long examId);
 }
+
